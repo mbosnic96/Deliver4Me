@@ -1,0 +1,44 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+    <h2>Freight Platform Login</h2>
+    
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input 
+        id="email"
+        formControlName="email" 
+        type="email" 
+        placeholder="user@example.com"
+        [class.invalid]="form.controls.email.invalid && form.controls.email.touched">
+      <div *ngIf="form.controls.email.invalid && form.controls.email.touched" class="error">
+        Valid email is required
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input 
+        id="password"
+        formControlName="password" 
+        type="password" 
+        placeholder="••••••••"
+        [class.invalid]="form.controls.password.invalid && form.controls.password.touched">
+      <div *ngIf="form.controls.password.invalid && form.controls.password.touched" class="error">
+        Password is required
+      </div>
+    </div>
+  
+    <button 
+      type="submit" 
+      [disabled]="loading() || form.invalid"
+      class="submit-button">
+      {{ loading() ? 'Logging in...' : 'Login' }}
+    </button>
+  
+    <div *ngIf="error()" class="server-error">
+      {{ error() }}
+    </div>
+  
+    <div class="auth-link">
+      Don't have an account? <a routerLink="/register">Register</a>
+    </div>
+  </form>
