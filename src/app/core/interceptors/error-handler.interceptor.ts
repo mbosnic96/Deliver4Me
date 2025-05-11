@@ -11,7 +11,8 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error) => {
       switch (error.status) {
         case 401: // Unauthorized
-          inject(AuthService).logout(); // Cleaner dependency injection
+         // inject(AuthService).logout(); // Cleaner dependency injection
+         router.navigate(['/forbidden']);
           break;
         case 403: // Forbidden
           router.navigate(['/forbidden']);

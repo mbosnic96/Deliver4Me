@@ -1,44 +1,73 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
-    <h2>Freight Platform Login</h2>
-    
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input 
-        id="email"
-        formControlName="email" 
-        type="email" 
-        placeholder="user@example.com"
-        [class.invalid]="form.controls.email.invalid && form.controls.email.touched">
-      <div *ngIf="form.controls.email.invalid && form.controls.email.touched" class="error">
-        Valid email is required
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form w-100" style="max-width: 500px;">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+      
+      <!-- Logo Header -->
+      <div class="card-header bg-white text-center border-0 py-4">
+        <img src="/assets/logo.png" alt="App Logo" width="80" height="80" class="mb-3">
+        <h2 class="h5 mb-0">Login</h2>
+        <p class="text-muted mb-0 small">Welcome back, please sign in</p>
       </div>
-    </div>
-  
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input 
-        id="password"
-        formControlName="password" 
-        type="password" 
-        placeholder="••••••••"
-        [class.invalid]="form.controls.password.invalid && form.controls.password.touched">
-      <div *ngIf="form.controls.password.invalid && form.controls.password.touched" class="error">
-        Password is required
+
+      <!-- Card Body -->
+      <div class="card-body p-4">
+        
+        <!-- Email Field -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input 
+            id="email"
+            formControlName="email" 
+            type="email" 
+            class="form-control rounded-3"
+            [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+            placeholder="user@example.com"
+            autocomplete="username">
+          <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="invalid-feedback">
+            <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+        
+        <!-- Password Field -->
+        <div class="mb-4">
+          <label for="password" class="form-label">Password</label>
+          <input 
+            id="password"
+            formControlName="password" 
+            type="password" 
+            class="form-control rounded-3"
+            [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+            placeholder="••••••••"
+            autocomplete="current-password">
+          <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="invalid-feedback">
+            Password is required
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          [disabled]="loading || form.invalid"
+          class="btn btn-primary w-100 py-2 mb-3 rounded-pill"
+          [class.btn-loading]="loading">
+          <span *ngIf="!loading">Login</span>
+          <span *ngIf="loading" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          <span *ngIf="loading" class="visually-hidden">Loading...</span>
+        </button>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="alert alert-danger mb-3 rounded-3">
+          <i class="bi bi-exclamation-circle me-2"></i>
+          {{ error }}
+        </div>
+        
+        <!-- Registration Link -->
+        <div class="text-center mt-3 small">
+          <span class="text-muted">Don't have an account?</span>
+          <a routerLink="/register" class="ms-1">Register</a>
+        </div>
       </div>
-    </div>
-  
-    <button 
-      type="submit" 
-      [disabled]="loading() || form.invalid"
-      class="submit-button">
-      {{ loading() ? 'Logging in...' : 'Login' }}
-    </button>
-  
-    <div *ngIf="error()" class="server-error">
-      {{ error() }}
-    </div>
-  
-    <div class="auth-link">
-      Don't have an account? <a routerLink="/register">Register</a>
     </div>
   </form>
+</div>

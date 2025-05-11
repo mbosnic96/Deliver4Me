@@ -1,0 +1,26 @@
+import { Injectable } from '@angular/core';
+import { Country, State, City } from 'country-state-city';
+import { ICountry, IState, ICity } from 'country-state-city';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CscService {
+
+  constructor() {}
+
+  /** Get all countries */
+  getAllCountries(): ICountry[] {
+    return Country.getAllCountries();
+  }
+
+  /** Get states by country code (e.g., "US", "IN") */
+  getStatesByCountry(countryCode: string): IState[] {
+    return State.getStatesOfCountry(countryCode);
+  }
+
+  /** Get cities by state code and country code */
+  getCitiesByCountry(countryCode: string): any[] {
+    return City.getCitiesOfCountry(countryCode) || [];
+  }
+}
