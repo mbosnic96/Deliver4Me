@@ -1,24 +1,25 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import { SharedModule } from '../../shared/shared.module';
 import { finalize } from 'rxjs/operators';
 import { CscService } from '../../core/services/csc.service';
 import { ICountry, IState, ICity } from 'country-state-city';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, SharedModule ],
+  imports: [ReactiveFormsModule, RouterLink, NgSelectModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-    private cscService = inject(CscService);
+  private cscService = inject(CscService);
 
   countries: ICountry[] = [];
   states: IState[] = [];
@@ -27,47 +28,25 @@ export class RegisterComponent {
   loading = signal(false);
   error = signal('');
 
-    ngOnInit() {
-    this.countries = this.cscService.getAllCountries();
-      console.log('Sample country:', this.countries[0]); // Verify ISO code structure
-  }
-
- onCountrySelect(event: any) {
-   const countryCode = event.isoCode; // Get the actual country code
-  this.states = this.cscService.getStatesByCountry(countryCode);
-  this.cities = [];
-  this.form.patchValue({ state: '', city: '' });
-}
-
-onStateSelect(event: any) {
-  const stateCode = event.isoCode; 
-  const countryCode = this.form.value.country;
-  if (countryCode && stateCode) {
-    this.cities = this.cscService.getCitiesByCountry(countryCode);
-    this.form.patchValue({ city: '' });
-  }
-}
-
-
   isDelivery = false;
-  vehicleTypes = ['Van', 'Truck', 'Long Truck', 'Truck for Sand', 'Junk Hauler'];
-  VehicleType: string[] = [];
 
   form: FormGroup = this.fb.group({
-  name: ['', Validators.required],
-  username: ['', Validators.required],
-  email: ['', [Validators.required, Validators.email]],
-  phone: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-  address: ['', Validators.required],
-  country: ['', Validators.required],
-  state: ['', Validators.required],
-  city: ['', Validators.required],
-  postalCode: ['', Validators.required],
-  password: ['', [Validators.required, Validators.minLength(6)]],
-  confirmPassword: ['', Validators.required],
-  vehicleTypes: [[]] 
-}, { validators: this.passwordMatchValidator });
+    name: ['', Validators.required],
+    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+    address: ['', Validators.required],
+    country: ['', Validators.required],
+    state: ['', Validators.required],
+    city: ['', Validators.required],
+    postalCode: ['', Validators.required],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    confirmPassword: ['', Validators.required],
+  }, { validators: this.passwordMatchValidator });
 
+  ngOnInit() {
+    this.countries = this.cscService.getAllCountries();
+  }
 
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password')?.value;
@@ -75,26 +54,30 @@ onStateSelect(event: any) {
     return password === confirmPassword ? null : { mismatch: true };
   }
 
-  
+  onCountrySelect(event: ICountry) {
+    const countryCode = event.isoCode;
+    this.states = this.cscService.getStatesByCountry(countryCode);
+    this.cities = [];
+    this.form.patchValue({ state: '', city: '' });
+  }
 
+  onStateSelect(event: IState) {
+    const stateCode = event.isoCode;
+    const countryCode = this.form.value.country;
+    if (countryCode && stateCode) {
+      this.cities = this.cscService.getCitiesByCountry(countryCode);
+      this.form.patchValue({ city: '' });
+    }
+  }
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    
 
-   const formData = this.form.value;
-const payload = {
-  ...formData,
-  role: this.isDelivery ? 'driver' : 'client',
-  isDeliveryMan: this.isDelivery,
-  vehicleTypes: this.isDelivery ? formData.vehicleTypes : []
-};
-
-if (this.isDelivery && (!formData.vehicleTypes || formData.vehicleTypes.length === 0)) {
-  this.error.set('Please select at least one vehicle type.');
-  return;
-}
-
+    const payload = {
+      ...this.form.value,
+      role: this.isDelivery ? 'driver' : 'client',
+      isDeliveryMan: this.isDelivery,
+    };
 
     this.loading.set(true);
     this.error.set('');
@@ -104,7 +87,6 @@ if (this.isDelivery && (!formData.vehicleTypes || formData.vehicleTypes.length =
     ).subscribe({
       next: () => {
         this.form.reset();
-        this.VehicleType = [];
         this.router.navigate(['/login']);
       },
       error: (err) => {

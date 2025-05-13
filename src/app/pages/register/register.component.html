@@ -1,7 +1,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
       <div class="col-md-8 col-lg-6">
-        <div class="card shadow">
+        <div class="card shadow content-bg border">
           <div class="card-body p-4">
             <div class="text-center mb-4">
               <img src="assets/logo.png" alt="Deliver4ME" height="50" class="mb-2">
@@ -113,7 +113,7 @@
                 <label class="form-label">Password</label>
                 <input type="password" formControlName="password" class="form-control" />
                 <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="text-danger small">
-                  Password must be at least 6 characters.
+                  Password must be at least 8 characters.
                 </div>
               </div>
   
@@ -124,24 +124,7 @@
                   Passwords do not match.
                 </div>
               </div>
-  
-              <!-- Delivery vehicle options -->
-               <!-- Vehicle Types Multi-Select -->
-<div *ngIf="isDelivery" class="mb-3">
-  <label class="form-label">Vehicle Types</label>
-  <ng-select
-  [items]="vehicleTypes"
-  [multiple]="true"
-  bindLabel=""
-  bindValue=""
-  [closeOnSelect]="false"
-  formControlName="vehicleTypes"
-  placeholder="Select vehicle types">
-</ng-select>
-
-</div>
-
-  
+    
               <button class="btn btn-primary w-100 mt-3" [disabled]="form.invalid">
                 Register
               </button>

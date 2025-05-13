@@ -58,13 +58,10 @@ describe('RegisterComponent', () => {
       address: 'Test Address',
       password: '123456',
       confirmPassword: '123456',
-      isDeliveryMan: false,
-      vehicleTypes: {
-        van: false, truck: false, longTruck: false, sandTruck: false, junkTruck: false
-      }
+      isDeliveryMan: false
     };
     component.form.setValue(validData);
-    authService.register.and.returnValue(of({ message: 'Registration successful' }));
+    authService.register.and.returnValue(of({ message: 'Registration successful' }) as any);
 
     component.onSubmit();
     expect(authService.register).toHaveBeenCalledWith(jasmine.objectContaining({
@@ -87,7 +84,7 @@ describe('RegisterComponent', () => {
     component.form.patchValue({
       name: 'John', username: 'john123', email: 'john@example.com',
       phone: '123456789', address: 'Street 1', password: '123456', confirmPassword: '123456',
-      isDeliveryMan: false, vehicleTypes: {}
+      isDeliveryMan: false
     });
 
     component.onSubmit();
@@ -106,7 +103,7 @@ describe('RegisterComponent', () => {
     component.form.patchValue({
       name: 'Jane', username: 'jane123', email: 'jane@example.com',
       phone: '987654321', address: 'Main Street', password: 'abcdef', confirmPassword: 'abcdef',
-      isDeliveryMan: false, vehicleTypes: {}
+      isDeliveryMan: false
     });
   
     component.onSubmit();
@@ -126,7 +123,7 @@ describe('RegisterComponent', () => {
     component.form.patchValue({
       name: 'John', username: 'john123', email: 'john@example.com',
       phone: '123456789', address: 'Street 1', password: '123456', confirmPassword: '123456',
-      isDeliveryMan: false, vehicleTypes: {}
+      isDeliveryMan: false
     });
 
     component.onSubmit();
@@ -138,7 +135,7 @@ describe('RegisterComponent', () => {
     component.form.patchValue({
       name: 'John', username: 'john123', email: 'john@example.com',
       phone: '123456789', address: 'Street 1', password: '123456', confirmPassword: '123456',
-      isDeliveryMan: false, vehicleTypes: {}
+      isDeliveryMan: false
     });
 
     component.onSubmit();
@@ -156,7 +153,7 @@ describe('RegisterComponent', () => {
     component.form.patchValue({
       name: 'John', username: 'john123', email: 'john@example.com',
       phone: '123456789', address: 'Street 1', password: '123456', confirmPassword: '123456',
-      isDeliveryMan: false, vehicleTypes: {}
+      isDeliveryMan: false
     });
 
     component.onSubmit();

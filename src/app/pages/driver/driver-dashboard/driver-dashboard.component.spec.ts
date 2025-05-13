@@ -8,7 +8,7 @@ describe('DriverDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DriverDashboardComponent]
+      declarations: [DriverDashboardComponent]
     })
     .compileComponents();
 

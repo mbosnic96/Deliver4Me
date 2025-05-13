@@ -1,1 +1,19 @@
 @import "@ng-select/ng-select/themes/default.theme.css";
+
+.dark-bg, body {
+  background-color: #080c1c !important;
+    color: #fff !important;
+}
+
+.content-bg{
+    background-color: #1c2434 !important;
+    color: #fff;
+}
+
+.nav-link{
+    color: #fff;
+    font-weight: bold;
+}
+.border, .border-bottom{
+    border-color: #404358 !important;
+}

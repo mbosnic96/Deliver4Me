@@ -1,0 +1,182 @@
+
+    <div class="row g-4">
+        <div class="col-12">
+      <app-vehicle-map [vehicles]="driverVehicles"></app-vehicle-map>
+    </div>
+    </div>
+
+  <div class="row g-4">
+
+    <!-- Deliveries Card -->
+    <div class="col-md-3">
+      <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <h6 class="text-light mb-1">Dostave</h6>
+              <h4 class="fw-bold mb-0">128</h4>
+            </div>
+            <div class="rounded-circle bg-success bg-opacity-25 p-2 text-success">
+              <fa-icon [icon]="faTruck" class="fs-4"></fa-icon>
+            </div>
+          </div>
+          <small class="text-success fw-semibold">+8%</small>
+          <small class="text-light ms-2">32 ovog mjeseca</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings Card -->
+    <div class="col-md-3">
+      <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <h6 class="text-light mb-1">Zarada</h6>
+              <h4 class="fw-bold mb-0">12.345,00 KM</h4>
+            </div>
+            <div class="rounded-circle bg-info bg-opacity-25 p-2 text-info">
+              <fa-icon [icon]="faMoneyBillWave" class="fs-4"></fa-icon>
+            </div>
+          </div>
+          <small class="text-success fw-semibold">+12%</small>
+          <small class="text-light ms-2">2.345,00 KM ovaj mjesec</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicles Card -->
+    <div class="col-md-3">
+      <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <h6 class="text-light mb-1">Moja vozila</h6>
+              <h4 class="fw-bold mb-0">2</h4>
+            </div>
+            <div class="rounded-circle bg-warning bg-opacity-25 p-2 text-warning">
+             <fa-icon [icon]="faTruckPickup" class="fs-4"></fa-icon>
+            </div>
+          </div>
+          <small class="text-light">Kombi, Pickup</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating Card -->
+    <div class="col-md-3">
+      <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <h6 class="text-light mb-1">Ocjena</h6>
+              <h4 class="fw-bold mb-0">4.8</h4>
+            </div>
+            <div class="rounded-circle bg-danger bg-opacity-25 p-2 text-danger">
+              <fa-icon [icon]="faStar" class="fs-4"></fa-icon>
+            </div>
+          </div>
+          <small class="text-light">56 recenzija</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row g-4 mt-2">
+    <div class="col-lg-6">
+  <h5>Moje vožnje</h5>
+    <div id="deliveryCarousel" class="carousel slide h-100" data-bs-ride="carousel">
+      
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators pt-2 pb-2">
+        <button
+          *ngFor="let item of dataArray; let i = index"
+          type="button"
+          data-bs-target="#deliveryCarousel"
+          [attr.data-bs-slide-to]="i"
+          [class.active]="i === 0"
+          [attr.aria-current]="i === 0 ? 'true' : null"
+          [attr.aria-label]="'Slide ' + (i + 1)"
+        ></button>
+      </div>
+
+      <!-- Carousel Items -->
+      <div class="carousel-inner">
+        <div
+          class="carousel-item"
+          *ngFor="let row of dataArray; let i = index"
+          [class.active]="i === 0"
+        >
+          <div class="container py-4 ps-0 pe-0">
+            <div class="card shadow-lg border-0 rounded-3 content-bg border">
+              <div class="card-body ms-5 me-5">
+                <h4 class="card-title text-primary">
+                  <fa-icon [icon]="faTruck"></fa-icon> {{ row.korisnik }}
+                </h4>
+                <p class="mb-2">
+                  <fa-icon [icon]="faMapMarkerAlt" class="me-2 text-secondary"></fa-icon>
+                  <strong>Adresa peuzimanja:</strong> {{ row.lokacija_preuzimanja }}
+                </p>
+                <p class="mb-2">
+                  <fa-icon [icon]="faLocationDot" class="me-2 text-success"></fa-icon>
+                  <strong>Adresa za dostavu:</strong> {{ row.lokacija_dostave }}
+                </p>
+                <p class="mb-2">
+                  <fa-icon [icon]="faBox" class="me-2 text-warning"></fa-icon>
+                  <strong>Paket:</strong> {{ row.naziv_paketa }}
+                </p>
+                <p class="mb-2">
+                  <fa-icon [icon]="faPhone" class="me-2 text-info"></fa-icon>
+                  <strong>Kontakt:</strong> {{ row.kontakt }}
+                </p>
+                <span
+                  class="badge rounded-pill"
+                  [ngClass]="{
+                    'bg-success': row.status === 'Arrived',
+                    'bg-secondary': row.status === 'Pending',
+                    'bg-warning': row.status === 'Dispatched',
+                    'bg-danger': row.status === 'Cancelled'
+                  }"
+                >
+                  {{ row.status }}
+                </span>
+              </div>
+              <div class="card-footer bg-transparent text-end pt-5 pb-4">
+                <button class="btn btn-outline-primary btn-sm w-100">
+                  <fa-icon [icon]="faEye" class="me-1"></fa-icon> Detalji
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel Controls -->
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#deliveryCarousel"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#deliveryCarousel"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    </div>
+    <div class="col-lg-6">
+      <div class="content-bg border rounded-3">
+        <app-vehicle-tabs></app-vehicle-tabs>
+      </div>
+    </div>
+  </div>

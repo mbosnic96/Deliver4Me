@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/auth.service'; // adjust the path
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,18 +12,15 @@ export class RoleGuard implements CanActivate {
 
   canActivate(
     route: ActivatedRouteSnapshot
-  ): Observable<boolean | UrlTree> {
+  ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     const expectedRole = route.data['role'];
+    const currentUser = this.authService.getCurrentUser();
 
-    // Use authState$ to check authentication and user role
-    return this.authService.authState$.pipe(
-      map(isAuthenticated => {
-        const currentUser = this.authService.getCurrentUser();
-        if (isAuthenticated && currentUser?.role === expectedRole) {
-          return true;
-        }
-        return this.router.createUrlTree(['/unauthorized']);
-      })
-    );
+    if (currentUser && currentUser.role === expectedRole) {
+      return true;
+    }
+
+    // Optional: redirect to fallback page if role mismatch
+    return this.router.createUrlTree(['/unauthorized']);
   }
 }

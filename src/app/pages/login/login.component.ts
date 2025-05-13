@@ -56,15 +56,15 @@ onSubmit(): void {
 
       switch (user.role.toLowerCase()) {
         case 'admin':
-          this.router.navigate(['/dashboard/admin']);
+          this.router.navigate(['/admin']);
           break;
         case 'driver':
-          this.router.navigate(['/dashboard/driver']);
+          this.router.navigate(['/driver']);
           break;
         case 'client':
         case 'user':
         default:
-          this.router.navigate(['/dashboard/client']);
+          this.router.navigate(['/client']);
           break;
       }
     },

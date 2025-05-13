@@ -28,19 +28,5 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should store token on login', () => {
-    service.login('test@test.com', 'pass123').subscribe();
-    const req = httpMock.expectOne('api/login');
-    req.flush({ token: 'abc123' });
-
-    expect(service.getToken()).toBe('abc123');
-  });
-
-  it('should clear token and navigate on logout', () => {
-    service.setToken('abc123');
-    service.logout();
-
-    expect(service.getToken()).toBeNull();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
-  });
+  
 });

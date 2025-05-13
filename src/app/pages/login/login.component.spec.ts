@@ -42,7 +42,7 @@ describe('LoginComponent', () => {
 
   it('should call authService.login with form values', () => {
     const testCredentials = { email: 'test@test.com', password: 'password' };
-    authService.login.and.returnValue(of({ token: { token: 'mock-token' }, user: {} }));
+    authService.login.and.callFake((email: string, password: string) => of({ token: 'mock-token', user: {} }));
     
     component.form.setValue(testCredentials);
     component.onSubmit();
@@ -56,14 +56,14 @@ describe('LoginComponent', () => {
   
 
   it('should navigate to dashboard on successful login', () => {
-    authService.login.and.returnValue(of({ token: { token: 'mock-token' }, user: {} }));
+    authService.login.and.returnValue(of({ token: 'mock-token', user: {} }));
     component.form.setValue({ email: 'test@test.com', password: 'password' });
     component.onSubmit();
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 
   it('should set loading to false after successful login', () => {
-    authService.login.and.returnValue(of({ token: { token: 'mock-token' }, user: {} }));
+    authService.login.and.returnValue(of({ token: 'mock-token', user: {} }));
     component.form.setValue({ email: 'test@test.com', password: 'password' });
     component.onSubmit();
     expect(component.loading).toBeFalse();
@@ -98,7 +98,7 @@ describe('LoginComponent', () => {
   });
 
   it('should reset form after successful login', () => {
-    authService.login.and.returnValue(of({ token: { token: 'mock-token' }, user: {} }));
+    authService.login.and.returnValue(of({ token: 'mock-token', user: {} }));
     component.form.setValue({ email: 'test@test.com', password: 'password' });
     component.onSubmit();
   

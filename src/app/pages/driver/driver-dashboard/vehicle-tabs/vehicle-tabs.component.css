@@ -1,0 +1,60 @@
+.truck-cargo {
+    position: relative;
+    width: 100%;
+  }
+  .truck-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: grayscale(100%);
+    opacity: 0.5;
+  }
+  
+  .cargo-overlay {
+    position: absolute;
+    left: 27%;
+    top: 12px;
+    height: 60%;
+    width: 70%;
+    max-width: 70%;
+    opacity: 0.8; /* Adjust the opacity as desired */
+    border-radius: 0.25rem; /* Add border-radius for a rounded look */
+    overflow: hidden; /* Ensure the stripes don't overflow */
+  }
+  
+  .cargo-progress {
+    height: 100%;
+    width: 100%;
+    border-radius: 0.25rem; /* Add border-radius for a rounded look */
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); /* Add striped background */
+    background-size: 1rem 1rem; /* Adjust the size of the stripes */
+    animation: progressAnimation 1s linear infinite; /* Add animation for the stripes */
+    
+    background-color: #0d6efd; /* Set the desired background color */
+  }
+  
+  @keyframes progressAnimation {
+    0% {
+      background-position: 1rem 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+  
+  .cargo-percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-100%, -100%);
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+  }
+
+  
+  @media (max-width:400px) {
+    .cargo-overlay{
+        top: 5px;
+    }
+  }

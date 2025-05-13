@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { ClientDashboardComponent } from './pages/client-dashboard/client-dashboard.component';
-import { DriverDashboardComponent } from './pages/driver-dashboard/driver-dashboard.component';
-import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { ClientDashboardComponent } from './pages/client/client-dashboard/client-dashboard.component';
+import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
 import { RoleGuard } from './core/guards/role.guard'; // path as needed
 
 export const routes: Routes = [
@@ -12,19 +11,19 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   {
-    path: 'dashboard/client',
+    path: 'client',
     component: ClientDashboardComponent,
     canActivate: [RoleGuard],
     data: { role: 'client' }
   },
   {
-    path: 'dashboard/driver',
-    component: DriverDashboardComponent,
+    path: 'driver',
+    loadChildren: () => import('./pages/driver/driver.routes').then(m => m.adminRoutes),
     canActivate: [RoleGuard],
     data: { role: 'driver' }
   },
   {
-    path: 'dashboard/admin',
+    path: 'admin',
     component: AdminDashboardComponent,
     canActivate: [RoleGuard],
     data: { role: 'admin' }

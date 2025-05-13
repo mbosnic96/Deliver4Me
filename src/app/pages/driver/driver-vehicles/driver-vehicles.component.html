@@ -1,0 +1,91 @@
+<!-- Add Vehicle Button with Icon -->
+<button class="btn btn-primary shadow-lg mb-5 gap-2" (click)="openAddModal()">
+  <i class="fas fa-plus fs-5"></i>
+  <span>Dodaj Vozilo</span>
+</button>
+
+<div class="row g-4">
+  <div *ngFor="let vehicle of vehicles" class="col-12 col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all content-bg">
+      <!-- Image Section with Badge -->
+      <div class="position-relative overflow-hidden" style="height: 220px;">
+        <div id="carousel-{{ vehicle.id }}" class="carousel slide h-100" data-bs-ride="carousel">
+          <div class="carousel-inner h-100">
+            <div *ngFor="let img of vehicle.imageUrls; let i = index" 
+                 class="carousel-item h-100" 
+                 [class.active]="i === 0">
+              <img [src]="img || 'assets/default-vehicle.jpg'" 
+                   class="d-block w-100 h-100 object-fit-cover" 
+                   alt="vehicle image {{ i + 1 }}">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" 
+                  [attr.data-bs-target]="'#carousel-' + vehicle.id" 
+                  data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" 
+                  [attr.data-bs-target]="'#carousel-' + vehicle.id" 
+                  data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <div class="position-absolute top-0 end-0 bg-primary text-white px-3 py-1 rounded-bl">
+            {{ vehicle.vehicleType?.name }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body pb-2">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h3 class="h5 mb-0">{{ vehicle.model }}</h3>
+            <small>{{ vehicle.brand }}</small>
+          </div>
+          <span class="badge bg-primary-subtle text-primary fs-6">
+            {{ vehicle.volume }} m³
+          </span>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="small">Registracija</div>
+            <div class="fw-medium">{{ vehicle.plateNumber }}</div>
+          </div>
+          <div class="col-6">
+            <div class="small">Dimenzije</div>
+            <div class="fw-medium">{{ vehicle.width }}x{{ vehicle.length }}x{{ vehicle.height }}m</div>
+          </div>
+        </div>
+
+        <!-- Metadata -->
+        <div class="d-flex justify-content-between small border-top pt-3">
+          <div>
+            <i class="fas fa-calendar-alt me-1"></i>
+            {{ vehicle.createdAt | date:'mediumDate' }}
+          </div>
+          <div class="badge bg-success bg-opacity-10 text-success">
+            <i class="fas fa-check-circle me-1"></i>Aktivno
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Footer with Actions -->
+      <div class="card-footer bg-transparent border-0 pt-0 d-flex gap-2">
+        <button class="btn btn-outline-primary btn-sm flex-fill d-flex align-items-center justify-content-center gap-2"
+                (click)="editVehicle(vehicle)">
+          <i class="fas fa-edit"></i>
+          <span>Uredi</span>
+        </button>
+        <button class="btn btn-outline-danger btn-sm flex-fill d-flex align-items-center justify-content-center gap-2"
+                (click)="deleteVehicle(vehicle.id)">
+          <i class="fas fa-trash"></i>
+          <span>Obriši</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

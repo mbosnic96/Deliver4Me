@@ -1,0 +1,220 @@
+// driver-vehicles-modal.component.ts
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DriverService } from '../../../../core/services/driver.service';
+import { CommonModule } from '@angular/common';
+import { environment } from '../../../../../enviroments/environment';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+@Component({
+  selector: 'app-driver-vehicles-modal',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, FontAwesomeModule],
+  templateUrl: './driver-vehicles-modal.component.html',
+  styleUrls: ['./driver-vehicles-modal.component.css']
+})
+export class DriverVehiclesModalComponent implements OnInit {
+    imageBaseUrl = environment.apiUrl;
+  driverVehicleForm: FormGroup;
+  vehicleTypes: any[] = [];
+  @Input() vehicleData: any;
+  isEditMode = false;
+  isLoading = false;
+  selectedImages: File[] = [];
+imagePreviews: string[] = [];
+removedImageIds: string[] = [];
+
+existingImages: { id: string; url: string }[] = [];
+
+
+  constructor(
+    public activeModal: NgbActiveModal,
+    private fb: FormBuilder,
+    private driverService: DriverService,
+    private cd: ChangeDetectorRef
+  ) {
+    this.driverVehicleForm = this.fb.group({
+      brand: ['', [Validators.required, Validators.maxLength(50)]],
+      model: ['', [Validators.required, Validators.maxLength(50)]],
+      plateNumber: ['', [Validators.required, Validators.pattern(/^[A-Z0-9- ]+$/i)]],
+      width: [0, [Validators.required, Validators.min(0.1), Validators.max(10)]],
+      length: [0, [Validators.required, Validators.min(0.1), Validators.max(20)]],
+      height: [0, [Validators.required, Validators.min(0.1), Validators.max(5)]],
+      volume: [{value: 0, disabled: true}],
+      vehicleTypeId: [null, Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.fetchVehicleTypes();
+
+    if (this.vehicleData) {
+      this.isEditMode = true;
+      this.patchFormValues();
+    }
+
+    this.setupVolumeCalculation();
+  }
+
+  private fetchVehicleTypes(): void {
+    this.isLoading = true;
+    this.driverService.getVehicleTypes().subscribe({
+      next: (types) => {
+        this.vehicleTypes = types;
+        setTimeout(() => {
+        this.cd.detectChanges(); 
+      });
+      this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching vehicle types', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+private patchFormValues(): void {
+  this.driverVehicleForm.patchValue({
+    ...this.vehicleData,
+    vehicleTypeId: this.vehicleData.vehicleType?.id
+  });
+
+  if (this.vehicleData.images && Array.isArray(this.vehicleData.images)) {
+  this.existingImages = this.vehicleData.images.map((img: any) => ({
+    id: img.id,
+    url: `${this.imageBaseUrl}${img.imageUrl}`
+  }));
+
+  this.imagePreviews = [...this.existingImages.map(img => img.url)];
+  console.log('Loaded image previews:', this.imagePreviews);
+}
+
+}
+
+
+
+
+
+
+
+
+
+  private setupVolumeCalculation(): void {
+    const dimensionControls = ['width', 'length', 'height'];
+    dimensionControls.forEach(control => {
+      this.driverVehicleForm.get(control)?.valueChanges.subscribe(() => {
+        this.calculateVolume();
+      });
+    });
+  }
+
+  calculateVolume(): void {
+  // Get values and convert to numbers (handles string inputs from form)
+  const width = Number(this.driverVehicleForm.get('width')?.value);
+  const length = Number(this.driverVehicleForm.get('length')?.value);
+  const height = Number(this.driverVehicleForm.get('height')?.value);
+
+  // Check if all dimensions are valid numbers greater than 0
+  if (!isNaN(width) && !isNaN(length) && !isNaN(height) && 
+      width > 0 && length > 0 && height > 0) {
+    
+    // Calculate with full precision, then round to 2 decimal places
+    const preciseVolume = width * length * height;
+    const roundedVolume = Math.round(preciseVolume * 100) / 100; // More accurate than toFixed
+    
+    // Update form control
+    this.driverVehicleForm.get('volume')?.setValue(roundedVolume, { emitEvent: false });
+  } else {
+    // Reset volume if invalid dimensions
+    this.driverVehicleForm.get('volume')?.setValue(0, { emitEvent: false });
+  }
+}
+
+onSubmit(): void {
+  if (this.driverVehicleForm.invalid || this.isLoading) return;
+
+  this.isLoading = true;
+  const formValues = this.driverVehicleForm.getRawValue();
+  const formData = new FormData();
+
+  // Append text fields
+  for (const key in formValues) {
+    if (formValues.hasOwnProperty(key)) {
+      formData.append(key, formValues[key]);
+    }
+  }
+
+  this.removedImageIds.forEach(id => {
+  formData.append('RemovedImageIds', id);
+});
+
+  // Ensure selected images are added to the form data
+  this.selectedImages.forEach((file) => {
+    formData.append('Images', file); // Use `Images` to match backend field
+  });
+
+  const operation$ = this.isEditMode
+    ? this.driverService.updateVehicle(this.vehicleData.id, formData)
+    : this.driverService.addVehicle(formData);
+
+  operation$.subscribe({
+    next: () => {
+      this.activeModal.close('success');
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('Error saving vehicle', err);
+      this.isLoading = false;
+    }
+  });
+}
+
+
+
+
+  onImageSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input.files) return;
+
+  Array.from(input.files).forEach(file => {
+    this.selectedImages.push(file);
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreviews.push(e.target.result); // base64 preview
+      this.cd.detectChanges(); 
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+removeImage(index: number): void {
+  const previewUrl = this.imagePreviews[index];
+
+  // Check if it's from existing images
+  const existingImage = this.existingImages.find(img => img.url === previewUrl);
+  if (existingImage) {
+    this.removedImageIds.push(existingImage.id);
+    this.existingImages = this.existingImages.filter(img => img.id !== existingImage.id);
+  } else {
+    // If it's a new upload
+    this.selectedImages.splice(index - this.existingImages.length, 1);
+  }
+
+  this.imagePreviews.splice(index, 1);
+  console.log('Removed image IDs:', this.removedImageIds);
+}
+
+
+
+  onCancel(): void {
+    if (this.driverVehicleForm.dirty) {
+      if (confirm('Are you sure you want to discard changes?')) {
+        this.activeModal.dismiss();
+      }
+    } else {
+      this.activeModal.dismiss();
+    }
+  }
+}
