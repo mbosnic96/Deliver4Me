@@ -1,0 +1,41 @@
+<form [formGroup]="emailForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+  <div class="modal-content content-bg">
+    <div class="modal-header">
+      <h5 class="modal-title fw-bold">
+        <i class="fas fa-envelope me-2"></i>
+        Promijeni Email
+      </h5>
+      <button type="button" class="btn-close" (click)="onCancel()" aria-label="Close"></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="mb-3">
+          <label for="email" class="form-label small fw-bold">
+            Novi Email
+            <span *ngIf="emailForm.get('email')?.hasError('required')" class="text-danger">*</span>
+            <span *ngIf="emailForm.get('email')?.hasError('email')" class="text-danger">Invalid email</span>
+          </label>
+          <input id="email" type="email" class="form-control"
+                 formControlName="email"
+                 [class.is-invalid]="emailForm.get('email')?.invalid && emailForm.get('email')?.touched">
+          <div *ngIf="emailForm.get('email')?.invalid && emailForm.get('email')?.touched" class="invalid-feedback">
+            <span *ngIf="emailForm.get('email')?.hasError('required')">Email is required</span>
+            <span *ngIf="emailForm.get('email')?.hasError('email')">Please enter a valid email</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer border-top-0">
+      <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">
+        <i class="fas fa-times me-1"></i> Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="emailForm.invalid || isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+        <i *ngIf="!isLoading" class="fas fa-save me-1"></i>
+        Save
+      </button>
+    </div>
+  </div>
+</form>

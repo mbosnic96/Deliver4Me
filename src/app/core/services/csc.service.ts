@@ -23,4 +23,19 @@ export class CscService {
   getCitiesByCountry(countryCode: string): any[] {
     return City.getCitiesOfCountry(countryCode) || [];
   }
+
+
+  /** Get lat/lng of a city */
+getCityLatLng(cityName: string, countryCode: string): { lat: number, lng: number } | null {
+  const cities = City.getCitiesOfCountry(countryCode);
+  const city = cities?.find(c => c.name === cityName);
+  
+  if (city?.latitude && city?.longitude) {
+    return { lat: parseFloat(city.latitude), lng: parseFloat(city.longitude) };
+  }
+
+  return null;
+}
+
+
 }

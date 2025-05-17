@@ -28,6 +28,14 @@
     </li>
 
     
+     <li *ngIf="role === 'driver'" class="nav-item">
+      <a routerLink="/driver/account" class="nav-link">
+        <fa-icon [icon]="'gear'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Profil</span>
+      </a>
+    </li>
+
+    
     <!-- ADMIN -->
     <li *ngIf="role === 'admin'" class="nav-item">
       <a routerLink="/admin/users" class="nav-link">

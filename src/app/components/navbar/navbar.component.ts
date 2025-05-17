@@ -13,6 +13,7 @@ import {
 import { AuthService } from '../../core/services/auth.service';
 
 import { NavbarHeightService } from '../../core/services/navbar-height.service';
+import { environment } from '../../../enviroments/environment';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class NavbarComponent {
 
   constructor(public authService: AuthService, private navbarHeightService: NavbarHeightService) {}
    @ViewChild('navbar', { static: false }) navbar!: ElementRef;
+     imageBaseUrl = environment.apiUrl;
 
   ngAfterViewInit() {
     this.updateNavbarHeight();
@@ -56,7 +58,7 @@ export class NavbarComponent {
     this.authService.logout();
   }
  getProfileImage(): string {
-    return this.authService.getCurrentUser()?.profileImage || 'https://scontent.fsjj3-1.fna.fbcdn.net/v/t39.30808-6/336722646_6015778125166086_7030387524882819766_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pHXpEnOzDE8Q7kNvwE9B5ul&_nc_oc=AdnyR9KSyvQ88HWvWjh9pJN_kqYOHw5Y8xdKyoqfyUQq69sTlbMFf8EDVYxG5l-2BX6L1smGreIjckrXK1EcS-1Q&_nc_zt=23&_nc_ht=scontent.fsjj3-1.fna&_nc_gid=Immd90PeNqfSEmWMq4KPrg&oh=00_AfIQYgBK5X-zhtSPVIioVJcb7sCifeeSYFuWgpYcns5bzg&oe=6826CA53';
+    return this.imageBaseUrl+this.authService.getCurrentUser()?.photoUrl || '/user.png';
   }
 
   getUserName(): string {

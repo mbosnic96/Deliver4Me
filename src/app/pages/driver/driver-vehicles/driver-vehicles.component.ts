@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-driver-vehicles',
-  imports: [CommonModule, DriverVehiclesModalComponent],
+  imports: [CommonModule],
   templateUrl: './driver-vehicles.component.html',
   styleUrl: './driver-vehicles.component.css'
 })

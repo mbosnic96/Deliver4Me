@@ -1,0 +1,157 @@
+<div class="container mt-4" [formGroup]="profileForm">
+  <!-- Profile Section -->
+  <div class="profile-section mb-4 p-4 border rounded content-bg">
+    <h2>Profile</h2>
+
+    <div class="row d-flex align-items-center">
+      <div class="col-lg-4">
+        <div class="mb-4">
+          <div class="d-flex align-items-center flex-column">
+            <div class="profile-photo-container me-4">
+              <img *ngIf="profileForm.value.photoUrl; else noPhoto" 
+                   [src]="profileForm.value.photoUrl" 
+                   alt="Profile photo" 
+                   class="profile-photo rounded-circle img-fluid">
+              <ng-template #noPhoto>
+                <div class="profile-photo-placeholder rounded-circle">
+                  <img src="user.png" alt="User" class="img-fluid">
+                </div>
+              </ng-template>
+            </div>
+            <div class="mt-3">
+              <button *ngIf="profileForm.value.photoUrl; else uploadBtn" 
+                      class="btn btn-outline-danger" 
+                      (click)="removePhoto()">Remove photo</button>
+              <ng-template #uploadBtn>
+                <div class="file-upload btn btn-primary">
+                  <label>
+                    <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+                    Add photo
+                  </label>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="mb-3">
+          <label class="form-label">Ime i prezime</label>
+          <input type="text" class="form-control" [value]="profileForm.value.name" formControlName="name">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" formControlName="username">
+        </div>
+
+        
+
+        <div class="row">
+  <div class="col-md-6 mb-3">
+    <label class="form-label">Country</label>
+    <ng-select
+      [items]="countries"
+      bindLabel="name"
+      bindValue="isoCode"
+      formControlName="country"
+      placeholder="Select country"
+      (change)="onCountrySelect($event)">
+    </ng-select>
+  </div>
+
+  <div class="col-md-6 mb-3">
+    <label class="form-label">State</label>
+    <ng-select
+      [items]="states"
+      bindLabel="name"
+      bindValue="isoCode"
+      formControlName="state"
+      placeholder="Select state"
+      (change)="onStateSelect($event)">
+    </ng-select>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 mb-3">
+    <label class="form-label">City</label>
+    <ng-select
+  [items]="cities"
+  bindLabel="name"
+  bindValue="name"
+  formControlName="city"
+  placeholder="Select city"
+  (change)="onCitySelect($event)">
+</ng-select>
+
+  </div>
+
+  <div class="col-md-6 mb-3">
+    <label class="form-label">Postal Code</label>
+    <input type="text" class="form-control" formControlName="postalCode">
+  </div>
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Address</label>
+  <input type="text" class="form-control" formControlName="address">
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Phone</label>
+  <input type="text" class="form-control" formControlName="phone">
+</div>
+
+
+        <div class="d-flex justify-content-end align-items-center">
+          <button class="btn btn-primary" (click)="saveProfile()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Map Location Section -->
+<div class="map-section p-4 border rounded content-bg mt-4">
+  <h3>Your Location</h3>
+  <p>Drag the marker to update your position.</p>
+  
+  <div id="map" style="height: 300px;" class="rounded border mb-3"></div>
+
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-success" (click)="updatePositionOnly()">Update Position</button>
+  </div>
+</div>
+
+
+
+  <!-- Account Section -->
+  <div class="account-section mb-4 p-4 border rounded content-bg">
+    <h3>Account</h3>
+
+    <div class="mb-4">
+      <h5 class="mb-3">Your email</h5>
+      <div class="d-flex justify-content-between align-items-center">
+        <span>{{ profileForm.value.email }}</span>
+        <button class="btn btn-outline-secondary" (click)="changeEmailModal()">Edit</button>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <h5 class="mb-3">Your password</h5>
+      <div class="d-flex justify-content-between align-items-center">
+        <span>**********</span>
+        <button class="btn btn-outline-secondary" (click)="changePasswordModal()">Change</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Danger Zone Section -->
+  <div class="danger-section p-4 border rounded border-danger content-bg">
+    <h3 class="text-danger">Danger Zone</h3>
+    <p class="mb-3">Irreversible and destructive actions</p>
+    <button class="btn btn-outline-danger" (click)="requestAccountDeletion()">Request account deletion</button>
+  </div>
+</div>
