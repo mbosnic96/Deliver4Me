@@ -1,27 +1,28 @@
 <div class="container mt-4" [formGroup]="profileForm">
   <!-- Profile Section -->
   <div class="profile-section mb-4 p-4 border rounded content-bg">
-    <h2>Profile</h2>
+    <h2>Profil</h2>
 
     <div class="row d-flex align-items-center">
       <div class="col-lg-4">
         <div class="mb-4">
           <div class="d-flex align-items-center flex-column">
-            <div class="profile-photo-container me-4">
-              <img *ngIf="profileForm.value.photoUrl; else noPhoto" 
-                   [src]="profileForm.value.photoUrl" 
-                   alt="Profile photo" 
-                   class="profile-photo rounded-circle img-fluid">
-              <ng-template #noPhoto>
-                <div class="profile-photo-placeholder rounded-circle">
-                  <img src="user.png" alt="User" class="img-fluid">
-                </div>
-              </ng-template>
-            </div>
+            <div class="profile-photo-container">
+  <img *ngIf="profileForm.value.photoUrl; else noPhoto" 
+       [src]="profileForm.value.photoUrl" 
+       alt="Profile photo" 
+       class="profile-photo">
+  <ng-template #noPhoto>
+    <div class="profile-photo-placeholder">
+      <img src="user.png" alt="User">
+    </div>
+  </ng-template>
+</div>
+
             <div class="mt-3">
               <button *ngIf="profileForm.value.photoUrl; else uploadBtn" 
                       class="btn btn-outline-danger" 
-                      (click)="removePhoto()">Remove photo</button>
+                      (click)="removePhoto()">Ukloni sliku</button>
               <ng-template #uploadBtn>
                 <div class="file-upload btn btn-primary">
                   <label>
@@ -42,7 +43,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Username</label>
+          <label class="form-label">Korisničko ime</label>
           <input type="text" class="form-control" formControlName="username">
         </div>
 
@@ -50,7 +51,7 @@
 
         <div class="row">
   <div class="col-md-6 mb-3">
-    <label class="form-label">Country</label>
+    <label class="form-label">Država</label>
     <ng-select
       [items]="countries"
       bindLabel="name"
@@ -62,7 +63,7 @@
   </div>
 
   <div class="col-md-6 mb-3">
-    <label class="form-label">State</label>
+    <label class="form-label">Regija/Kanton</label>
     <ng-select
       [items]="states"
       bindLabel="name"
@@ -76,7 +77,7 @@
 
 <div class="row">
   <div class="col-md-6 mb-3">
-    <label class="form-label">City</label>
+    <label class="form-label">Grad</label>
     <ng-select
   [items]="cities"
   bindLabel="name"
@@ -89,18 +90,18 @@
   </div>
 
   <div class="col-md-6 mb-3">
-    <label class="form-label">Postal Code</label>
+    <label class="form-label">Poštanski broj</label>
     <input type="text" class="form-control" formControlName="postalCode">
   </div>
 </div>
 
 <div class="mb-3">
-  <label class="form-label">Address</label>
+  <label class="form-label">Adresa</label>
   <input type="text" class="form-control" formControlName="address">
 </div>
 
 <div class="mb-3">
-  <label class="form-label">Phone</label>
+  <label class="form-label">Telefon</label>
   <input type="text" class="form-control" formControlName="phone">
 </div>
 
@@ -113,14 +114,14 @@
   </div>
 
 <!-- Map Location Section -->
-<div class="map-section p-4 border rounded content-bg mt-4">
-  <h3>Your Location</h3>
-  <p>Drag the marker to update your position.</p>
+<div class="map-section p-4 border rounded content-bg mb-4">
+  <h3>Tačna lokacija</h3>
+  <p>Prevucite marker na tačnu lokacciju da bi vas dostavljač lakše pronašao.</p>
   
   <div id="map" style="height: 300px;" class="rounded border mb-3"></div>
 
   <div class="d-flex justify-content-end">
-    <button class="btn btn-success" (click)="updatePositionOnly()">Update Position</button>
+    <button class="btn btn-success" (click)="updatePositionOnly()">Ažuriraj lokaciju</button>
   </div>
 </div>
 
@@ -128,21 +129,21 @@
 
   <!-- Account Section -->
   <div class="account-section mb-4 p-4 border rounded content-bg">
-    <h3>Account</h3>
+    <h3>Račun</h3>
 
     <div class="mb-4">
-      <h5 class="mb-3">Your email</h5>
+      <h5 class="mb-3">Email adresa</h5>
       <div class="d-flex justify-content-between align-items-center">
         <span>{{ profileForm.value.email }}</span>
-        <button class="btn btn-outline-secondary" (click)="changeEmailModal()">Edit</button>
+        <button class="btn btn-outline-secondary" (click)="changeEmailModal()">Uredi</button>
       </div>
     </div>
 
     <div class="mb-4">
-      <h5 class="mb-3">Your password</h5>
+      <h5 class="mb-3">Lozinka</h5>
       <div class="d-flex justify-content-between align-items-center">
         <span>**********</span>
-        <button class="btn btn-outline-secondary" (click)="changePasswordModal()">Change</button>
+        <button class="btn btn-outline-secondary" (click)="changePasswordModal()">Promijeni lozinku</button>
       </div>
     </div>
 
@@ -150,8 +151,8 @@
 
   <!-- Danger Zone Section -->
   <div class="danger-section p-4 border rounded border-danger content-bg">
-    <h3 class="text-danger">Danger Zone</h3>
-    <p class="mb-3">Irreversible and destructive actions</p>
-    <button class="btn btn-outline-danger" (click)="requestAccountDeletion()">Request account deletion</button>
+    <h3 class="text-danger">Opasna zona</h3>
+    <p class="mb-3">Pažljivo, ovom radnjom brišete račun. Ponovna prijava nije moguća bez kontaktiranja administratora!</p>
+    <button class="btn btn-outline-danger" (click)="requestAccountDeletion()">Obriši račun</button>
   </div>
 </div>

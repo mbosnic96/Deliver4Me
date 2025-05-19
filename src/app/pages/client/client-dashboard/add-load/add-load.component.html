@@ -1,0 +1,140 @@
+<form [formGroup]="addLoadForm" (ngSubmit)="onSubmit()">
+  <div class="modal-header content-bg">
+    <h5 class="modal-title">{{ isEditMode ? 'Uredi teret' : 'Dodaj novi teret' }}</h5>
+    <button type="button" class="btn-close" (click)="onCancel()"></button>
+  </div>
+
+  <div class="modal-body content-bg">
+    <!-- Naslov & Opis -->
+    <div class="mb-3">
+      <label class="form-label">Naslov</label>
+      <input formControlName="title" class="form-control" />
+    </div>
+    <div class="mb-4">
+      <label class="form-label">Opis</label>
+      <textarea formControlName="description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <!-- Lokacija preuzimanja -->
+    <h6 class="fw-bold">Lokacija preuzimanja</h6>
+    <div class="row g-2 mb-2">
+      <div class="col-md">
+        <label class="form-label">Država</label>
+        <ng-select [items]="countries" bindLabel="name" bindValue="isoCode"
+                   formControlName="pickupCountry" (change)="onCountryChange('pickup')"></ng-select>
+      </div>
+      <div class="col-md">
+        <label class="form-label">Entitet / Regija</label>
+        <ng-select [items]="states" bindLabel="name" bindValue="isoCode"
+                   formControlName="pickupState" (change)="onStateChange('pickup')"></ng-select>
+      </div>
+      <div class="col-md">
+        <label class="form-label">Grad</label>
+        <ng-select [items]="cities" bindLabel="name" bindValue="name"
+                   formControlName="pickupCity" (change)="onCityChange('pickup')"></ng-select>
+      </div>
+    </div>
+    <div class="col-lg-12 mb-2">
+      <label class="form-label">Adresa preuzimanja</label>
+      <input type="text" formControlName="pickupAddress" class="form-control" />
+    </div>
+    <div #pickupMap class="map-container rounded border" style="height: 200px;"></div>
+
+    <!-- Lokacija isporuke -->
+    <h6 class="fw-bold mt-4">Lokacija isporuke</h6>
+    <div class="row g-2 mb-2">
+      <div class="col-md">
+        <label class="form-label">Država</label>
+        <ng-select [items]="countries" bindLabel="name" bindValue="isoCode"
+                   formControlName="deliveryCountry" (change)="onCountryChange('delivery')"></ng-select>
+      </div>
+      <div class="col-md">
+        <label class="form-label">Entitet / Regija</label>
+        <ng-select [items]="states" bindLabel="name" bindValue="isoCode"
+                   formControlName="deliveryState" (change)="onStateChange('delivery')"></ng-select>
+      </div>
+      <div class="col-md">
+        <label class="form-label">Grad</label>
+        <ng-select [items]="cities" bindLabel="name" bindValue="name"
+                   formControlName="deliveryCity" (change)="onCityChange('delivery')"></ng-select>
+      </div>
+    </div>
+    <div class="col-lg-12 mb-2">
+      <label class="form-label">Adresa isporuke</label>
+      <input type="text" formControlName="deliveryAddress" class="form-control" />
+    </div>
+    <div #deliveryMap class="map-container rounded border" style="height: 200px;"></div>
+
+    <!-- Datumi i vremena -->
+    <div class="row g-3 my-3">
+      <div class="col-md">
+        <label class="form-label">Datum preuzimanja</label>
+        <input type="date" formControlName="preferredPickupDate" class="form-control" />
+      </div>
+      <div class="col-md">
+        <label class="form-label">Datum isporuke</label>
+        <input type="date" formControlName="preferredDeliveryDate" class="form-control" />
+      </div>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-md">
+        <label class="form-label">Vrijeme preuzimanja</label>
+        <input type="time" formControlName="pickupTime" class="form-control" />
+      </div>
+      <div class="col-md">
+        <label class="form-label">Maksimalno vrijeme isporuke</label>
+        <input type="time" formControlName="maxDeliveryTime" class="form-control" />
+      </div>
+    </div>
+
+    <!-- Informacije o teretu -->
+    <h6 class="fw-bold mt-4">Detalji o teretu</h6>
+    <div class="row g-2">
+      <div class="col-md">
+        <label class="form-label">Težina (kg)</label>
+        <input type="number" formControlName="cargoWeight" class="form-control" />
+      </div>
+      <div class="col-md">
+        <label class="form-label">Širina (m)</label>
+        <input type="number" formControlName="cargoWidth" class="form-control" />
+      </div>
+      <div class="col-md">
+        <label class="form-label">Visina (m)</label>
+        <input type="number" formControlName="cargoHeight" class="form-control" />
+      </div>
+      <div class="col-md">
+        <label class="form-label">Dužina (m)</label>
+        <input type="number" formControlName="cargoLength" class="form-control" />
+      </div>
+      <div class="col-md">
+        <label class="form-label">Volumen (m³)</label>
+        <input type="text" formControlName="cargoVolume" readonly class="form-control bg-light" />
+      </div>
+    </div>
+
+    <!-- Cijena -->
+    <div class="mt-2">
+      <label class="form-label">Unesite maksimalnu cijenu dostave</label>
+      <input type="number" formControlName="fixedPrice" class="form-control" />
+    </div>
+
+    <!-- Slike -->
+    <div class="mt-4">
+      <label class="form-label">Dodaj slike</label>
+      <input type="file" multiple (change)="onImageSelected($event)" class="form-control" />
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        <div *ngFor="let preview of imagePreviews; let i = index" class="position-relative">
+          <img [src]="preview" alt="Pregled slike" width="100" height="100" class="rounded shadow" />
+          <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" (click)="removeImage(i)">×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer content-bg">
+    <button type="submit" class="btn btn-success" [disabled]="addLoadForm.invalid || isLoading">
+      {{ isEditMode ? 'Ažuriraj teret' : 'Kreiraj teret' }}
+    </button>
+    <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">Otkaži</button>
+  </div>
+</form>

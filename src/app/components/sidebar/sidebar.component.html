@@ -6,9 +6,9 @@
   <ul class="nav flex-column mt-5 pt-5">
     <!-- USER -->
     <li *ngIf="role === 'client'" class="nav-item">
-      <a routerLink="/user/dashboard" class="nav-link">
-        <fa-icon [icon]="'user'" class="me-2"></fa-icon>
-        <span *ngIf="!collapsed">Moje narudžbe</span>
+      <a routerLink="/client" class="nav-link">
+        <fa-icon [icon]="'home'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Dashboard</span>
       </a>
     </li>
 
@@ -34,6 +34,13 @@
         <span *ngIf="!collapsed">Profil</span>
       </a>
     </li>
+
+    <li *ngIf="role === 'client'" class="nav-item">
+  <a routerLink="/client/account" class="nav-link">
+    <fa-icon [icon]="'user'" class="me-2"></fa-icon>
+    <span *ngIf="!collapsed">Profil</span>
+  </a>
+</li>
 
     
     <!-- ADMIN -->

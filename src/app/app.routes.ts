@@ -12,19 +12,19 @@ export const routes: Routes = [
 
   {
     path: 'client',
-    component: ClientDashboardComponent,
+    loadChildren: () => import('./pages/client/client.routes').then(m => m.clientRoutes),
     canActivate: [RoleGuard],
     data: { role: 'client' }
   },
   {
     path: 'driver',
-    loadChildren: () => import('./pages/driver/driver.routes').then(m => m.adminRoutes),
+    loadChildren: () => import('./pages/driver/driver.routes').then(m => m.driverRoutes),
     canActivate: [RoleGuard],
     data: { role: 'driver' }
   },
   {
     path: 'admin',
-    component: AdminDashboardComponent,
+    loadChildren: () => import('./pages/client/client.routes').then(m => m.clientRoutes),
     canActivate: [RoleGuard],
     data: { role: 'admin' }
   },
