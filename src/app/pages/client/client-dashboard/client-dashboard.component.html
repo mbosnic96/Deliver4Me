@@ -45,7 +45,10 @@
         <p><fa-icon [icon]="'box'" class="me-2 text-warning"></fa-icon>
           <strong>Paket:</strong> {{ row.description }}</p>
         <p><fa-icon [icon]="'clock'" class="me-2 text-info"></fa-icon>
-          <strong>Pickup:</strong> {{ row.preferredPickupDate?.split('T')[0] }} {{ row.pickupTime }}</p>
+          <strong>Preuzimanje:</strong> {{ row.preferredPickupDate?.split('T')[0] }} {{ row.pickupTime }}</p>
+          
+        <p><fa-icon [icon]="'clock'" class="me-2 text-warning"></fa-icon>
+          <strong>Zakazana dostava:</strong> {{ row.preferredDeliveryDate?.split('T')[0] }} {{ row.maxDeliveryTime }}</p>
         <p class="badge rounded-pill"
           [ngClass]="{
             'bg-success': row.status === 'Aktvan',

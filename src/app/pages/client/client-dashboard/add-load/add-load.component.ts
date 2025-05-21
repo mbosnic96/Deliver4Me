@@ -1,4 +1,3 @@
-// src/app/components/add-load/add-load.component.ts
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDatepicker, NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -11,6 +10,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { CommonModule, DatePipe } from '@angular/common';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { environment } from '../../../../../enviroments/environment';
 
 @Component({
   selector: 'app-add-load',
@@ -21,11 +21,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 export class AddLoadComponent implements OnInit {
   @ViewChild('pickupMap') pickupMapElement!: ElementRef;
   @ViewChild('deliveryMap') deliveryMapElement!: ElementRef;
-
+  imageBaseUrl = environment.apiUrl;
   addLoadForm!: FormGroup;
   isEditMode = false;
   isLoading = false;
   loadData: any;
+  
+
+
 
   countries: ICountry[] = [];
   states: IState[] = [];
@@ -36,6 +39,8 @@ export class AddLoadComponent implements OnInit {
   pickupMarker!: L.Marker;
   deliveryMarker!: L.Marker;
 
+  existingImages: { id: string; url: string }[] = [];
+removedImageIds: string[] = [];
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
 
@@ -71,6 +76,14 @@ ngOnInit(): void {
   });
 }
 
+statusOptions = [
+  { value: 'Aktivan', label: 'Aktivan' },
+  { value: 'Čekanje', label: 'Čekanje' },
+  { value: 'Poslan', label: 'Poslan' },
+  { value: 'Otkazan', label: 'Otkazan' },
+  { value: 'Dostavljen', label: 'Dostavljen' }
+];
+
 
   initializeForm(): void {
     this.addLoadForm = this.fb.group({
@@ -99,7 +112,8 @@ ngOnInit(): void {
       pickupLatitude: ['', Validators.required],
       pickupLongitude: ['', Validators.required],
       deliveryLatitude: ['', Validators.required],
-      deliveryLongitude: ['', Validators.required]
+      deliveryLongitude: ['', Validators.required],
+      status: ['']
     });
   }
 
@@ -172,7 +186,6 @@ this.deliveryMap.invalidateSize();
     const lat = user.latitude || 0;
     const lng = user.longitude || 0;
 
-    // Set pickup address fields
     this.addLoadForm.patchValue({
       pickupCountry: user.country,
       pickupState: user.state,
@@ -182,11 +195,11 @@ this.deliveryMap.invalidateSize();
       pickupLongitude: lng
     });
 
-    // Preload dropdowns
+ 
     this.states = this.cscService.getStatesByCountry(user.country);
     this.cities = this.cscService.getCitiesByCountry(user.country);
 
-    // Update the pickup map
+
     this.pickupMap.setView([lat, lng], 13);
     this.pickupMarker.setLatLng([lat, lng]);
 
@@ -239,54 +252,68 @@ this.deliveryMap.invalidateSize();
     });
   }
 
-  removeImage(index: number): void {
-    this.selectedImages.splice(index, 1);
-    this.imagePreviews.splice(index, 1);
+removeImage(index: number): void {
+  const previewUrl = this.imagePreviews[index];
+
+  const existingImage = this.existingImages.find(img => img.url === previewUrl);
+  if (existingImage) {
+    this.removedImageIds.push(existingImage.id);
+    this.existingImages = this.existingImages.filter(img => img.id !== existingImage.id);
+  } else {
+    this.selectedImages.splice(index - this.existingImages.length, 1);
   }
 
-  onSubmit(): void {
-    if (this.addLoadForm.invalid || this.isLoading) return;
+  this.imagePreviews.splice(index, 1);
+}
 
-    this.isLoading = true;
-    const formValues = this.addLoadForm.getRawValue();
-    const formData = new FormData();
+onSubmit(): void {
+  if (this.addLoadForm.invalid || this.isLoading) return;
 
-     if (formValues.preferredPickupDate) {
+  this.isLoading = true;
+  const formValues = this.addLoadForm.getRawValue();
+  const formData = new FormData();
+
+  if (formValues.preferredPickupDate) {
     formValues.preferredPickupDate = this.ngbDateToDateString(formValues.preferredPickupDate);
   }
   if (formValues.preferredDeliveryDate) {
     formValues.preferredDeliveryDate = this.ngbDateToDateString(formValues.preferredDeliveryDate);
   }
 
-    for (const key in formValues) {
-      if (formValues.hasOwnProperty(key)) {
-        formData.append(key, formValues[key]);
-      }
+  for (const key in formValues) {
+    if (formValues.hasOwnProperty(key)) {
+      formData.append(key, formValues[key]);
     }
-
-    this.selectedImages.forEach(file => {
-      formData.append('Images', file);
-    });
-
-    const operation$ = this.isEditMode
-      ? this.loadService.updateLoad(this.loadData.id, formData)
-      : this.loadService.addLoad(formData);
-
-    operation$.subscribe({
-      next: () => {
-        this.activeModal.close('success');
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error saving load', err);
-        this.isLoading = false;
-      }
-    });
   }
+
+
+  this.removedImageIds.forEach(id => {
+    formData.append('RemovedImageIds', id);
+  });
+
+
+  this.selectedImages.forEach(file => {
+    formData.append('Images', file);
+  });
+
+  const operation$ = this.isEditMode
+    ? this.loadService.updateLoad(this.loadData.id, formData)
+    : this.loadService.addLoad(formData);
+
+  operation$.subscribe({
+    next: () => {
+      this.activeModal.close('success');
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('Error saving load', err);
+      this.isLoading = false;
+    }
+  });
+}
 
   
 private ngbDateToDateString(ngbDate: NgbDateStruct): string {
-  // Format as yyyy-MM-dd (correct for .NET DateOnly)
   return `${ngbDate.year}-${ngbDate.month.toString().padStart(2, '0')}-${ngbDate.day.toString().padStart(2, '0')}`;
 }
 
@@ -302,53 +329,55 @@ private ngbDateToDateString(ngbDate: NgbDateStruct): string {
     }
   }
 
-  populateForm(data: any): void {
-    
+populateForm(data: any): void {
   this.states = this.cscService.getStatesByCountry(data.deliveryCountry);
   this.cities = this.cscService.getCitiesByCountry(data.deliveryCountry);
-    this.addLoadForm.patchValue({
-      title: data.title,
-      description: data.description,
-      pickupCountry: data.pickupCountry,
-       pickupState: data.pickupState,
-      pickupCity: data.pickupCity,
-      pickupAddress: data.pickupAddress,
-      deliveryCountry: data.deliveryCountry,
-      deliveryState: data.deliveryState,
-      deliveryAddress: data.deliveryAddress,
-      deliveryCity: data.deliveryCity, 
-      preferredPickupDate: this.ddmmyyyyToNgbDate(data.preferredPickupDate),
-      pickupTime: data.pickupTime,
-      preferredDeliveryDate: this.ddmmyyyyToNgbDate(data.preferredDeliveryDate),
-      contactPerson: data.contactPerson,
-      contactPhone: data.contactPhone,
-      maxDeliveryTime: data.maxDeliveryTime,
-      cargoWeight: data.cargoWeight,
-      cargoWidth: data.cargoWidth,
-      cargoHeight: data.cargoHeight,
-      cargoLength: data.cargoLength,
-      cargoVolume: data.cargoVolume,
-      fixedPrice: data.fixedPrice,
-      pickupLatitude: data.pickupLatitude,
-      pickupLongitude: data.pickupLongitude,
-      deliveryLatitude: data.deliveryLatitude,
-      deliveryLongitude: data.deliveryLongitude,
-    });
+  this.addLoadForm.patchValue({
+    title: data.title,
+    description: data.description,
+    pickupCountry: data.pickupCountry,
+    pickupState: data.pickupState,
+    pickupCity: data.pickupCity,
+    pickupAddress: data.pickupAddress,
+    deliveryCountry: data.deliveryCountry,
+    deliveryState: data.deliveryState,
+    deliveryAddress: data.deliveryAddress,
+    deliveryCity: data.deliveryCity, 
+    preferredPickupDate: this.ddmmyyyyToNgbDate(data.preferredPickupDate),
+    pickupTime: data.pickupTime,
+    preferredDeliveryDate: this.ddmmyyyyToNgbDate(data.preferredDeliveryDate),
+    contactPerson: data.contactPerson,
+    contactPhone: data.contactPhone,
+    maxDeliveryTime: data.maxDeliveryTime,
+    cargoWeight: data.cargoWeight,
+    cargoWidth: data.cargoWidth,
+    cargoHeight: data.cargoHeight,
+    cargoLength: data.cargoLength,
+    cargoVolume: data.cargoVolume,
+    fixedPrice: data.fixedPrice,
+    pickupLatitude: data.pickupLatitude,
+    pickupLongitude: data.pickupLongitude,
+    deliveryLatitude: data.deliveryLatitude,
+    deliveryLongitude: data.deliveryLongitude,
+    status: data.status
+  });
 
-    // Preload dependent dropdowns
-  //  this.states = this.cscService.getStatesByCountry(data.pickupCountry);
-   // this.cities = this.cscService.getCitiesByCountry(data.pickupCountry);
+  this.updateMapMarker('pickup', data.pickupLatitude, data.pickupLongitude);
+  this.updateMapMarker('delivery', data.deliveryLatitude, data.deliveryLongitude);
+  
+if (data.images && Array.isArray(data.images)) {
+  this.existingImages = data.images.map((img: any) => ({
+    id: img.id,
+    url:`${this.imageBaseUrl}${img.image}`
+  }));
+  this.imagePreviews = this.existingImages.map(img => img.url);
+}
+  this.cd.detectChanges();
+}
 
-    this.updateMapMarker('pickup', data.pickupLatitude, data.pickupLongitude);
-    this.updateMapMarker('delivery', data.deliveryLatitude, data.deliveryLongitude);
-    this.cd.detectChanges(); // import ChangeDetectorRef
 
 
-    // Optionally preload image previews if editing
-    if (data.imageUrls && data.imageUrls.length) {
-      this.imagePreviews = [...data.imageUrls]; // assuming URLs are returned
-    }
-  }
+
 isoStringToNgbDate(dateString: string): NgbDateStruct | null {
   const date = new Date(dateString);
   return isNaN(date.getTime()) ? null : {

@@ -10,20 +10,20 @@
   [HeadersArray]="[
     { key: 'title', label: 'Naziv' },
     { key: 'description', label: 'Opis' },
+    { key: 'status', label: 'Status' },
     { key: 'pickupCountry', label: 'Država pošiljatelja' },
     { key: 'pickupState', label: 'Kanton pošiljatelja' },
     { key: 'pickupCity', label: 'Grad pošiljatelja' },
     { key: 'pickupAddress', label: 'Adresa pošiljatelja' },
-    { key: 'deliveryCountry', label: 'Država primaoca' },
+    { key: 'preferredPickupDate', label: 'Datum preuzimanja' },
+    { key: 'pickupTime', label: 'Vrijeme preuzimanja' },
     { key: 'contactPerson', label: 'Kontakt osoba' },
     { key: 'contactPhone', label: 'Kontakt telefon' },
+    { key: 'deliveryCountry', label: 'Država primaoca' },
     { key: 'deliveryCity', label: 'Grad primaoca' },
     { key: 'deliveryState', label: 'Kanton primaoca' },
     { key: 'deliveryAddress', label: 'Adresa primaoca' },
-    { key: 'status', label: 'Status' },
-    { key: 'preferredPickupDate', label: 'Datum preuzimanja' },
     { key: 'preferredDeliveryDate', label: 'Datum dostave' },
-    { key: 'pickupTime', label: 'Vrijeme preuzimanja' },
     { key: 'maxDeliveryTime', label: 'Vrijeme dostave' },
     { key: 'cargoWeight', label: 'Težina (kg)' },
     { key: 'cargoLength', label: 'Dužina (m)' },
@@ -35,7 +35,7 @@
   [DataArray]="userLoads"
   [route]="'/deliveries'"
   (editRequest)="editLoad($event)"
-  (deleteRequest)="onDelete()">
+  (deleteRequest)="onDelete($event)">
 </app-table>
 
     </div>

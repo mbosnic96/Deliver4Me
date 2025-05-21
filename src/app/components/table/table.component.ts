@@ -80,9 +80,10 @@ export class TableComponent implements OnChanges {
     this.editRequest.emit(index);
   }
 
-  delete(index: number) {
-    this.deleteRequest.emit(index);
-  }
+ delete(index: number) {
+  this.deleteRequest.emit(index); 
+}
+
 
   openRoute(id: any) {
     if (this.route) {

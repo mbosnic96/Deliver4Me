@@ -16,9 +16,10 @@ private http = inject(HttpClient);
     
   }
 
-  updateLoad(id: string, formData: FormData): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, formData);
-  }
+updateLoad(id: string, formData: FormData): Observable<any> {
+  return this.http.put(`${this.apiUrl}/api/loads/${id}`, formData);
+}
+
 
   getMyLoads(): Observable<any[]> {
   return this.http.get<any[]>(`${this.apiUrl}/api/loads/my-loads`);
@@ -28,4 +29,9 @@ private http = inject(HttpClient);
   getLoadById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
+
+  deleteLoad(id: string): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/api/loads/${id}`);
+}
+
 }

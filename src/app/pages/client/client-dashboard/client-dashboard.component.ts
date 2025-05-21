@@ -68,7 +68,7 @@ recommendedDrivers = [
   fetchUserLoads() {
   this.loadService.getMyLoads().subscribe({
     next: (loads) => {
-       this.userLoads = loads.filter(l => l.status !== 'Dostavljeno');
+       this.userLoads = loads.filter(l => l.status !== 'Dostavljen');
       
     this.initMap();
         this.cd.detectChanges();

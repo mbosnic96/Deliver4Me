@@ -86,7 +86,7 @@ initMap(): void {
     console.warn('No location data to initialize map.');
     return;
   }
-console.log('Init map at:', lat, lng);
+
 
   this.map = L.map('map').setView([lat, lng], 12);
 

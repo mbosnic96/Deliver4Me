@@ -6,6 +6,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddLoadComponent } from '../client-dashboard/add-load/add-load.component';
 import { LoadService } from '../../../core/services/load.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-my-loads',
@@ -41,13 +43,10 @@ export class MyLoadsComponent {
     });
     
   }
-  onDelete(){
-    console.log('Delete request received');
-  }
+
 
   editLoad(index: number) {
   const load = this.userLoads[index];
-    console.log('Edit request for load:', load);
   const modalRef = this.modalService.open(AddLoadComponent, {
     size: 'xl',
     backdrop: 'static'
@@ -61,5 +60,42 @@ export class MyLoadsComponent {
     }
   });
 }
+
+onDelete(index: number) {
+  const load = this.userLoads[index];
+  Swal.fire({
+    title: 'Jeste li sigurni?',
+    text: 'Ova akcija će trajno obrisati dostavu.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Da, obriši',
+    cancelButtonText: 'Otkaži'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.loadService.deleteLoad(load.id).subscribe({
+        next: () => {
+          this.userLoads.splice(index, 1);
+          this.cd.detectChanges();
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Obrisano',
+            text: 'Dostava je uspješno obrisana.'
+          });
+        },
+        error: (err) => {
+          console.error('Greška prilikom brisanja:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Greška',
+            text: 'Došlo je do greške prilikom brisanja dostave.'
+          });
+        }
+      });
+    }
+  });
+}
+
+
 
 }
