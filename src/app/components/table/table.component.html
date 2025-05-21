@@ -37,7 +37,7 @@
           </ng-container>
 
           <ng-container *ngIf="column.key === 'action'">
-            <button class="btn btn-outline-primary btn-sm me-1" (click)="openRoute(row.id)" title="View">
+            <button class="btn btn-outline-primary btn-sm me-1" (click)="openRoute(i)" title="View">
               <fa-icon [icon]="'eye'"></fa-icon> 
             </button>
             <button class="btn btn-outline-primary btn-sm me-1" (click)="edit(i)" title="Edit">

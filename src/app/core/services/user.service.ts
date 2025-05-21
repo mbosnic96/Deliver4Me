@@ -30,6 +30,11 @@ updateLocation(lat: number, lng: number): Observable<any> {
   });
 }
 
+getUserById(id: string): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/api/users/${id}`);
+}
+
+
 
   requestAccountDeletion(): Observable<{ message: string }> {
   return this.http.post<{ message: string }>(`${this.apiUrl}/api/users/me/account-delete`, {});

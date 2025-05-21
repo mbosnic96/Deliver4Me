@@ -25,9 +25,13 @@ updateLoad(id: string, formData: FormData): Observable<any> {
   return this.http.get<any[]>(`${this.apiUrl}/api/loads/my-loads`);
 }
 
+getAllLoads(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/api/loads/available`);
+}
+
 
   getLoadById(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.apiUrl}/api/loads/${id}`);
   }
 
   deleteLoad(id: string): Observable<any> {

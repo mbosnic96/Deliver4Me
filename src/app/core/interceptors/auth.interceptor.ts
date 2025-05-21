@@ -19,9 +19,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError(error => {
       if (error.status === 401 || error.status === 403) {
-        authService.logout(); // Centralized logout handling
+        authService.logout();
       }
-      return throwError(() => error); // Correct way to rethrow in RxJS 7+
+      return throwError(() => error); 
     })
   );
 };

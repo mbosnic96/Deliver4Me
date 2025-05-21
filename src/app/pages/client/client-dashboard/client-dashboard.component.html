@@ -58,7 +58,7 @@
           }">{{ row.status }}</p>
       </div>
       <div class="card-footer bg-transparent text-end pb-4">
-        <button class="btn btn-outline-primary btn-sm w-100">
+        <button class="btn btn-outline-primary btn-sm w-100" (click)="viewLoadDetails(row.id)">
           <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Detalji
         </button>
       </div>

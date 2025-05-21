@@ -17,6 +17,8 @@ export class TableComponent implements OnChanges {
   @Input() route?: string;
 
   @Output() editRequest = new EventEmitter<number>();
+  @Output() viewRequest = new EventEmitter<number>();
+
   @Output() deleteRequest = new EventEmitter<number>();
 
   sortOrder: 'asc' | 'desc' = 'asc';
@@ -25,10 +27,7 @@ export class TableComponent implements OnChanges {
   constructor(private router: Router) {}
 
   ngOnChanges(): void {
-    // Optionally reset sorting on data change
-    // this.sortColumn = '';
-    // this.sortOrder = 'asc';
-    // or you can trigger a default sort here if needed
+    //
   }
 
   sort(columnKey: string) {
@@ -85,9 +84,8 @@ export class TableComponent implements OnChanges {
 }
 
 
-  openRoute(id: any) {
-    if (this.route) {
-      this.router.navigateByUrl(`${this.route}/${id}`);
-    }
-  }
+openRoute(index: number) {
+    this.viewRequest.emit(index);
+}
+
 }

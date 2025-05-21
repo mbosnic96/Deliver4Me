@@ -7,6 +7,7 @@ import { AddLoadComponent } from '../client-dashboard/add-load/add-load.componen
 import { LoadService } from '../../../core/services/load.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,7 +19,7 @@ import Swal from 'sweetalert2';
 export class MyLoadsComponent {
   userLoads: any[] = [];
 
-  constructor(private modalService: NgbModal, private loadService: LoadService, private cd: ChangeDetectorRef) { }
+  constructor(private modalService: NgbModal, private loadService: LoadService, private cd: ChangeDetectorRef, private router: Router) { }
 
     ngOnInit() {
     this.fetchUserLoads();
@@ -95,6 +96,29 @@ onDelete(index: number) {
     }
   });
 }
+
+viewLoad(index: number) {
+  const load = this.userLoads[index];
+  if (load && load.id) {
+    try {
+      this.router.navigate(['/load', load.id])
+        .then(success => {
+          if (!success) {
+            console.error('Navigation failed');
+            // Optionally show error to user
+          }
+        })
+        .catch(err => {
+          console.error('Navigation error:', err);
+        });
+    } catch (e) {
+      console.error('Error during navigation:', e);
+    }
+  } else {
+    console.error('Invalid load or load ID');
+  }
+}
+
 
 
 

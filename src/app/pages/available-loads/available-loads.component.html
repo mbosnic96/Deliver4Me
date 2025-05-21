@@ -1,0 +1,188 @@
+<div class="container">
+<div class="row g-3 mb-3">
+  <div class="col-md-3">
+    <label>Search</label>
+    <input type="text" class="form-control" [(ngModel)]="filters.searchTerm" placeholder="Search..." />
+  </div>
+
+  <div class="col-md-2">
+    <label>Pickup Country</label>
+    <ng-select
+      [items]="pickupCountries"
+      bindLabel="name"
+      bindValue="isoCode"
+      [(ngModel)]="filters.pickupCountry"
+      (change)="onPickupCountryChange()"
+      placeholder="Select country"
+    ></ng-select>
+  </div>
+
+  <div class="col-md-2">
+    <label>Pickup State</label>
+    <ng-select
+      [items]="pickupStates"
+      bindLabel="name"
+      bindValue="isoCode"
+      [(ngModel)]="filters.pickupState"
+      (change)="onPickupStateChange()"
+      [disabled]="!filters.pickupCountry"
+      placeholder="Select state"
+    ></ng-select>
+  </div>
+
+  <div class="col-md-2">
+    <label>Pickup City</label>
+    <ng-select
+      [items]="pickupCities"
+      bindLabel="name"
+      bindValue="name"
+      [(ngModel)]="filters.pickupCity"
+      [disabled]="!filters.pickupState"
+      placeholder="Select city"
+    ></ng-select>
+  </div>
+
+  <div class="col-md-2">
+    <label>Delivery Country</label>
+    <ng-select
+      [items]="deliveryCountries"
+      bindLabel="name"
+      bindValue="isoCode"
+      [(ngModel)]="filters.deliveryCountry"
+      (change)="onDeliveryCountryChange()"
+      placeholder="Select country"
+    ></ng-select>
+  </div>
+
+  <div class="col-md-2">
+    <label>Delivery State</label>
+    <ng-select
+      [items]="deliveryStates"
+      bindLabel="name"
+      bindValue="isoCode"
+      [(ngModel)]="filters.deliveryState"
+      (change)="onDeliveryStateChange()"
+      [disabled]="!filters.deliveryCountry"
+      placeholder="Select state"
+    ></ng-select>
+  </div>
+
+  <div class="col-md-2">
+    <label>Delivery City</label>
+    <ng-select
+      [items]="deliveryCities"
+      bindLabel="name"
+      bindValue="name"
+      [(ngModel)]="filters.deliveryCity"
+      [disabled]="!filters.deliveryState"
+      placeholder="Select city"
+    ></ng-select>
+  </div>
+
+  <div class="col-md-2 d-flex align-items-end">
+    <button class="btn btn-primary w-100" (click)="applyFilters()">Apply</button>
+  </div>
+  <div class="col-md-2 d-flex align-items-end">
+    <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">Reset</button>
+  </div>
+</div>
+
+
+<div class="row g-4 mt-3">
+  <div *ngFor="let load of DataArray" class="col-12 col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all content-bg">
+
+      <!-- Image or Placeholder -->
+      <div class="position-relative overflow-hidden" style="height: 220px;">
+        <div id="carousel-{{ load.id }}" class="carousel slide h-100" data-bs-ride="carousel">
+          <div class="carousel-inner h-100">
+            <div *ngFor="let img of load.images; let i = index" 
+                 class="carousel-item h-100" 
+                 [class.active]="i === 0">
+              <img [src]="imageBaseUrl+img.image" 
+                   class="d-block w-100 h-100 object-contain-cover" 
+                   alt="vehicle image {{ i + 1 }}">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" 
+                  [attr.data-bs-target]="'#carousel-' + load.id" 
+                  data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" 
+                  [attr.data-bs-target]="'#carousel-' + load.id" 
+                  data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <div class="position-absolute top-0 end-0 bg-success text-white px-3 py-1 rounded-bl">
+            {{ load.status }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body pb-2">
+        <div class="mb-2 d-flex align-items-center text-center">
+          <fa-icon [icon]="'route'" class="me-2 text-primary"></fa-icon>
+          <p class="mb-0">
+            {{ load.pickupCountry }}, {{ load.pickupCity }},  {{ load.pickupAddress }}
+            <fa-icon [icon]="'arrow-right'" class="ms-2 me-2 text-primary"></fa-icon>
+              {{ load.deliveryCountry }}, {{ load.deliveryCity }},  {{ load.deliveryAddress }}
+         
+          </p>
+        </div>
+
+        <!-- Dimensions & Info -->
+        <div class="row g-2 mb-3 small">
+          <div class="col-6 text-center">
+            <div class="text-center"> <fa-icon [icon]="'weight-hanging'" class="ms-2 me-2 text-primary"></fa-icon>Težina</div>
+            <div class="fw-semibold text-center">{{ load.cargoWeight }} kg</div>
+          </div>
+          <div class="col-6">
+
+            <div class="text-center text-center"> <fa-icon [icon]="'cube'" class="ms-2 me-2 text-primary"></fa-icon>Volumen</div>
+            <div class="fw-semibold text-center">{{ load.cargoVolume }} m³</div>
+          </div>
+          <div class="col-6 text-center">
+            <div class="text-center"> <fa-icon [icon]="'ruler-combined'" class="ms-2 me-2 text-primary"></fa-icon>Dimenzije</div>
+            <div class="fw-semibold text-center">
+              {{ load.cargoWidth }} x {{ load.cargoLength }} x {{ load.cargoHeight }} m
+            </div>
+          </div>
+          <div class="col-6 text-center">
+            <div class="text-center"> <fa-icon [icon]="'dollar-sign'" class="ms-2 me-2 text-primary"></fa-icon>Cijena</div>
+            <div class="fw-semibold text-success text-center">
+              {{ load.fixedPrice ? ( load.fixedPrice) : 'N/A' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Dates -->
+        <div class="border-top pt-3 small d-flex justify-content-between">
+          <div>
+             <fa-icon [icon]="'calendar-alt'" class="ms-2 me-2 text-primary"></fa-icon>
+            {{ load.preferredPickupDate }} od {{ load.pickupTime }} 
+          </div>
+          <div>
+             <fa-icon [icon]="'calendar-check'" class="ms-2 me-2 text-primary"></fa-icon>
+            {{ load.preferredDeliveryDate }} do {{ load.maxDeliveryTime }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer: Preview only -->
+      <div class="card-footer bg-transparent border-0 pt-0">
+        <button
+          class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+          (click)="viewLoadDetails(load.id)"
+        >
+         <fa-icon [icon]="'eye'" class="ms-2 me-2"></fa-icon>
+          <span>Detalji</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

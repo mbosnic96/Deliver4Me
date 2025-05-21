@@ -1,0 +1,210 @@
+<div class="container-fluid py-4" *ngIf="loadData">
+  <div class="row g-4">
+    <!-- Glavni sadržaj (slike i detalji tereta) -->
+    <div class="col-lg-8">
+      <!-- Galerija slika tereta -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body p-0">
+          <div id="loadGallery" class="carousel slide" aria-label="Galerija slika tereta" data-bs-ride="carousel">
+            
+            <!-- Indikatori -->
+            <div class="carousel-indicators">
+              <button *ngFor="let img of loadData.images; let i = index" 
+                      type="button" 
+                      (click)="setActiveSlide(i)" 
+                      [class.active]="i === activeSlideIndex"
+                      [attr.aria-current]="i === activeSlideIndex ? 'true' : null"
+                      [attr.aria-label]="'Slajd ' + (i + 1)">
+              </button>
+            </div>
+
+            <!-- Slajdovi -->
+            <div class="carousel-inner">
+              <div *ngFor="let img of loadData.images; let i = index" 
+                   class="carousel-item"
+                   [class.active]="i === activeSlideIndex"
+                   [attr.aria-hidden]="i === activeSlideIndex ? 'false' : 'true'">
+                <img [src]="imageBaseUrl + img.image" 
+                     class="d-block w-100" 
+                     alt="Slika tereta {{i + 1}}">
+              </div>
+            </div>
+
+            <!-- Kontrole -->
+            <button class="carousel-control-prev" type="button" 
+                  data-bs-target="#loadGallery" 
+                  data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" 
+                  data-bs-target="#loadGallery" 
+                  data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          </div>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="card-footer bg-transparent">
+          <div class="d-flex gap-2 overflow-auto py-2">
+            <div *ngFor="let img of loadData.images; let i = index" 
+                 class="thumbnail-container"
+                 [class.active]="i === activeSlideIndex"
+                 (click)="setActiveSlide(i)"
+                 style="cursor: pointer;">
+              <img [src]="imageBaseUrl + img.image" 
+                   class="img-thumbnail" 
+                   alt="Mini slika {{i + 1}}">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalji tereta -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">{{ loadData.title }}</h3>
+          <span class="badge"
+                [ngClass]="{
+                  'bg-success': loadData.status === 'Aktivan',
+                  'bg-warning': loadData.status === 'Na čekanju',
+                  'bg-danger': loadData.status === 'Otkazan'
+                }">
+            {{ loadData.status }}
+          </span>
+        </div>
+        <div class="card-body">
+          <p class="lead">{{ loadData.description }}</p>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-flex align-items-start mb-4">
+                <div class="flex-shrink-0 me-3 text-primary">
+                  <fa-icon [icon]="'map-marker-alt'" class="fs-3"></fa-icon>
+                </div>
+                <div>
+                  <h5 class="mb-1">Mjesto preuzimanja</h5>
+                  <p class="mb-1">
+                    {{ loadData.pickupAddress }}, {{ loadData.pickupCity }}<br>
+                    {{ loadData.pickupState }}, {{ loadData.pickupCountry }}
+                  </p>
+                  <small class="text-muted">
+                    <fa-icon [icon]="'calendar-alt'"></fa-icon> 
+                    {{ loadData.preferredPickupDate }} u {{ loadData.pickupTime }}
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="d-flex align-items-start mb-4">
+                <div class="flex-shrink-0 me-3 text-success">
+                  <fa-icon [icon]="'truck'" class="fs-3"></fa-icon>
+                </div>
+                <div>
+                  <h5 class="mb-1">Mjesto isporuke</h5>
+                  <p class="mb-1">
+                    {{ loadData.deliveryAddress }}, {{ loadData.deliveryCity }}<br>
+                    {{ loadData.deliveryState }}, {{ loadData.deliveryCountry }}
+                  </p>
+                  <small class="text-muted">
+                    <fa-icon [icon]="'calendar-alt'"></fa-icon> 
+                    {{ loadData.preferredDeliveryDate }} do {{ loadData.maxDeliveryTime }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-flex align-items-start mb-4">
+                <div class="flex-shrink-0 me-3 text-info">
+                  <fa-icon [icon]="'box'" class="fs-3"></fa-icon>
+                </div>
+                <div>
+                  <h5 class="mb-1">Detalji tereta</h5>
+                  <ul class="list-unstyled">
+                    <li><strong>Težina:</strong> {{ loadData.cargoWeight }} kg</li>
+                    <li><strong>Zapremina:</strong> {{ loadData.cargoVolume }} m³</li>
+                    <li><strong>Dimenzije:</strong> {{ loadData.cargoWidth }}m × {{ loadData.cargoHeight }}m × {{ loadData.cargoLength }}m</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="d-flex align-items-start mb-4">
+                <div class="flex-shrink-0 me-3 text-warning">
+                  <fa-icon [icon]="'user'" class="fs-3"></fa-icon>
+                </div>
+                <div>
+                  <h5 class="mb-1">Kontakt informacije</h5>
+                  <ul class="list-unstyled">
+                    <li><strong>Osoba za kontakt:</strong> {{ loadData.contactPerson }}</li>
+                    <li><strong>Telefon:</strong> <a href="tel:{{loadData.contactPhone}}">{{ loadData.contactPhone }}</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ponuda (Bidding) -->
+    <div class="col-lg-4">
+      <div class="sticky-top" style="top: 20px;">
+        <!-- Cijene -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <h4 class="mb-0">Detalji cijene</h4>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-muted">Maksimalna cijena koju korisnik plaća:</span>
+              <span class="h4 text-primary">{{ loadData.fixedPrice | currency:'BAM':'symbol':'1.2-2' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-muted">Trenutna ponuda:</span>
+              <span class="h5">{{ currentBid | currency:'BAM':'symbol':'1.2-2' }}</span>
+            </div>
+            <div *ngIf="lastBidderName" class="mt-2 small text-muted">
+              Posljednji ponuđač: <strong>{{ lastBidderName }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Forma za ponudu -->
+        <div class="card shadow-sm">
+          <div class="card-header bg-white">
+            <h4 class="mb-0">Postavi svoju ponudu</h4>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="submitBid()">
+              <div class="mb-3">
+                <label for="bidAmount" class="form-label">Vaša ponuda (BAM)</label>
+                <div class="input-group">
+                  <span class="input-group-text">KM</span>
+                  <input type="number" 
+                         class="form-control" 
+                         id="bidAmount"
+                         [(ngModel)]="bidAmount"
+                         name="bidAmount"
+                         [min]="loadData.fixedPrice"
+                         required>
+                </div>
+                <div *ngIf="bidError" class="text-danger mt-1">{{ bidError }}</div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Pošalji ponudu</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -33,7 +33,7 @@
     { key: 'action', label: 'Opcije' }
   ]"
   [DataArray]="userLoads"
-  [route]="'/deliveries'"
+    (viewRequest)="viewLoad($event)"
   (editRequest)="editLoad($event)"
   (deleteRequest)="onDelete($event)">
 </app-table>

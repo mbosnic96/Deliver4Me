@@ -12,6 +12,7 @@ import * as LRouting from 'leaflet-routing-machine';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddLoadComponent } from './add-load/add-load.component';
 import { LoadService } from '../../../core/services/load.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -23,7 +24,7 @@ import { LoadService } from '../../../core/services/load.service';
 export class ClientDashboardComponent {
 
 
-  constructor(private modalService: NgbModal, private loadService: LoadService, private cd: ChangeDetectorRef) { }
+  constructor(private modalService: NgbModal, private loadService: LoadService, private cd: ChangeDetectorRef, private router: Router) { }
 
   userLoads: any[] = [];
 
@@ -155,5 +156,9 @@ private getColorForIndex(index: number): string {
       backdrop: 'static'
     });
     
+  }
+
+   viewLoadDetails(loadId: string) {
+    this.router.navigate(['/load', loadId]);
   }
 }
