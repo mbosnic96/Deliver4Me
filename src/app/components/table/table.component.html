@@ -1,34 +1,53 @@
-<div class="table-responsive rounded shadow-sm overflow-auto">
-  <table class="table align-middle table-hover text-center mb-0">
-    <thead class="bg-dark text-white sticky-top">
+<div class="table-responsive rounded shadow-sm overflow-auto" style="max-height: 600px;">
+  <table class="table table-hover align-middle text-center mb-0" style="min-width: 900px;">
+    <thead class="table-dark sticky-top">
       <tr>
-        <th *ngFor="let column of HeadersArray" class="text-uppercase" (click)="sort(column)" style="cursor: pointer;">
-          {{ column }}
-          <i *ngIf="column === sortOrder" class="fa ms-1"
-             [ngClass]="{ 'fa-sort-up': sortOrder === 'asc', 'fa-sort-down': sortOrder === 'desc' }"></i>
+        <th
+  *ngFor="let column of HeadersArray"
+  (click)="sort(column.key)"
+  style="cursor: pointer;"
+  [attr.aria-sort]="column.key === sortColumn ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'"
+>
+
+
+          {{ column.label }}
+          <i *ngIf="column.key === sortColumn"
+             class="fa ms-1"
+             [ngClass]="{
+               'fa-sort-up': sortOrder === 'asc',
+               'fa-sort-down': sortOrder === 'desc'
+             }"
+             aria-hidden="true"></i>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of DataArray; index as i" class="table-row">
-        <td *ngFor="let column of HeadersArray">
-          <ng-container *ngIf="column !== 'action'">
-            <span *ngIf="isPillValue(row[column])" class="badge rounded-pill bg-primary px-3 py-2 text-white">
-              {{ row[column] }}
+      <tr *ngFor="let row of DataArray; index as i" class="align-middle">
+        <td *ngFor="let column of HeadersArray" class="text-truncate" style="max-width: 150px;">
+
+          <ng-container *ngIf="column.key !== 'action'">
+            <span *ngIf="isPillValue(row[column.key])" 
+                  class="badge rounded-pill text-white px-3 py-2">
+              {{ row[column.key] }}
             </span>
-            <span *ngIf="!isPillValue(row[column])" (click)="openRoute(row.id)" class="text-nowrap">
-              {{ row[column] }}
+            <span *ngIf="!isPillValue(row[column.key])"
+                  style="cursor: default;">
+              {{ row[column.key] }}
             </span>
           </ng-container>
 
-          <ng-container *ngIf="column === 'action'">
-            <button class="btn btn-outline-primary btn-sm me-2" (click)="edit(i)">
-              <i class="fa fa-pen"></i>
+          <ng-container *ngIf="column.key === 'action'">
+            <button class="btn btn-outline-primary btn-sm me-1" (click)="openRoute(row.id)" title="View">
+              <fa-icon [icon]="'eye'"></fa-icon> 
             </button>
-            <button class="btn btn-outline-danger btn-sm" (click)="delete(i)">
-              <i class="fa fa-trash"></i>
+            <button class="btn btn-outline-primary btn-sm me-1" (click)="edit(i)" title="Edit">
+              <fa-icon [icon]="'pen'"></fa-icon> 
+            </button>
+            <button class="btn btn-outline-danger btn-sm" (click)="delete(i)" title="Delete">
+              <fa-icon [icon]="'trash'"></fa-icon> 
             </button>
           </ng-container>
+
         </td>
       </tr>
     </tbody>

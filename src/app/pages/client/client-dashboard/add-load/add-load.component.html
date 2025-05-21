@@ -25,7 +25,7 @@
       </div>
       <div class="col-md">
         <label class="form-label">Entitet / Regija</label>
-        <ng-select [items]="states" bindLabel="name" bindValue="isoCode"
+        <ng-select [items]="states" bindLabel="name" bindValue="name"
                    formControlName="pickupState" (change)="onStateChange('pickup')"></ng-select>
       </div>
       <div class="col-md">
@@ -42,6 +42,18 @@
 
     <!-- Lokacija isporuke -->
     <h6 class="fw-bold mt-4">Lokacija isporuke</h6>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md">
+        <label class="form-label">Kontakt osoba</label>
+        <input type="text" formControlName="contactPerson" class="form-control" />
+      </div>
+      <div class="col-md">
+        <label class="form-label">Kontakt telefon</label>
+        <input type="text" formControlName="contactPhone" class="form-control" />
+      </div>
+    </div>
+
     <div class="row g-2 mb-2">
       <div class="col-md">
         <label class="form-label">Država</label>
@@ -50,7 +62,7 @@
       </div>
       <div class="col-md">
         <label class="form-label">Entitet / Regija</label>
-        <ng-select [items]="states" bindLabel="name" bindValue="isoCode"
+        <ng-select [items]="states" bindLabel="name" bindValue="name"
                    formControlName="deliveryState" (change)="onStateChange('delivery')"></ng-select>
       </div>
       <div class="col-md">
@@ -68,13 +80,34 @@
     <!-- Datumi i vremena -->
     <div class="row g-3 my-3">
       <div class="col-md">
-        <label class="form-label">Datum preuzimanja</label>
-        <input type="date" formControlName="preferredPickupDate" class="form-control" />
-      </div>
+  <label class="form-label">Datum preuzimanja</label>
+  
+  <div class="input-group">
+  <input
+    class="form-control"
+    placeholder="dd-mm-yyyy"
+    name="preferredPickupDate"
+    ngbDatepicker
+    formControlName="preferredPickupDate"
+    #d1="ngbDatepicker"
+  />
+  <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+  </div>
+</div>
       <div class="col-md">
-        <label class="form-label">Datum isporuke</label>
-        <input type="date" formControlName="preferredDeliveryDate" class="form-control" />
-      </div>
+  <label class="form-label">Datum dostave</label>
+  <div class="input-group">
+  <input
+    class="form-control"
+    placeholder="dd-mm-yyyy"
+    name="preferredDeliveryDate"
+    ngbDatepicker
+    formControlName="preferredDeliveryDate"
+    #d2="ngbDatepicker"
+  />
+  <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+  </div>
+</div>
     </div>
     <div class="row g-3 mb-3">
       <div class="col-md">

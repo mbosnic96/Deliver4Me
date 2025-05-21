@@ -42,6 +42,13 @@
   </a>
 </li>
 
+ <li *ngIf="role === 'client'" class="nav-item">
+  <a routerLink="/client/my-loads" class="nav-link">
+    <fa-icon [icon]="'truck-fast'" class="me-2"></fa-icon>
+    <span *ngIf="!collapsed">Moji tereti</span>
+  </a>
+</li>
+
     
     <!-- ADMIN -->
     <li *ngIf="role === 'admin'" class="nav-item">

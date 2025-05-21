@@ -1,19 +1,20 @@
 // src/app/components/add-load/add-load.component.ts
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDatepicker, NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CscService } from '../../../../core/services/csc.service';
 import { LoadService } from '../../../../core/services/load.service';
 import { UserService } from '../../../../core/services/user.service';
 import { ICountry, IState, ICity } from 'country-state-city';
 import * as L from 'leaflet';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-add-load',
-  imports: [NgSelectComponent, ReactiveFormsModule, CommonModule, LeafletModule],
+  imports: [NgSelectComponent, ReactiveFormsModule, CommonModule, LeafletModule, NgbDatepickerModule, FontAwesomeModule],
   templateUrl: './add-load.component.html',
   styleUrls: ['./add-load.component.css']
 })
@@ -44,22 +45,32 @@ export class AddLoadComponent implements OnInit {
     private cscService: CscService,
     private loadService: LoadService,
     private userService: UserService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
   ) {}
 
-  ngOnInit(): void {
-    this.initializeForm();
-    this.loadCountries();
+ngOnInit(): void {
+  this.initializeForm();
+  this.loadCountries();
+
+  if (!this.loadData) {
+    this.setDefaultPickupLocation();
+  }
+
+  this.setupVolumeCalculation();
+}
+
+
+  ngAfterViewInit(): void {
+  setTimeout(() => {
+    this.initializeMaps();
 
     if (this.loadData) {
       this.isEditMode = true;
       this.populateForm(this.loadData);
-    } else {
-      this.setDefaultPickupLocation();
     }
+  });
+}
 
-    this.setupVolumeCalculation();
-  }
 
   initializeForm(): void {
     this.addLoadForm = this.fb.group({
@@ -74,6 +85,8 @@ export class AddLoadComponent implements OnInit {
       deliveryCity: ['', Validators.required],
       deliveryAddress: ['', Validators.required],
       preferredPickupDate: ['', Validators.required],
+      contactPerson: ['', Validators.required],
+      contactPhone: ['', Validators.required],
       pickupTime: ['', Validators.required],
       preferredDeliveryDate: ['', Validators.required],
       maxDeliveryTime: ['', Validators.required],
@@ -90,9 +103,6 @@ export class AddLoadComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {
-setTimeout(() => this.initializeMaps(), 0);
-}
 
   loadCountries(): void {
     this.countries = this.cscService.getAllCountries();
@@ -241,6 +251,13 @@ this.deliveryMap.invalidateSize();
     const formValues = this.addLoadForm.getRawValue();
     const formData = new FormData();
 
+     if (formValues.preferredPickupDate) {
+    formValues.preferredPickupDate = this.ngbDateToDateString(formValues.preferredPickupDate);
+  }
+  if (formValues.preferredDeliveryDate) {
+    formValues.preferredDeliveryDate = this.ngbDateToDateString(formValues.preferredDeliveryDate);
+  }
+
     for (const key in formValues) {
       if (formValues.hasOwnProperty(key)) {
         formData.append(key, formValues[key]);
@@ -267,6 +284,14 @@ this.deliveryMap.invalidateSize();
     });
   }
 
+  
+private ngbDateToDateString(ngbDate: NgbDateStruct): string {
+  // Format as yyyy-MM-dd (correct for .NET DateOnly)
+  return `${ngbDate.year}-${ngbDate.month.toString().padStart(2, '0')}-${ngbDate.day.toString().padStart(2, '0')}`;
+}
+
+
+
   onCancel(): void {
     if (this.addLoadForm.dirty) {
       if (confirm('Are you sure you want to discard changes?')) {
@@ -278,6 +303,9 @@ this.deliveryMap.invalidateSize();
   }
 
   populateForm(data: any): void {
+    
+  this.states = this.cscService.getStatesByCountry(data.deliveryCountry);
+  this.cities = this.cscService.getCitiesByCountry(data.deliveryCountry);
     this.addLoadForm.patchValue({
       title: data.title,
       description: data.description,
@@ -288,10 +316,12 @@ this.deliveryMap.invalidateSize();
       deliveryCountry: data.deliveryCountry,
       deliveryState: data.deliveryState,
       deliveryAddress: data.deliveryAddress,
-      deliveryCity: data.deliveryCity,
-      preferredPickupDate: data.preferredPickupDate,
+      deliveryCity: data.deliveryCity, 
+      preferredPickupDate: this.ddmmyyyyToNgbDate(data.preferredPickupDate),
       pickupTime: data.pickupTime,
-      preferredDeliveryDate: data.preferredDeliveryDate,
+      preferredDeliveryDate: this.ddmmyyyyToNgbDate(data.preferredDeliveryDate),
+      contactPerson: data.contactPerson,
+      contactPhone: data.contactPhone,
       maxDeliveryTime: data.maxDeliveryTime,
       cargoWeight: data.cargoWeight,
       cargoWidth: data.cargoWidth,
@@ -306,8 +336,8 @@ this.deliveryMap.invalidateSize();
     });
 
     // Preload dependent dropdowns
-    this.states = this.cscService.getStatesByCountry(data.pickupCountry);
-    this.cities = this.cscService.getCitiesByCountry(data.pickupCountry);
+  //  this.states = this.cscService.getStatesByCountry(data.pickupCountry);
+   // this.cities = this.cscService.getCitiesByCountry(data.pickupCountry);
 
     this.updateMapMarker('pickup', data.pickupLatitude, data.pickupLongitude);
     this.updateMapMarker('delivery', data.deliveryLatitude, data.deliveryLongitude);
@@ -319,5 +349,27 @@ this.deliveryMap.invalidateSize();
       this.imagePreviews = [...data.imageUrls]; // assuming URLs are returned
     }
   }
-  
+isoStringToNgbDate(dateString: string): NgbDateStruct | null {
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? null : {
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate()
+  };
+}
+
+
+ddmmyyyyToNgbDate(dateString: string): NgbDateStruct | null {
+  if (!dateString) return null;
+
+  const parts = dateString.split('-');
+  if (parts.length !== 3) return null;
+
+  const [day, month, year] = parts.map(part => parseInt(part, 10));
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+
+  return { year, month, day };
+}
+
+
 }

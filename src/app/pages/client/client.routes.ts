@@ -2,7 +2,7 @@ import { Routes } from "@angular/router";
 import { ClientDashboardComponent } from "./client-dashboard/client-dashboard.component";
 import { LayoutComponent } from "./layout/layout.component";
 import { AccountSettingsComponent } from "../../components/account-settings/account-settings.component";
-import { AddLoadComponent } from "./client-dashboard/add-load/add-load.component";
+import { MyLoadsComponent } from "./my-loads/my-loads.component";
 
 export const clientRoutes: Routes = [
   {
@@ -11,7 +11,7 @@ export const clientRoutes: Routes = [
     children: [
         {path: '', component: ClientDashboardComponent},
         { path: 'account', component: AccountSettingsComponent},
-        { path: 'add-load', component: AddLoadComponent},
+        { path: 'my-loads', component: MyLoadsComponent},
     ]
 }
 ];
