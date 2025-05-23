@@ -1,0 +1,30 @@
+<div class="content-bg p-2 border rounded">
+  <h4>Pošalji ponudu</h4>
+
+  <input
+    type="number"
+    [(ngModel)]="price"
+    placeholder="Cijena"
+    class="form-control mb-2"
+  />
+
+  <textarea
+    [(ngModel)]="message"
+    placeholder="Poruka"
+    class="form-control mb-2"
+  ></textarea>
+
+  <select
+    [(ngModel)]="vehicleId"
+    class="form-control mb-2"
+  >
+    <option value="" disabled selected>Odaberite vozilo</option>
+    <option *ngFor="let v of vehicles" [value]="v.id">
+      {{ v.brand }} {{ v.model }} ({{ v.plateNumber }}) - {{ v.vehicleType?.name }}
+    </option>
+  </select>
+
+  <div class="text-end">
+    <button (click)="submitBid()" class="btn btn-primary btn-sm">Pošalji</button>
+  </div>
+</div>

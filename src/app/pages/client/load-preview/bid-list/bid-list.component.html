@@ -1,0 +1,42 @@
+<div class="container content-bg p-3 rounded border">
+  <h3 class="mb-4">Ponude</h3>
+ <div class="scrollable">
+  <div *ngFor="let bid of bids" class="card mb-3 shadow-sm dark-bg">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="card-title mb-0">
+          {{ bid.driverName || bid.driver?.name }}
+        </h5>
+        <small class="fst-italic">
+          {{ bid.vehicleModel || bid.vehicle?.model }}
+        </small>
+      </div>
+
+      <p class="card-text mb-2">
+        <strong>Cijena:</strong> {{ bid.price }}<br />
+        <strong>Poruka:</strong> {{ bid.message }}
+      </p>
+
+      <div *ngIf="bid.status === 'Na čekanju'" class="btn-group" role="group" aria-label="Bid actions">
+        <button class="btn btn-success btn-sm me-2" (click)="accept(bid.id)">Prihvati</button>
+      </div>
+
+      <a [routerLink]="['/user', bid.driverId]" class="btn btn-outline-primary btn-sm">
+        <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Vidi profil
+      </a>
+
+      <div *ngIf="bid.status !== 'Na čekanju' && bid.status !== 'Prihvaćeno'" class="mt-2">
+        <span class="badge bg-danger text-dark">
+          Status: {{ bid.status | titlecase }}
+        </span>
+      </div>
+
+      <div *ngIf="bid.status === 'Prihvaćeno'" class="mt-2">
+        <span class="badge bg-success text-dark">
+          Status: {{ bid.status | titlecase }}
+        </span>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

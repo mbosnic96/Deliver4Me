@@ -21,6 +21,6 @@ export class RoleGuard implements CanActivate {
     }
 
     // Optional: redirect to fallback page if role mismatch
-    return this.router.createUrlTree(['/unauthorized']);
+    return this.router.createUrlTree(['/']);
   }
 }

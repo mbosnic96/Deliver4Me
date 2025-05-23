@@ -6,10 +6,13 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../core/services/user.service';
+import { AddBidComponent } from "./add-bid/add-bid.component";
+import { AuthService } from '../../../core/services/auth.service';
+import { BidListComponent } from "./bid-list/bid-list.component";
 
 @Component({
   selector: 'app-load-preview',
-  imports: [CommonModule, FontAwesomeModule, FormsModule, RouterModule],
+  imports: [CommonModule, FontAwesomeModule, FormsModule, RouterModule, AddBidComponent, BidListComponent],
   templateUrl: './load-preview.component.html',
   styleUrls: ['./load-preview.component.css'],
 })
@@ -18,18 +21,23 @@ export class LoadPreviewComponent implements OnInit {
   user: any = null;
 
  
-  imageBaseUrl = environment.apiUrl; // replace with your actual type/interface
+  imageBaseUrl = environment.apiUrl; 
  
 
   constructor(
     private route: ActivatedRoute,
     private loadService: LoadService,
     private cd: ChangeDetectorRef,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
     this.fetchLoadById();
+  }
+
+    getUserRole(): string {
+    return this.authService.getCurrentUser()?.role;
   }
 
   fetchLoadById() {

@@ -12,13 +12,13 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
       switch (error.status) {
         case 401: // Unauthorized
          // inject(AuthService).logout(); // Cleaner dependency injection
-         router.navigate(['/forbidden']);
+      //   router.navigate(['/forbidden']);
           break;
         case 403: // Forbidden
-          router.navigate(['/forbidden']);
+        //  router.navigate(['/forbidden']);
           break;
         case 404: // Not Found
-          router.navigate(['/not-found']);
+        //  router.navigate(['/not-found']);
           break;
       }
       throw error;

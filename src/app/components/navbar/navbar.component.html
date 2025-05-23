@@ -50,22 +50,24 @@
 
             
             <ul class="dropdown-menu dropdown-menu-end">
-              <li>
-                <a class="dropdown-item" routerLink="/dashboard">
-                  <fa-icon [icon]="faUser" class="me-2"></fa-icon>
-                  My Profile
+              <li  *ngIf="getUserRole() === 'driver'">
+                <a class="dropdown-item" routerLink="/driver">
+                  <fa-icon [icon]="'user'" class="me-2"></fa-icon>
+                  Dashboard
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item" routerLink="/settings">
-                  <fa-icon [icon]="faCog" class="me-2"></fa-icon>
-                  Settings
+
+              <li  *ngIf="getUserRole() === 'client'">
+                <a class="dropdown-item" routerLink="/client">
+                  <fa-icon [icon]="'user'" class="me-2"></fa-icon>
+                  Dashboard
                 </a>
               </li>
+
               <li><hr class="dropdown-divider"></li>
               <li>
                 <button class="dropdown-item" (click)="logout()">
-                  <fa-icon [icon]="faSignOutAlt" class="me-2"></fa-icon>
+                  <fa-icon [icon]="'sign-out-alt'" class="me-2"></fa-icon>
                   Logout
                 </button>
               </li>

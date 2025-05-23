@@ -78,7 +78,6 @@ ngOnInit(): void {
 
 statusOptions = [
   { value: 'Aktivan', label: 'Aktivan' },
-  { value: 'Čekanje', label: 'Čekanje' },
   { value: 'Poslan', label: 'Poslan' },
   { value: 'Otkazan', label: 'Otkazan' },
   { value: 'Dostavljen', label: 'Dostavljen' }

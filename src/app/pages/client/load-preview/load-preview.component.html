@@ -50,7 +50,7 @@
           <span class="badge"
                 [ngClass]="{
                   'bg-success': loadData.status === 'Aktivan',
-                  'bg-warning': loadData.status === 'Na čekanju',
+                  'bg-warning': loadData.status === 'Poslan',
                   'bg-danger': loadData.status === 'Otkazan'
                 }">
             {{ loadData.status }}
@@ -139,7 +139,7 @@
 
     <!-- Ponuda (Bidding) -->
     <div class="col-lg-4">
-      <div class="sticky-top" style="top: 20px;">
+      <div>
         <!-- Cijene -->
         <div class="card shadow-sm mb-4">
           <div class="card-header content-bg">
@@ -192,6 +192,15 @@
       </a>
     </div>
   </div>
+</div>
+
+<div class="mt-4 pt-3" *ngIf="getUserRole() == 'driver' && loadData.assignedBidId != null">
+
+<app-add-bid *ngIf="loadData" [loadId]="loadData.id"></app-add-bid>
+</div>
+
+<div class="mt-4 pt-3" *ngIf="getUserRole() == 'client'">
+<app-bid-list *ngIf="loadData" [loadId]="loadData.id"></app-bid-list>
 </div>
 
    
