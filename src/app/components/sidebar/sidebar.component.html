@@ -27,6 +27,13 @@
       </a>
     </li>
 
+     <li *ngIf="role === 'driver'" class="nav-item">
+  <a routerLink="/driver/my-loads" class="nav-link">
+    <fa-icon [icon]="'truck-fast'" class="me-2"></fa-icon>
+    <span *ngIf="!collapsed">Moji tereti</span>
+  </a>
+</li>
+
     
      <li *ngIf="role === 'driver'" class="nav-item">
       <a routerLink="/driver/account" class="nav-link">
@@ -42,6 +49,9 @@
     <span *ngIf="!collapsed">Moji tereti</span>
   </a>
 </li>
+
+
+
 
     <li *ngIf="role === 'client'" class="nav-item">
   <a routerLink="/client/account" class="nav-link">

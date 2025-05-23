@@ -1,33 +1,29 @@
 <div class="table-responsive rounded shadow-sm overflow-auto" style="max-height: 600px;">
   <table class="table table-hover align-middle text-center mb-0" style="min-width: 900px;">
-    <thead class="table-dark sticky-top">
+    <thead class="table-dark">
       <tr>
         <th
-  *ngFor="let column of HeadersArray"
-  (click)="sort(column.key)"
-  style="cursor: pointer;"
-  [attr.aria-sort]="column.key === sortColumn ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'"
->
-
-
+          *ngFor="let column of HeadersArray"
+          (click)="column.sortable !== false ? sort(column.key) : null"
+          [style.cursor]="column.sortable !== false ? 'pointer' : 'default'"
+          [attr.aria-sort]="column.key === sortColumn ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'"
+        >
           {{ column.label }}
-          <i *ngIf="column.key === sortColumn"
-             class="fa ms-1"
-             [ngClass]="{
-               'fa-sort-up': sortOrder === 'asc',
-               'fa-sort-down': sortOrder === 'desc'
-             }"
-             aria-hidden="true"></i>
+          <fa-icon 
+            *ngIf="column.key === sortColumn && column.sortable !== false"
+            [icon]="sortOrder === 'asc' ? 'arrow-up' : 'arrow-down'"
+            class="ms-1">
+          </fa-icon>
         </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of DataArray; index as i" class="align-middle">
         <td *ngFor="let column of HeadersArray" class="text-truncate" style="max-width: 150px;">
-
           <ng-container *ngIf="column.key !== 'action'">
             <span *ngIf="isPillValue(row[column.key])" 
-                  class="badge rounded-pill text-white px-3 py-2">
+                  class="badge rounded-pill text-white px-3 py-2"
+                  [ngClass]="getPillClass(row[column.key])">
               {{ row[column.key] }}
             </span>
             <span *ngIf="!isPillValue(row[column.key])"
@@ -37,17 +33,22 @@
           </ng-container>
 
           <ng-container *ngIf="column.key === 'action'">
-            <button class="btn btn-outline-primary btn-sm me-1" (click)="openRoute(i)" title="View">
-              <fa-icon [icon]="'eye'"></fa-icon> 
+            <button *ngIf="hasViewAction" class="btn btn-outline-primary btn-sm me-1" (click)="openRoute(i)" title="Vidi">
+              <fa-icon [icon]="['fas', 'eye']"></fa-icon> 
             </button>
-            <button class="btn btn-outline-primary btn-sm me-1" (click)="edit(i)" title="Edit">
-              <fa-icon [icon]="'pen'"></fa-icon> 
+            <button *ngIf="hasEditAction" class="btn btn-outline-primary btn-sm me-1" (click)="edit(i)" title="Uredi">
+              <fa-icon [icon]="['fas', 'pen']"></fa-icon> 
             </button>
-            <button class="btn btn-outline-danger btn-sm" (click)="delete(i)" title="Delete">
-              <fa-icon [icon]="'trash'"></fa-icon> 
+            <button *ngIf="hasDeleteAction" class="btn btn-outline-danger btn-sm me-1" (click)="delete(i)" title="Briši">
+              <fa-icon [icon]="['fas', 'trash']"></fa-icon> 
+            </button>
+            <button *ngIf="hasMarkAsDeliveredAction" class="btn btn-outline-success btn-sm me-1" (click)="markAsDelivered(i)" title="Označi kao dostavljeno">
+              <fa-icon [icon]="['fas', 'truck']"></fa-icon>
+            </button>
+            <button *ngIf="hasCancelAction" class="btn btn-outline-warning btn-sm" (click)="cancel(i)" title="Otkaži">
+              <fa-icon [icon]="['fas', 'ban']"></fa-icon>
             </button>
           </ng-container>
-
         </td>
       </tr>
     </tbody>

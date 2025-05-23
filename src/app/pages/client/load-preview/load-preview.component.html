@@ -49,9 +49,10 @@
           <h3 class="mb-0">{{ loadData.title }}</h3>
           <span class="badge"
                 [ngClass]="{
-                  'bg-success': loadData.status === 'Aktivan',
+                  'bg-info': loadData.status === 'Aktivan',
                   'bg-warning': loadData.status === 'Poslan',
-                  'bg-danger': loadData.status === 'Otkazan'
+                  'bg-danger': loadData.status === 'Otkazan',
+                  'bg-success': loadData.status === 'Dostavljen'
                 }">
             {{ loadData.status }}
           </span>
@@ -194,7 +195,7 @@
   </div>
 </div>
 
-<div class="mt-4 pt-3" *ngIf="getUserRole() == 'driver' && loadData.assignedBidId != null">
+<div class="mt-4 pt-3" *ngIf="getUserRole() == 'driver' && loadData.assignedBidId == null">
 
 <app-add-bid *ngIf="loadData" [loadId]="loadData.id"></app-add-bid>
 </div>

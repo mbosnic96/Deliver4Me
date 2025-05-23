@@ -1,7 +1,13 @@
 
-    <div class="row g-4">
+    <div class="row g-4 mb-3">
         <div class="col-12">
-      <app-vehicle-map [vehicles]="driverVehicles"></app-vehicle-map>
+     <div class="card content-bg border shadow-sm rounded-3">
+  <div class="card-body">
+    <h5><fa-icon [icon]="'map-marker-alt'" class="me-2 text-success"></fa-icon> Mapa vozila</h5>
+    <div id="map" style="height: 300px;"></div>
+  </div>
+</div>
+
     </div>
     </div>
 
@@ -85,95 +91,65 @@
 
   <div class="row g-4 mt-2">
     <div class="col-lg-6">
-  <h5>Moje vožnje</h5>
-    <div id="deliveryCarousel" class="carousel slide h-100" data-bs-ride="carousel">
-      
-      <!-- Carousel Indicators -->
+    <div class="shadow-lg border-0 rounded-3 content-bg border">
+    <h5 class="mb-3 ps-3 pt-4"> <fa-icon [icon]="'truck-fast'"></fa-icon>  Aktivne dostave</h5>
+    <div id="senderCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-indicators pt-2 pb-2">
-        <button
-          *ngFor="let item of dataArray; let i = index"
-          type="button"
-          data-bs-target="#deliveryCarousel"
-          [attr.data-bs-slide-to]="i"
-          [class.active]="i === 0"
-          [attr.aria-current]="i === 0 ? 'true' : null"
-          [attr.aria-label]="'Slide ' + (i + 1)"
-        ></button>
+        <button *ngFor="let item of userLoads; let i = index"
+        type="button" data-bs-target="#senderCarousel"
+        [attr.data-bs-slide-to]="i" [class.active]="i === 0"
+        [attr.aria-current]="i === 0 ? 'true' : null"
+        [attr.aria-label]="'Slide ' + (i + 1)"></button>
       </div>
-
-      <!-- Carousel Items -->
       <div class="carousel-inner">
-        <div
-          class="carousel-item"
-          *ngFor="let row of dataArray; let i = index"
-          [class.active]="i === 0"
-        >
-          <div class="container py-4 ps-0 pe-0">
-            <div class="card shadow-lg border-0 rounded-3 content-bg border">
-              <div class="card-body ms-5 me-5">
-                <h4 class="card-title text-primary">
-                  <fa-icon [icon]="faTruck"></fa-icon> {{ row.korisnik }}
-                </h4>
-                <p class="mb-2">
-                  <fa-icon [icon]="faMapMarkerAlt" class="me-2 text-secondary"></fa-icon>
-                  <strong>Adresa peuzimanja:</strong> {{ row.lokacija_preuzimanja }}
-                </p>
-                <p class="mb-2">
-                  <fa-icon [icon]="faLocationDot" class="me-2 text-success"></fa-icon>
-                  <strong>Adresa za dostavu:</strong> {{ row.lokacija_dostave }}
-                </p>
-                <p class="mb-2">
-                  <fa-icon [icon]="faBox" class="me-2 text-warning"></fa-icon>
-                  <strong>Paket:</strong> {{ row.naziv_paketa }}
-                </p>
-                <p class="mb-2">
-                  <fa-icon [icon]="faPhone" class="me-2 text-info"></fa-icon>
-                  <strong>Kontakt:</strong> {{ row.kontakt }}
-                </p>
-                <span
-                  class="badge rounded-pill"
-                  [ngClass]="{
-                    'bg-success': row.status === 'Arrived',
-                    'bg-secondary': row.status === 'Pending',
-                    'bg-warning': row.status === 'Dispatched',
-                    'bg-danger': row.status === 'Cancelled'
-                  }"
-                >
-                  {{ row.status }}
-                </span>
-              </div>
-              <div class="card-footer bg-transparent text-end pt-5 pb-4">
-                <button class="btn btn-outline-primary btn-sm w-100">
-                  <fa-icon [icon]="faEye" class="me-1"></fa-icon> Detalji
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="carousel-item" *ngFor="let row of userLoads; let i = index"
+     [class.active]="i === 0">
+  <div class="container py-4 ps-0 pe-0">
+    <div class="card content-bg">
+      <div class="card-body ms-5 me-5">
+        <h4 class="card-title text-primary">
+          {{ row.title }}
+        </h4>
+        <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
+          <strong>Preuzimanje:</strong> {{ row.pickupCity }}, {{ row.pickupAddress }}</p>
+        <p><fa-icon [icon]="'location-dot'" class="me-2 text-success"></fa-icon>
+          <strong>Dostava:</strong> {{ row.deliveryCity }}, {{ row.deliveryAddress }}</p>
+        <p><fa-icon [icon]="'box'" class="me-2 text-warning"></fa-icon>
+          <strong>Paket:</strong> {{ row.description }}</p>
+        <p><fa-icon [icon]="'clock'" class="me-2 text-info"></fa-icon>
+          <strong>Preuzimanje:</strong> {{ row.preferredPickupDate?.split('T')[0] }} {{ row.pickupTime }}</p>
+          
+        <p><fa-icon [icon]="'clock'" class="me-2 text-warning"></fa-icon>
+          <strong>Zakazana dostava:</strong> {{ row.preferredDeliveryDate?.split('T')[0] }} {{ row.maxDeliveryTime }}</p>
+        <p class="badge rounded-pill"
+          [ngClass]="{
+            'bg-success': row.status === 'Aktvan',
+            'bg-secondary': row.status === 'Čekanje',
+            'bg-warning': row.status === 'Poslan',
+            'bg-danger': row.status === 'Otkazan'
+          }">{{ row.status }}</p>
       </div>
-
-      <!-- Carousel Controls -->
-      <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#deliveryCarousel"
-        data-bs-slide="prev"
-      >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
+      <div class="card-footer bg-transparent text-end pb-4">
+        <button class="btn btn-outline-primary btn-sm w-100" (click)="viewLoadDetails(row.id)">
+          <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Detalji
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#senderCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
       </button>
-      <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#deliveryCarousel"
-        data-bs-slide="next"
-      >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
+      <button class="carousel-control-next" type="button" data-bs-target="#senderCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
       </button>
     </div>
-
     </div>
+  </div>
+
+    
+
     <div class="col-lg-6">
       <div class="content-bg border rounded-3">
         <app-vehicle-tabs></app-vehicle-tabs>

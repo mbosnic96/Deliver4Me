@@ -7,33 +7,28 @@ import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
-  standalone: true, // For Angular 14+ standalone component
-  imports: [ReactiveFormsModule, CommonModule, RouterLink], // Import necessary modules
+  standalone: true, 
+  imports: [ReactiveFormsModule, CommonModule, RouterLink], 
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  // Define the form group
   form: FormGroup;
 
-  // Define loading and error states as signals
   loading = false;
   error = '';
 
-  // Injecting services via constructor
   constructor(
-    private fb: FormBuilder, // FormBuilder for managing form controls
-    private authService: AuthService, // AuthService for login functionality
-    private router: Router // Router for navigation
+    private fb: FormBuilder,
+    private authService: AuthService, 
+    private router: Router 
   ) {
-    // Initialize the form with validators
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
 
-  // Handle form submission
 onSubmit(): void {
   if (this.form.invalid) return;
 
@@ -50,7 +45,7 @@ onSubmit(): void {
       const user = this.authService.getCurrentUser();
 
       if (!user || !user.role) {
-        this.error = 'Login successful, but user data is missing or invalid.';
+        this.error = 'Login uspješan, nepotpuni podaci.';
         return;
       }
 
@@ -62,7 +57,6 @@ onSubmit(): void {
           this.router.navigate(['/driver']);
           break;
         case 'client':
-        case 'user':
         default:
           this.router.navigate(['/client']);
           break;
@@ -70,8 +64,8 @@ onSubmit(): void {
     },
     error: (err) => {
       const msg = err?.status === 401
-        ? 'Invalid email or password'
-        : err?.message || 'An unexpected error occurred. Please check your connection and try again.';
+        ? 'Pogrešan email ili password'
+        : err?.message || 'Please check your connection and try again.';
       this.error = msg;
     }
   });

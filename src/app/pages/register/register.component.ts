@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
     name: ['', Validators.required],
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+    phone: ['', [Validators.required]],
     address: ['', Validators.required],
     country: ['', Validators.required],
     state: ['', Validators.required],
@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        const msg = err?.message || 'An unexpected error occurred. Please try again later.';
+        const msg = err?.message || 'Please try again later.';
         this.error.set(msg);
       }
     });

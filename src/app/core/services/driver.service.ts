@@ -30,4 +30,16 @@ updateVehicle(id: string, formData: FormData): Observable<any> {
     deleteVehicle(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/vehicles/${id}`);
   }
+
+    getMyLoads(driverId: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/api/driver/loads/${driverId}`);
+}
+
+markAsDelivered(loadId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/driver/loads/${loadId}/deliver`, {});
+  }
+
+  markAsCanceled(loadId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/driver/loads/${loadId}/cancel`, {});
+  }
 }

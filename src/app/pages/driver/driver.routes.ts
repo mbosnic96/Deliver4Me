@@ -3,6 +3,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { DriverDashboardComponent } from './driver-dashboard/driver-dashboard.component';
 import { DriverVehiclesComponent } from './driver-vehicles/driver-vehicles.component';
 import { AccountSettingsComponent } from '../../components/account-settings/account-settings.component';
+import { MyLoadsComponent } from './my-loads/my-loads.component';
 export const driverRoutes: Routes = [
   {
     path: '',
@@ -11,6 +12,7 @@ export const driverRoutes: Routes = [
       { path: '', component: DriverDashboardComponent },
       { path: 'vehicles', component: DriverVehiclesComponent },
       { path: 'account', component: AccountSettingsComponent },
+      { path: 'my-loads', component: MyLoadsComponent},
     ]
   }
 ];

@@ -13,20 +13,17 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/available-loads" routerLinkActive="active">Dostupni tereti</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/about" routerLinkActive="active">About</a>
-        </li>
       </ul>
       
       <div class="d-flex align-items-center gap-2">
         <ng-container *ngIf="!(authService.authState$ | async); else loggedInTemplate">
           <a routerLink="/login" class="btn btn-primary" routerLinkActive="active">
             <fa-icon [icon]="faSignInAlt" class="me-2"></fa-icon>
-            Login
+            Prijava
           </a>
           <a routerLink="/register" class="btn btn-success" routerLinkActive="active">
             <fa-icon [icon]="faUserPlus" class="me-2"></fa-icon>
-            Register
+            Registracija
           </a>
         </ng-container>
         
@@ -68,7 +65,7 @@
               <li>
                 <button class="dropdown-item" (click)="logout()">
                   <fa-icon [icon]="'sign-out-alt'" class="me-2"></fa-icon>
-                  Logout
+                  Odjava
                 </button>
               </li>
             </ul>

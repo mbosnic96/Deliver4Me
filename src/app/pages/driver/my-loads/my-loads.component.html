@@ -1,0 +1,40 @@
+<div class="row g-4">
+    <div class="col-lg-12">
+      
+
+        <app-table
+  [HeadersArray]="[
+    { key: 'title', label: 'Naziv' },
+    { key: 'description', label: 'Opis' },
+    { key: 'status', label: 'Status' },
+    { key: 'pickupCountry', label: 'Država pošiljatelja' },
+    { key: 'pickupState', label: 'Kanton pošiljatelja' },
+    { key: 'pickupCity', label: 'Grad pošiljatelja' },
+    { key: 'pickupAddress', label: 'Adresa pošiljatelja' },
+    { key: 'preferredPickupDate', label: 'Datum preuzimanja' },
+    { key: 'pickupTime', label: 'Vrijeme preuzimanja' },
+    { key: 'contactPerson', label: 'Kontakt osoba' },
+    { key: 'contactPhone', label: 'Kontakt telefon' },
+    { key: 'deliveryCountry', label: 'Država primaoca' },
+    { key: 'deliveryCity', label: 'Grad primaoca' },
+    { key: 'deliveryState', label: 'Kanton primaoca' },
+    { key: 'deliveryAddress', label: 'Adresa primaoca' },
+    { key: 'preferredDeliveryDate', label: 'Datum dostave' },
+    { key: 'maxDeliveryTime', label: 'Vrijeme dostave' },
+    { key: 'cargoWeight', label: 'Težina (kg)' },
+    { key: 'cargoLength', label: 'Dužina (m)' },
+    { key: 'cargoWidth', label: 'Širina (m)' },
+    { key: 'cargoWeight', label: 'Visina (m)' },
+    { key: 'fixedPrice', label: 'Cijena' },
+    { key: 'action', label: 'Opcije' }
+  ]"
+  [DataArray]="userLoads"
+    (viewRequest)="viewLoad($event)"
+    
+  (markAsDeliveredRequest)="deliverOrder($event)"
+  (cancelRequest)="cancelOrder($event)">
+    >
+</app-table>
+
+    </div>
+</div>

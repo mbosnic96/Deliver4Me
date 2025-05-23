@@ -6,9 +6,11 @@ import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-das
 import { RoleGuard } from './core/guards/role.guard'; // path as needed
 import { LoadPreviewComponent } from './pages/client/load-preview/load-preview.component';
 import { AvailableLoadsComponent } from './pages/available-loads/available-loads.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'load/:id', component: LoadPreviewComponent},
@@ -26,5 +28,4 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { role: 'driver' }
   },
-  { path: '**', redirectTo: 'login' }
 ];

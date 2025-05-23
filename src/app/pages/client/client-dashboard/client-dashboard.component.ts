@@ -75,7 +75,7 @@ recommendedDrivers = [
         this.cd.detectChanges();
     },
     error: (err) => {
-      console.error('Failed to fetch loads:', err);
+      console.error('Greška pri preuzimanju podataka:', err);
     }
   });
 }

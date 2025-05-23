@@ -3,11 +3,12 @@
     height: 48px;
 }
 
-.nav-link{
+.nav-link, .nav-item{
+    color: #fff !important;
     font-weight: 500 !important;
 }
 
-.active, .nav-link:hover{
+.active, .nav-link:hover, .nav-item, .nav-item:hover{
     color: #fff !important;
     font-weight: bold !important;
 }

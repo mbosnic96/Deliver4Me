@@ -5,55 +5,56 @@
           <div class="card-body p-4">
             <div class="text-center mb-4">
               <img src="/logo-light.png" alt="Deliver4ME" class="mb-2 logo">
-              <h2 class="h4 mb-0">Create an Account</h2>
+              <h2 class="h4 mb-0">Kreirajte račun</h2>
             </div>
   
-            <!-- Role toggle -->
+            
             <div class="mb-3 text-center">
+              <p>Ja sam:</p>
               <div class="btn-group" role="group">
-                <button type="button" class="btn" [class.btn-primary]="!isDelivery" [class.btn-outline-primary]="isDelivery" (click)="isDelivery = false">Normal User</button>
-                <button type="button" class="btn" [class.btn-primary]="isDelivery" [class.btn-outline-primary]="!isDelivery" (click)="isDelivery = true">Delivery Man</button>
+                <button type="button" class="btn" [class.btn-primary]="!isDelivery" [class.btn-outline-primary]="isDelivery" (click)="isDelivery = false">Klijent</button>
+                <button type="button" class="btn" [class.btn-primary]="isDelivery" [class.btn-outline-primary]="!isDelivery" (click)="isDelivery = true">Dostavljač</button>
               </div>
             </div>
   
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row">
                 <div class="mb-3 col-md-6">
-                  <label class="form-label">Full Name</label>
+                  <label class="form-label">Ime i prezime</label>
                   <input type="text" formControlName="name" class="form-control" />
                   <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-danger small">
-                    Full name is required.
+                    Ovo polje je obavezno!
                   </div>
                 </div>
                 <div class="mb-3 col-md-6">
-                  <label class="form-label">Username</label>
+                  <label class="form-label">Korisničko ime</label>
                   <input type="text" formControlName="username" class="form-control" />
                   <div *ngIf="form.get('username')?.invalid && form.get('username')?.touched" class="text-danger small">
-                    Username is required.
+                    Ovo polje je obavezno!
                   </div>
                 </div>
               </div>
   
               <div class="row">
                 <div class="mb-3 col-md-6">
-                  <label class="form-label">Phone</label>
+                  <label class="form-label">Telefon</label>
                   <input type="text" formControlName="phone" class="form-control" />
                   <div *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" class="text-danger small">
-                    Enter a valid phone number.
+                    Ovo polje je obavezno! Unesite validne podatke.
                   </div>
                 </div>
                 <div class="mb-3 col-md-6">
                   <label class="form-label">Email</label>
                   <input type="email" formControlName="email" class="form-control" />
                   <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-danger small">
-                    Enter a valid email.
+                    Ovo polje je obavezno! Unesite validne podatke.
                   </div>
                 </div>
               </div>
 
          <div class="row">
   <div class="mb-3 col-md-6">
-    <label class="form-label">Country</label>
+    <label class="form-label">Država</label>
   
     <ng-select 
   [items]="countries"
@@ -65,7 +66,7 @@
 </ng-select>
   </div>
   <div class="mb-3 col-md-6">
-    <label class="form-label">State</label>
+    <label class="form-label">Regija/Kanton</label>
     <ng-select
       [items]="states"
       bindLabel="name"
@@ -79,7 +80,7 @@
 
 <div class="row">
   <div class="mb-3 col-md-6">
-    <label class="form-label">City</label>
+    <label class="form-label">Grad</label>
     <ng-select
       [items]="cities"
       bindLabel="name"
@@ -90,10 +91,10 @@
   </div>
 
   <div class="mb-3 col-md-6">
-    <label class="form-label">Postal Code</label>
+    <label class="form-label">Poštanski broj</label>
     <input type="text" class="form-control" formControlName="postalCode" />
     <div *ngIf="form.get('postalCode')?.invalid && form.get('postalCode')?.touched" class="text-danger small">
-      Postal code is required.
+      Ovo polje je obavezno! Unesite validne podatke.
     </div>
   </div>
 </div>
@@ -102,37 +103,37 @@
 
   
               <div class="mb-3">
-                <label class="form-label">Address</label>
+                <label class="form-label">Adresa</label>
                 <input type="text" formControlName="address" class="form-control" />
                 <div *ngIf="form.get('address')?.invalid && form.get('address')?.touched" class="text-danger small">
-                  Address is required.
+                  Ovo polje je obavezno! Unesite validne podatke.
                 </div>
               </div>
   
               <div class="mb-3">
-                <label class="form-label">Password</label>
+                <label class="form-label">Lozinka</label>
                 <input type="password" formControlName="password" class="form-control" />
                 <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="text-danger small">
-                  Password must be at least 8 characters.
+                 Lozinka mora imati bar 8 karaktera.
                 </div>
               </div>
   
               <div class="mb-3">
-                <label class="form-label">Confirm Password</label>
+                <label class="form-label">Potvrdite lozinku</label>
                 <input type="password" formControlName="confirmPassword" class="form-control" />
                 <div *ngIf="form.errors?.['mismatch'] && form.get('confirmPassword')?.touched" class="text-danger small">
-                  Passwords do not match.
+                  Lozinke se ne poklapaju!
                 </div>
               </div>
     
               <button class="btn btn-primary w-100 mt-3" [disabled]="form.invalid">
-                Register
+                Registracija
               </button>
             </form>
   
             <div class="text-center mt-3">
-              <small>Already have an account?</small>
-              <a routerLink="/login" class="ms-1">Login</a>
+              <small>Već imate račun?</small>
+              <a routerLink="/login" class="ms-1">Prijava</a>
             </div>
           </div>
         </div>

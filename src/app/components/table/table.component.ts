@@ -12,27 +12,37 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnChanges {
-  @Input() HeadersArray: { key: string; label: string }[] = [];
+  @Input() HeadersArray: { key: string; label: string; sortable?: boolean }[] = [];
   @Input() DataArray: any[] = [];
   @Input() route?: string;
 
   @Output() editRequest = new EventEmitter<number>();
   @Output() viewRequest = new EventEmitter<number>();
-
   @Output() deleteRequest = new EventEmitter<number>();
+  @Output() markAsDeliveredRequest = new EventEmitter<number>();
+  @Output() cancelRequest = new EventEmitter<number>();
 
   sortOrder: 'asc' | 'desc' = 'asc';
   sortColumn: string = '';
+  
+  hasViewAction = false;
+  hasEditAction = false;
+  hasDeleteAction = false;
+  hasMarkAsDeliveredAction = false;
+  hasCancelAction = false;
 
   constructor(private router: Router) {}
 
   ngOnChanges(): void {
-    //
+    this.hasViewAction = this.viewRequest.observed;
+    this.hasEditAction = this.editRequest.observed;
+    this.hasDeleteAction = this.deleteRequest.observed;
+    this.hasMarkAsDeliveredAction = this.markAsDeliveredRequest.observed;
+    this.hasCancelAction = this.cancelRequest.observed;
   }
 
   sort(columnKey: string) {
     if (this.sortColumn === columnKey) {
-      // toggle sort order if same column
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortColumn = columnKey;
@@ -55,7 +65,6 @@ export class TableComponent implements OnChanges {
           : valB.localeCompare(valA);
       }
 
-      // For date strings or Date objects (you might want to ensure date parsing)
       const dateA = new Date(valA);
       const dateB = new Date(valB);
       if (!isNaN(dateA.getTime()) && !isNaN(dateB.getTime())) {
@@ -71,21 +80,38 @@ export class TableComponent implements OnChanges {
   isPillValue(value: any): boolean {
     return (
       typeof value === 'string' &&
-      ['Ready', 'Pending', 'Arrived', 'Cancelled', 'Dispatched', 'Possible'].includes(value)
+      ['Ready', 'Pending', 'Arrived', 'Cancelled', 'Dispatched', 'Possible', 'Delivered'].includes(value)
     );
+  }
+
+  getPillClass(value: string): string {
+    switch(value) {
+      case 'Aktivan': return 'bg-primary';
+      case 'Na čekanju': return 'bg-secondary';
+      case 'Otkazan': return 'bg-danger';
+      case 'Poslan': return 'bg-warning';
+      case 'Dostavljen': return 'bg-success';
+      default: return 'bg-primary';
+    }
   }
 
   edit(index: number) {
     this.editRequest.emit(index);
   }
 
- delete(index: number) {
-  this.deleteRequest.emit(index); 
-}
+  delete(index: number) {
+    this.deleteRequest.emit(index);
+  }
 
-
-openRoute(index: number) {
+  openRoute(index: number) {
     this.viewRequest.emit(index);
-}
+  }
 
+  markAsDelivered(index: number) {
+    this.markAsDeliveredRequest.emit(index);
+  }
+
+  cancel(index: number) {
+    this.cancelRequest.emit(index);
+  }
 }

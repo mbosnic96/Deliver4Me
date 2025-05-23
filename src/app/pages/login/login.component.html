@@ -2,17 +2,16 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form w-100" style="max-width: 500px;">
     <div class="card shadow-lg rounded-4 overflow-hidden content-bg border">
       
-      <!-- Logo Header -->
+
       <div class="card-header text-center border-0 py-4">
         <img src="/logo-light.png" alt="App Logo" class="mb-3 logo">
         <h2 class="h5 mb-0">Login</h2>
-        <p class="mb-0 small">Welcome back, please sign in</p>
+        <p class="mb-0 small">Dobrodošli, molimo da se logirate</p>
       </div>
 
-      <!-- Card Body -->
+
       <div class="card-body p-4">
         
-        <!-- Email Field -->
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <input 
@@ -24,12 +23,12 @@
             placeholder="user@example.com"
             autocomplete="username">
           <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="invalid-feedback">
-            <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
-            <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
+            <span *ngIf="form.get('email')?.errors?.['required']">Email je obavezan</span>
+            <span *ngIf="form.get('email')?.errors?.['email']">Unesite validan mail</span>
           </div>
         </div>
         
-        <!-- Password Field -->
+      
         <div class="mb-4">
           <label for="password" class="form-label">Password</label>
           <input 
@@ -41,11 +40,10 @@
             placeholder="••••••••"
             autocomplete="current-password">
           <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="invalid-feedback">
-            Password is required
+            Password je obavezan
           </div>
         </div>
         
-        <!-- Submit Button -->
         <button 
           type="submit" 
           [disabled]="loading || form.invalid"
@@ -56,16 +54,15 @@
           <span *ngIf="loading" class="visually-hidden">Loading...</span>
         </button>
 
-        <!-- Error Message -->
         <div *ngIf="error" class="alert alert-danger mb-3 rounded-3">
           <i class="bi bi-exclamation-circle me-2"></i>
           {{ error }}
         </div>
-        
-        <!-- Registration Link -->
+
+
         <div class="text-center mt-3 small">
-          <span>Don't have an account?</span>
-          <a routerLink="/register" class="ms-1">Register</a>
+          <span>Nemate račun? Registrujte se!</span>
+          <a routerLink="/register" class="ms-1">Registracija</a>
         </div>
       </div>
     </div>
