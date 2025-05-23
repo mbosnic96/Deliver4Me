@@ -51,7 +51,7 @@ export class NavbarComponent {
 
   private updateNavbarHeight() {
     const height = this.navbar.nativeElement.offsetHeight;
-    this.navbarHeightService.setNavbarHeight(height); // Update the height in the service
+    this.navbarHeightService.setNavbarHeight(height); 
   }
 
   logout(): void {

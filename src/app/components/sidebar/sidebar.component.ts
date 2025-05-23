@@ -21,20 +21,20 @@ export class SidebarComponent {
   ngOnInit() {
     this.navbarHeightSubscription = this.navbarHeightService.navbarHeight$.subscribe(
       (height) => {
-        this.navbarHeight = height; // Update the navbar height when it changes
+        this.navbarHeight = height; 
       }
     );
   }
 
   ngOnDestroy() {
-    this.navbarHeightSubscription.unsubscribe(); // Unsubscribe when the component is destroyed
+    this.navbarHeightSubscription.unsubscribe(); 
   }
 
   collapsed = false;
   role: 'client' | 'driver' | 'admin';
 
   constructor(private authService: AuthService, private navbarHeightService: NavbarHeightService) {
-    this.role = this.authService.getCurrentUser()?.role  // Pull role from session/auth logic
+    this.role = this.authService.getCurrentUser()?.role  
   }
 
   toggleSidebar() {

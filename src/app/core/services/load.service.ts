@@ -34,6 +34,11 @@ getAllLoads(): Observable<any[]> {
     return this.http.get(`${this.apiUrl}/api/loads/${id}`);
   }
 
+  filterLoads(filters: any): Observable<any[]> {
+  return this.http.post<any[]>(`${this.apiUrl}/api/loads/filter`, filters);
+}
+
+
   deleteLoad(id: string): Observable<any> {
   return this.http.delete(`${this.apiUrl}/api/loads/${id}`);
 }

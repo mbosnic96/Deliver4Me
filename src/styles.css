@@ -17,3 +17,7 @@
 .border, .border-bottom{
     border-color: #404358 !important;
 }
+
+.logo{
+    height: 40px;
+}

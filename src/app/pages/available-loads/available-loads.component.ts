@@ -19,16 +19,30 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 })
 export class AvailableLoadsComponent implements OnInit {
     imageBaseUrl = environment.apiUrl;
-  filters: any = {
-    pickupCountry: '',
-    pickupState: '',
-    pickupCity: '',
-    deliveryCountry: '',
-    deliveryState: '',
-    deliveryCity: '',
-    searchTerm: '',
-    fixedPrice: false
-  };
+    showAdvancedFilters = false;
+
+filters: any = {
+  pickupCountry: '',
+  pickupState: '',
+  pickupCity: '',
+  deliveryCountry: '',
+  deliveryState: '',
+  deliveryCity: '',
+  preferredPickupDate: null,
+  preferredDeliveryDate: null,
+  minFixedPrice: null,
+  maxFixedPrice: null,
+  cargoWeight: null,
+  cargoVolume: null,
+  minCargoWidth: null,
+  maxCargoWidth: null,
+  minCargoHeight: null,
+  maxCargoHeight: null,
+  minCargoLength: null,
+  maxCargoLength: null,
+  status: 'Aktivan'
+};
+
 
   pickupCountries: ICountry[] = [];
   pickupStates: IState[] = [];
@@ -67,10 +81,14 @@ export class AvailableLoadsComponent implements OnInit {
     this.pickupCities = [];
   }
 
-  onPickupStateChange(): void {
-    this.pickupCities = this.csc.getCitiesByCountry(this.filters.pickupCountry)
-      .filter(c => c.stateCode === this.filters.pickupState);
-  }
+onPickupStateChange(): void {
+  this.pickupCities = this.csc.getCitiesByCountry(this.filters.pickupCountry);
+  // optionally reset selected city
+  this.filters.pickupCity = '';
+}
+
+
+
 
   onDeliveryCountryChange(): void {
     this.deliveryStates = this.csc.getStatesByCountry(this.filters.deliveryCountry);
@@ -78,18 +96,39 @@ export class AvailableLoadsComponent implements OnInit {
     this.filters.deliveryCity = '';
     this.deliveryCities = [];
   }
+onDeliveryStateChange(): void {
+  this.deliveryCities = this.csc.getCitiesByCountry(this.filters.deliveryCountry);
+  // optionally reset selected city
+  this.filters.deliveryCity = '';
+}
+private formatDate(date: string | null): string | null {
+  if (!date) return null;
+  // Ensure the date is in DD-MM-YYYY format
+  const [year, month, day] = date.split('-');
+  return `${day}-${month}-${year}`;
+}
 
-  onDeliveryStateChange(): void {
-    this.deliveryCities = this.csc.getCitiesByCountry(this.filters.deliveryCountry)
-      .filter(c => c.stateCode === this.filters.deliveryState);
-  }
+private getFormattedFilters() {
+  const f = this.filters;
+  return {
+    ...f,
+    preferredPickupDate: this.formatDate(f.preferredPickupDate),
+    preferredPickupDateTo: this.formatDate(f.preferredPickupDateTo),
+    preferredDeliveryDate: this.formatDate(f.preferredDeliveryDate),
+    preferredDeliveryDateTo: this.formatDate(f.preferredDeliveryDateTo),
+    // Convert numeric fields to numbers
+  };
+}
 
-  applyFilters(): void {
-    // Optional: Send filter values to backend or filter locally
-    this.fetchLoads(); // for now, just re-fetch
-    
-      this.cd.detectChanges();
-  }
+applyFilters(): void {
+  const formattedFilter = this.getFormattedFilters();
+  console.log('Sending filters:', this.filters); // Check the console for this output
+  this.loadService.filterLoads(this.getFormattedFilters()).subscribe(data => {
+    this.DataArray = data;
+    this.cd.detectChanges();
+  });
+}
+
 
   resetFilters(): void {
     this.filters = {};
@@ -103,4 +142,6 @@ export class AvailableLoadsComponent implements OnInit {
  viewLoadDetails(loadId: string) {
     this.router.navigate(['/load', loadId]);
   }
+
+
 }
