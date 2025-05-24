@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { environment } from '../../../../enviroments/environment';
 import Swal from 'sweetalert2';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-driver-vehicles',
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './driver-vehicles.component.html',
   styleUrl: './driver-vehicles.component.css'
 })

@@ -1,8 +1,6 @@
 <div class="container py-4" *ngIf="loadData">
   <div class="row g-4">
-    <!-- Glavni sadržaj (slike i detalji tereta) -->
     <div class="col-lg-8">
-      <!-- Galerija slika tereta -->
       <div class="card shadow-sm mb-4">
         <div class="card-body p-0">
           <div id="loadGallery" class="carousel slide" data-bs-ride="carousel">
@@ -43,7 +41,6 @@
 
       </div>
 
-      <!-- Detalji tereta -->
       <div class="card shadow-sm mb-4">
         <div class="card-header content-bg d-flex justify-content-between align-items-center">
           <h3 class="mb-0">{{ loadData.title }}</h3>
@@ -138,10 +135,9 @@
       </div>
     </div>
 
-    <!-- Ponuda (Bidding) -->
+   
     <div class="col-lg-4">
       <div>
-        <!-- Cijene -->
         <div class="card shadow-sm mb-4">
           <div class="card-header content-bg">
             <h4 class="mb-0">Cijena</h4>
@@ -207,5 +203,35 @@
    
       </div>
     </div>
+  </div>
+
+
+  <div class="row g-4 p-3">
+  <!-- Klijent ocjenjuje vozača -->
+  <div class="col-lg-12 content-bg rounded border p-3" *ngIf="getUserRole() === 'client' && getAcceptedBidDriverId() ">
+     <p class="mt-2">
+      Ocjenjujete vozača:
+      {{ getAcceptedBidDriverName() }}
+    </p>
+    <app-review-form
+      [toUserId]="getAcceptedBidDriverId() ?? ''"
+      [loadId]="loadData.id"
+    ></app-review-form>
+    
+   
+  </div>
+
+  <!-- Vozač ocjenjuje klijenta -->
+  <div class="col-lg-12 content-bg rounded border p-3" *ngIf="getUserRole() === 'driver' && loadData.status === 'Dostavljen'">
+    <p class="mt-2">
+      Ocjenjujete klijenta:
+      {{ user?.name || 'Nepoznat klijent' }}
+    </p>
+    <app-review-form
+      [toUserId]="loadData.userId"
+      [loadId]="loadData.id"
+    ></app-review-form>
+
+    
   </div>
 </div>

@@ -1,166 +1,201 @@
-<div class="row g-4">
-<div class="col-lg-12">
+<div class="row g-4 mb-4">
+  <div class="col-lg-12">
     <div class="d-flex justify-content-end mb-3">
-  <button class="btn btn-primary shadow-sm" (click)="openAddModal()">
-    <fa-icon [icon]="'box'" class="me-2"></fa-icon> Zatraži dostavu
-  </button>
-</div>
+      <button class="btn btn-primary shadow-sm" (click)="openAddModal()">
+        <fa-icon [icon]="'box'" class="me-2"></fa-icon> Zatraži dostavu
+      </button>
+    </div>
 
-<div class="card content-bg border shadow-sm rounded-3">
-  <div class="card-body">
-    <h5><fa-icon [icon]="'map-marker-alt'" class="me-2 text-success"></fa-icon> Mapa paketa</h5>
-    <div id="map" style="height: 300px;"></div>
+    <div class="card content-bg border shadow-sm rounded-3">
+      <div class="card-body">
+        <h5><fa-icon [icon]="'map-marker-alt'" class="me-2 text-success"></fa-icon> Mapa paketa</h5>
+        <div id="map" style="height: 300px;"></div>
+      </div>
+    </div>
   </div>
 </div>
-</div>
+
+<div class="row g-4 mb-1">
+  <div class="col-md-6">
+    <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <h6 class="text-light mb-1">Ukupno dostava</h6>
+            <h4 class="fw-bold mb-0">{{ totalLoads }}</h4>
+          </div>
+          <div class="rounded-circle bg-success bg-opacity-25 p-2 text-success">
+            <fa-icon [icon]="'truck'" class="fs-4"></fa-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="col-md-6">
+    <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <h6 class="text-light mb-1">Ocjena</h6>
+            <h4 class="fw-bold mb-0">{{ averageRating | number:'1.1-2' }}</h4>
+          </div>
+          <div class="rounded-circle bg-danger bg-opacity-25 p-2 star-rating">
+            <fa-icon [icon]="'star'" class="fs-4"></fa-icon>
+          </div>
+        </div>
+        <small class="text-light">{{ totalReviews }} recenzija</small>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 
 <div class="row g-4">
-  <!-- Moje dostave -->
   <div class="col-lg-6 mb-3">
     <div class="shadow-lg border-0 rounded-3 content-bg border">
-    <h5 class="mb-3 mt-4 ps-3 pt-4"> <fa-icon [icon]="'truck-fast'"></fa-icon>  Moje dostave</h5>
-    <div id="senderCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-indicators pt-2 pb-2">
-        <button *ngFor="let item of userLoads; let i = index"
-        type="button" data-bs-target="#senderCarousel"
-        [attr.data-bs-slide-to]="i" [class.active]="i === 0"
-        [attr.aria-current]="i === 0 ? 'true' : null"
-        [attr.aria-label]="'Slide ' + (i + 1)"></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item" *ngFor="let row of userLoads; let i = index"
-     [class.active]="i === 0">
-  <div class="container py-4 ps-0 pe-0">
-    <div class="card content-bg">
-      <div class="card-body ms-5 me-5">
-        <h4 class="card-title text-primary">
-          {{ row.title }}
-        </h4>
-        <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
-          <strong>Preuzimanje:</strong> {{ row.pickupCity }}, {{ row.pickupAddress }}</p>
-        <p><fa-icon [icon]="'location-dot'" class="me-2 text-success"></fa-icon>
-          <strong>Dostava:</strong> {{ row.deliveryCity }}, {{ row.deliveryAddress }}</p>
-        <p><fa-icon [icon]="'box'" class="me-2 text-warning"></fa-icon>
-          <strong>Paket:</strong> {{ row.description }}</p>
-        <p><fa-icon [icon]="'clock'" class="me-2 text-info"></fa-icon>
-          <strong>Preuzimanje:</strong> {{ row.preferredPickupDate?.split('T')[0] }} {{ row.pickupTime }}</p>
-          
-        <p><fa-icon [icon]="'clock'" class="me-2 text-warning"></fa-icon>
-          <strong>Zakazana dostava:</strong> {{ row.preferredDeliveryDate?.split('T')[0] }} {{ row.maxDeliveryTime }}</p>
-        <p class="badge rounded-pill"
-          [ngClass]="{
+      <h5 class="mb-3 mt-4 ps-3 pt-4"> <fa-icon [icon]="'truck-fast'"></fa-icon> Moje dostave</h5>
+      <div id="senderCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators pt-2 pb-2">
+          <button *ngFor="let item of userLoads; let i = index" type="button" data-bs-target="#senderCarousel"
+            [attr.data-bs-slide-to]="i" [class.active]="i === 0" [attr.aria-current]="i === 0 ? 'true' : null"
+            [attr.aria-label]="'Slide ' + (i + 1)"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item" *ngFor="let row of userLoads; let i = index" [class.active]="i === 0">
+            <div class="container py-4 ps-0 pe-0">
+              <div class="card content-bg">
+                <div class="card-body ms-5 me-5">
+                  <div class="d-flex justify-content-between">
+                     <h4 class="card-title text-primary">
+                    {{ row.title }}
+
+                  </h4>
+                  <p class="badge rounded-pill" [ngClass]="{
             'bg-success': row.status === 'Aktvan',
             'bg-secondary': row.status === 'Čekanje',
             'bg-warning': row.status === 'Poslan',
             'bg-danger': row.status === 'Otkazan'
           }">{{ row.status }}</p>
+                  </div>
+                 
+                  <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
+                    <strong>Preuzimanje:</strong> {{ row.pickupCity }}, {{ row.pickupAddress }}
+                  </p>
+                  <p><fa-icon [icon]="'location-dot'" class="me-2 text-success"></fa-icon>
+                    <strong>Dostava:</strong> {{ row.deliveryCity }}, {{ row.deliveryAddress }}
+                  </p>
+                  <p><fa-icon [icon]="'box'" class="me-2 text-warning"></fa-icon>
+                    <strong>Paket:</strong> {{ row.description }}
+                  </p>
+                  <p><fa-icon [icon]="'clock'" class="me-2 text-info"></fa-icon>
+                    <strong>Preuzimanje:</strong> {{ row.preferredPickupDate?.split('T')[0] }} {{ row.pickupTime }}
+                  </p>
+
+                  <p><fa-icon [icon]="'clock'" class="me-2 text-warning"></fa-icon>
+                    <strong>Zakazana dostava:</strong> {{ row.preferredDeliveryDate?.split('T')[0] }} {{
+                    row.maxDeliveryTime }}
+                    </p>
+
+                 
+                </div>
+                <div class="card-footer bg-transparent text-end pb-4">
+                  <a class="btn btn-outline-primary btn-sm w-100" [routerLink]="['/load', row.id]">
+                    <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Detalji
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#senderCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#senderCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
       </div>
-      <div class="card-footer bg-transparent text-end pb-4">
-        <button class="btn btn-outline-primary btn-sm w-100" (click)="viewLoadDetails(row.id)">
-          <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Detalji
+    </div>
+  </div>
+
+
+  <div class="col-lg-6 mb-3">
+    <div class="shadow-lg border-0 rounded-3 content-bg border">
+      <h5 class="mb-3 mt-4 ps-3 pt-4"> <fa-icon [icon]="'truck'"></fa-icon> Preporučeni dostavljači</h5>
+      <div id="recommendedCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators pt-2 pb-2">
+          <button *ngFor="let driver of recommendedDrivers; let i = index" type="button"
+            data-bs-target="#recommendedCarousel" [attr.data-bs-slide-to]="i" [class.active]="i === 0"
+            [attr.aria-current]="i === 0 ? 'true' : null" [attr.aria-label]="'Slide ' + (i + 1)"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item" *ngFor="let driver of recommendedDrivers; let i = index" [class.active]="i === 0">
+            <div class="container py-4 ps-0 pe-0">
+              <div class="card content-bg">
+                <div class="card-body ms-5 me-5">
+                  <div class="row d-flex align-items-center">
+                    <div class="col-3 profile-photo-placeholder">
+
+                      <img [src]="imageBaseUrl+driver.user.photoUrl" alt="Driver Image" class="img-fluid rounded-circle"
+                        style="width: 150px; height: 150px;">
+                    </div>
+
+                    <div class="col-9">
+                      <h4 class="card-title text-primary">
+                        {{ driver.user.name }}
+                      </h4>
+                      <p><fa-icon [icon]="'star'" class="me-2 text-warning"></fa-icon>
+                        <strong>Ocjena:</strong> {{ driver.averageRating }}
+                      </p>
+                      <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
+                        <strong>Država:</strong> {{ getCountryName(driver.user.country) }}
+                      </p>
+                      <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
+                        <strong>Regija/Kanton:</strong> {{ getStateName(driver.user.country, driver.user.state) }}
+                      </p>
+                      <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
+                        <strong>Grad:</strong> {{ driver.user.city }}
+                      </p>
+                      <p><fa-icon [icon]="'phone'" class="me-2 text-info"></fa-icon>
+                        <strong>Kontakt:</strong> {{ driver.user.phone }}
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="card-footer bg-transparent text-end pb-4">
+                  <a 
+  [routerLink]="['/user', driver.user.id]" 
+  class="btn btn-outline-success btn-sm w-100"
+>
+  <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Profil
+</a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#recommendedCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#recommendedCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
         </button>
       </div>
     </div>
   </div>
 </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#senderCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#senderCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-    </div>
-    </div>
-  </div>
 
-  <!-- Preporučeni dostavljači -->
-  <div class="col-lg-6 mb-3">
-    <div class="shadow-lg border-0 rounded-3 content-bg border">
-    <h5 class="mb-3 mt-4 ps-3 pt-4"> <fa-icon [icon]="'truck'"></fa-icon>  Preporučeni dostavljači</h5>
-    <div id="recommendedCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-indicators pt-2 pb-2">
-        <button *ngFor="let driver of recommendedDrivers; let i = index"
-          type="button" data-bs-target="#recommendedCarousel"
-          [attr.data-bs-slide-to]="i" [class.active]="i === 0"
-          [attr.aria-current]="i === 0 ? 'true' : null"
-          [attr.aria-label]="'Slide ' + (i + 1)"></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item" *ngFor="let driver of recommendedDrivers; let i = index"
-          [class.active]="i === 0">
-          <div class="container py-4 ps-0 pe-0">
-            <div class="card content-bg">
-              <div class="card-body ms-5 me-5">
-                <div class="row d-flex align-items-center">
-                    <div class="col-3">
-                        
-                        <img [src]="driver.image" alt="Driver Image" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
-                    </div>
 
-                    <div class="col-9">
-<h4 class="card-title text-primary">
-                 {{ driver.name }}
-                </h4>
-                <p><fa-icon [icon]="'star'" class="me-2 text-warning"></fa-icon>
-                  <strong>Ocjena:</strong> {{ driver.rating }}</p>
-                <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
-                  <strong>Lokacija:</strong> {{ driver.location }}</p>
-                <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
-                  <strong>Lokacija:</strong> {{ driver.location }}</p>
-                <p><fa-icon [icon]="'map-marker-alt'" class="me-2 text-secondary"></fa-icon>
-                  <strong>Lokacija:</strong> {{ driver.location }}</p>
-                <p><fa-icon [icon]="'phone'" class="me-2 text-info"></fa-icon>
-                  <strong>Kontakt:</strong> {{ driver.phone }}</p>
-                    </div>
-                </div>
-                
-              </div>
-              <div class="card-footer bg-transparent text-end pb-4">
-                <button class="btn btn-outline-success btn-sm w-100">
-                  <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Profil
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#recommendedCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#recommendedCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-    </div>
-  </div>
-</div>
-</div>
 
-<div class="row g-4">
-  <!-- Summary Cards -->
-  <div class="col-md-4 mb-3" *ngFor="let card of [
-    {title:'Ukupno dostava', value: summary.total, icon: 'truck', color:'success'},
-    {title:'Prosječna ponuda', value: summary.avgBid, icon: 'money-bill-wave', color:'info'},
-    {title:'Ocjena', value: summary.rating, icon: 'star', color:'danger'},
-  ]">
-    <div class="card text-white content-bg border shadow-sm rounded-3">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <h6 class="text-light mb-1">{{ card.title }}</h6>
-            <h4 class="fw-bold mb-0">{{ card.value }}</h4>
-          </div>
-          <div class="rounded-circle bg-{{card.color}} bg-opacity-25 p-2 text-{{card.color}}">
-            <fa-icon [icon]="card.icon" class="fs-4"></fa-icon>
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
-  </div>
 
+<!--
   <div class="row g-4">
     <div class="col-lg-12">
 <div class="card content-bg border shadow-sm rounded-3 mb-4">
@@ -170,4 +205,4 @@
   </div>
 </div>
 
-  </div>
+  </div>-->

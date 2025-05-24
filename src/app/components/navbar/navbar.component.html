@@ -1,4 +1,4 @@
-<nav #navbar class="navbar navbar-expand-lg bg-body-tertiary content-bg border-bottom">
+<nav #navbar class="navbar navbar-expand-lg bg-body-tertiary content-bg border-bottom sticky-top">
   <div class="container">
     <a class="navbar-brand" routerLink="/"><img src="/logo-light.png" class="img-fluid mx-auto logo"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
@@ -18,11 +18,11 @@
       <div class="d-flex align-items-center gap-2">
         <ng-container *ngIf="!(authService.authState$ | async); else loggedInTemplate">
           <a routerLink="/login" class="btn btn-primary" routerLinkActive="active">
-            <fa-icon [icon]="faSignInAlt" class="me-2"></fa-icon>
+            <fa-icon [icon]="'sign-in-alt'" class="me-2"></fa-icon>
             Prijava
           </a>
           <a routerLink="/register" class="btn btn-success" routerLinkActive="active">
-            <fa-icon [icon]="faUserPlus" class="me-2"></fa-icon>
+            <fa-icon [icon]="'user-plus'" class="me-2"></fa-icon>
             Registracija
           </a>
         </ng-container>
@@ -36,11 +36,11 @@
          alt="{{this.authService.getCurrentUser()?.name?.charAt(0)}}">
            <div class="d-flex flex-column">
     <span>{{ getUserName() }}</span>
-    <span>{{ getUserRole() }}</span>
+    <span>{{ getUserUsername() }}</span>
   </div>
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center" *ngIf="getUserRole() !== 'admin'">
     <div class="d-flex justify-content-center align-items-center rounded-circle bg-primary text-white p-2">
-      {{ getRating() }}
+      {{ averageRating | number:'1.1-2' }}
     </div>
   </div>
 </div>
@@ -56,6 +56,13 @@
 
               <li  *ngIf="getUserRole() === 'client'">
                 <a class="dropdown-item" routerLink="/client">
+                  <fa-icon [icon]="'user'" class="me-2"></fa-icon>
+                  Dashboard
+                </a>
+              </li>
+              
+              <li  *ngIf="getUserRole() === 'admin'">
+                <a class="dropdown-item" routerLink="/admin">
                   <fa-icon [icon]="'user'" class="me-2"></fa-icon>
                   Dashboard
                 </a>

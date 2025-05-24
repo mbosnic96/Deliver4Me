@@ -34,6 +34,9 @@ getUserById(id: string): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/api/users/${id}`);
 }
 
+getVehiclesByUserId(userId: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/vehicles/user/${userId}`);
+}
 
 
   requestAccountDeletion(): Observable<{ message: string }> {

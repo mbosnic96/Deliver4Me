@@ -1,5 +1,4 @@
 <div class="container mt-4" [formGroup]="profileForm">
-  <!-- Profile Section -->
   <div class="profile-section mb-4 p-4 border rounded content-bg">
     <h2>Profil</h2>
 
@@ -107,13 +106,13 @@
 
 
         <div class="d-flex justify-content-end align-items-center">
-          <button class="btn btn-primary" (click)="saveProfile()">Save Changes</button>
+          <button class="btn btn-outline-primary" (click)="saveProfile()">Save Changes</button>
         </div>
       </div>
     </div>
   </div>
 
-<!-- Map Location Section -->
+
 <div class="map-section p-4 border rounded content-bg mb-4">
   <h3>Tačna lokacija</h3>
   <p>Prevucite marker na tačnu lokacciju da bi vas dostavljač lakše pronašao.</p>
@@ -121,13 +120,12 @@
   <div id="map" style="height: 300px;" class="rounded border mb-3"></div>
 
   <div class="d-flex justify-content-end">
-    <button class="btn btn-success" (click)="updatePositionOnly()">Ažuriraj lokaciju</button>
+    <button class="btn btn-outline-success" (click)="updatePositionOnly()">Ažuriraj lokaciju</button>
   </div>
 </div>
 
 
 
-  <!-- Account Section -->
   <div class="account-section mb-4 p-4 border rounded content-bg">
     <h3>Račun</h3>
 
@@ -149,10 +147,11 @@
 
   </div>
 
-  <!-- Danger Zone Section -->
-  <div class="danger-section p-4 border rounded border-danger content-bg">
+  <div class="danger-section p-4 border rounded border-danger content-bg" *ngIf="getUserRole() !== 'admin'">
     <h3 class="text-danger">Opasna zona</h3>
     <p class="mb-3">Pažljivo, ovom radnjom brišete račun. Ponovna prijava nije moguća bez kontaktiranja administratora!</p>
-    <button class="btn btn-outline-danger" (click)="requestAccountDeletion()">Obriši račun</button>
+    <div class="text-end">
+        <button class="btn btn-outline-danger" (click)="requestAccountDeletion()">Obriši račun</button>
+    </div>
   </div>
 </div>

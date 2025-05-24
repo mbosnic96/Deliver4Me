@@ -1,19 +1,12 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { 
-  faSignInAlt, 
-  faUserPlus, 
-  faUser, 
-  faSignOutAlt,
-  faStar,
-  faCog
-} from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../core/services/auth.service';
 
 import { NavbarHeightService } from '../../core/services/navbar-height.service';
 import { environment } from '../../../enviroments/environment';
+import { ReviewService } from '../../core/services/review.service';
 
 
 @Component({
@@ -28,20 +21,18 @@ import { environment } from '../../../enviroments/environment';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  // Icons
-  faSignInAlt = faSignInAlt;
-  faUserPlus = faUserPlus;
-  faUser = faUser;
-  faSignOutAlt = faSignOutAlt;
-    faStar = faStar;
-  faCog = faCog;
 
-  constructor(public authService: AuthService, private navbarHeightService: NavbarHeightService) {}
+
+  constructor(public authService: AuthService, private navbarHeightService: NavbarHeightService, private reviewService: ReviewService,  private cd: ChangeDetectorRef) {}
    @ViewChild('navbar', { static: false }) navbar!: ElementRef;
      imageBaseUrl = environment.apiUrl;
+     
+   averageRating: number = 0;
 
   ngAfterViewInit() {
     this.updateNavbarHeight();
+    
+        this.getRating();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -70,8 +61,22 @@ export class NavbarComponent {
     return this.authService.getCurrentUser()?.role || 'User';
   }
 
-  getRating(): string {
-    return this.authService.getCurrentUser()?.rating?.toFixed(1) || '4.8';
+    getUserUsername(): string {
+    return this.authService.getCurrentUser()?.userName || 'User';
+  }
+
+    getRating() {
+    const userId = this.authService.getCurrentUser()?.id;
+    if (!userId) return;
+
+    this.reviewService.getUserRating(userId).subscribe({
+      next: (data) => {
+        this.averageRating = data.averageRating;
+        
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Greška pri preuzimanju ocjene:', err)
+    });
   }
 }
 

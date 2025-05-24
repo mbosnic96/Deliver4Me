@@ -3,7 +3,7 @@
         <div class="col-12">
      <div class="card content-bg border shadow-sm rounded-3">
   <div class="card-body">
-    <h5><fa-icon [icon]="'map-marker-alt'" class="me-2 text-success"></fa-icon> Mapa vozila</h5>
+    <h5><fa-icon [icon]="'map-marker-alt'" class="me-2 text-success"></fa-icon> Mapa aktivnih ruta</h5>
     <div id="map" style="height: 300px;"></div>
   </div>
 </div>
@@ -13,79 +13,59 @@
 
   <div class="row g-4">
 
-    <!-- Deliveries Card -->
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
-              <h6 class="text-light mb-1">Dostave</h6>
-              <h4 class="fw-bold mb-0">128</h4>
+              <h6 class="text-light mb-1">Ukupno dostava</h6>
+              <h4 class="fw-bold mb-0">{{ totalLoads }}</h4>
             </div>
             <div class="rounded-circle bg-success bg-opacity-25 p-2 text-success">
-              <fa-icon [icon]="faTruck" class="fs-4"></fa-icon>
+              <fa-icon [icon]="'truck'" class="fs-4"></fa-icon>
             </div>
           </div>
-          <small class="text-success fw-semibold">+8%</small>
-          <small class="text-light ms-2">32 ovog mjeseca</small>
         </div>
       </div>
     </div>
 
-    <!-- Earnings Card -->
-    <div class="col-md-3">
-      <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div>
-              <h6 class="text-light mb-1">Zarada</h6>
-              <h4 class="fw-bold mb-0">12.345,00 KM</h4>
-            </div>
-            <div class="rounded-circle bg-info bg-opacity-25 p-2 text-info">
-              <fa-icon [icon]="faMoneyBillWave" class="fs-4"></fa-icon>
-            </div>
-          </div>
-          <small class="text-success fw-semibold">+12%</small>
-          <small class="text-light ms-2">2.345,00 KM ovaj mjesec</small>
-        </div>
-      </div>
-    </div>
 
-    <!-- Vehicles Card -->
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
               <h6 class="text-light mb-1">Moja vozila</h6>
-              <h4 class="fw-bold mb-0">2</h4>
+              <h4 class="fw-bold mb-0">{{ totalVehicles }}</h4>
             </div>
             <div class="rounded-circle bg-warning bg-opacity-25 p-2 text-warning">
-             <fa-icon [icon]="faTruckPickup" class="fs-4"></fa-icon>
+             <fa-icon [icon]="'truck-pickup'" class="fs-4"></fa-icon>
             </div>
           </div>
-          <small class="text-light">Kombi, Pickup</small>
+          <small class="text-light" *ngFor="let model of vehicleTypes()">
+            {{ model }}, 
+          </small>
         </div>
       </div>
     </div>
 
-    <!-- Rating Card -->
-    <div class="col-md-3">
-      <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div>
-              <h6 class="text-light mb-1">Ocjena</h6>
-              <h4 class="fw-bold mb-0">4.8</h4>
-            </div>
-            <div class="rounded-circle bg-danger bg-opacity-25 p-2 text-danger">
-              <fa-icon [icon]="faStar" class="fs-4"></fa-icon>
-            </div>
-          </div>
-          <small class="text-light">56 recenzija</small>
+
+<div class="col-md-4">
+  <div class="card text-white content-bg border shadow-sm rounded-3 h-100">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <h6 class="text-light mb-1">Ocjena</h6>
+          <h4 class="fw-bold mb-0">{{ averageRating | number:'1.1-2' }}</h4>
+        </div>
+        <div class="rounded-circle bg-danger bg-opacity-25 p-2 star-rating">
+          <fa-icon [icon]="'star'" class="fs-4"></fa-icon>
         </div>
       </div>
+      <small class="text-light">{{ totalReviews }} recenzija</small>
     </div>
+  </div>
+</div>
 
   </div>
 
@@ -130,9 +110,9 @@
           }">{{ row.status }}</p>
       </div>
       <div class="card-footer bg-transparent text-end pb-4">
-        <button class="btn btn-outline-primary btn-sm w-100" (click)="viewLoadDetails(row.id)">
-          <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Detalji
-        </button>
+       <a class="btn btn-outline-primary btn-sm w-100" [routerLink]="['/load', row.id]">
+                    <fa-icon [icon]="'eye'" class="me-1"></fa-icon> Detalji
+                  </a>
       </div>
     </div>
   </div>

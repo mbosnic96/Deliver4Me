@@ -3,62 +3,69 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.js';
-// @ts-ignore
-
-import { 
-  faTruck, 
-  faStar, 
-  faTruckPickup, 
-  faMoneyBill1Wave, 
-  faMapMarkerAlt,
-  faLocationDot,
-  faBox,
-  faPhone,
-  faEye
-} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
-import { VehicleMapComponent } from './vehicle-map/vehicle-map.component';
-import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { VehicleTabsComponent } from './vehicle-tabs/vehicle-tabs.component';
 import { DriverService } from '../../../core/services/driver.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ReviewService } from '../../../core/services/review.service';
 @Component({
   selector: 'app-driver-dashboard',
-  imports: [FontAwesomeModule, VehicleTabsComponent, CommonModule],
+  imports: [FontAwesomeModule, VehicleTabsComponent, CommonModule, RouterModule],
   templateUrl: './driver-dashboard.component.html',
   styleUrls: ['./driver-dashboard.component.css']
 })
 export class DriverDashboardComponent {
   
 
-  constructor(private driverService: DriverService, private cd: ChangeDetectorRef, private router: Router, private authService: AuthService) { }
-    faTruck = faTruck;
-    faStar = faStar;
-    faTruckPickup = faTruckPickup;
-    faMoneyBillWave = faMoneyBill1Wave;
-    
-  faMapMarkerAlt = faMapMarkerAlt;
-  faLocationDot = faLocationDot;
-  faBox = faBox;
-  faPhone = faPhone;
-  faEye = faEye;
+  constructor(private driverService: DriverService, private cd: ChangeDetectorRef, private router: Router, private authService: AuthService, private reviewService: ReviewService) { }
+
  
   userLoads: any[] = [];
+   averageRating: number = 0;
+  totalReviews: number = 0;
+  totalLoads: number = 0;
+  
+  vehicles: any[] = [];
+  
+
+  vehicleCounts: { [type: string]: number } = {};
+totalVehicles: number = 0;
+
 
 
   map!: L.Map;
     ngOnInit() {
     this.fetchUserLoads();
+    this.fetchUserRating(); 
+    this.fetchVehicles();
+  }
+
+  fetchUserRating() {
+    const userId = this.getUser();
+    if (!userId) return;
+
+    this.reviewService.getUserRating(userId).subscribe({
+      next: (data) => {
+        this.averageRating = data.averageRating;
+        this.totalReviews = data.totalReviews;
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Greška pri preuzimanju ocjene:', err)
+    });
   }
 
    fetchUserLoads() {
   this.driverService.getMyLoads(this.getUser()).subscribe({
     next: (loads) => {
+      this.totalLoads = loads.length;
        this.userLoads = loads.filter(l => l.status === 'Poslan');
        
-    this.initMap();
+    setTimeout(() => {
+    this.initMap(); 
+  });
+
         this.cd.detectChanges();
     },
     error: (err) => {
@@ -72,18 +79,29 @@ getUser(): string {
     return user?.id;
   }
 
-  carriers = [
-    { label: 'Total', value: '2,345' },
-    { label: 'Trucks', value: '456' },
-    { label: 'Cargo Vans', value: '891' },
-    { label: 'New', value: '123' },
-    { label: 'Retail & Broker', value: '567' }
-  ];
+fetchVehicles(): void {
+  this.driverService.getVehicles().subscribe({
+    next: (data) => {
+      this.vehicles = data;
+      this.totalVehicles = data.length;
 
-    driverVehicles = [
-    { lat: 44.8164, lng: 15.8704 }, // Vehicle A
-    { lat: 44.8064, lng: 15.8804 }  // Vehicle B
-  ];
+      this.vehicleCounts = data.reduce((acc: any, vehicle: any) => {
+        const model = vehicle.model || 'Nepoznato';
+        acc[model] = (acc[model] || 0) + 1;
+        return acc;
+      }, {});
+      this.cd.detectChanges();
+    },
+    error: (err) => {
+      console.error('Error fetching vehicles', err);
+      this.cd.detectChanges();
+    }
+  });
+}
+vehicleTypes(): string[] {
+  return Object.keys(this.vehicleCounts);
+}
+
 
   viewLoadDetails(loadId: string) {
     this.router.navigate(['/load', loadId]);

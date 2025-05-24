@@ -1,0 +1,6 @@
+.star-rating span {
+  color: #ccc;
+}
+.star-rating .filled {
+  color: gold;
+}

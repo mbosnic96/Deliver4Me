@@ -1,0 +1,32 @@
+<form [formGroup]="form">
+  <div class="star-rating">
+    <span
+      *ngFor="let star of [1, 2, 3, 4, 5]"
+      (click)="setRating(star)"
+      (mouseenter)="hoverRating = star"
+      (mouseleave)="hoverRating = 0"
+      [class.filled]="star <= (hoverRating || selectedRating)"
+      style="cursor: pointer; font-size: 2rem;"
+    >
+      <fa-icon [icon]="'star'"></fa-icon>
+    </span>
+  </div>
+
+  <textarea
+    formControlName="comment"
+    placeholder="Napišite komentar"
+    rows="3"
+    class="form-control"
+  ></textarea>
+
+  <div class="text-end">
+    <button
+      type="button"
+      (click)="submit()"
+      [disabled]="!selectedRating"
+      class="mt-2 text-end btn btn-primary btn-sm"
+    >
+      Ocijeni
+    </button>
+  </div>
+</form>

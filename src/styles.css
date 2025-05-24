@@ -17,3 +17,10 @@
 .logo{
     height: 40px;
 }
+.card-body,.card-header,.card-footer {
+  border: 0px solid #1c2434 !important;
+}
+
+.star-rating {
+  color: gold;
+}

@@ -12,72 +12,80 @@ import * as LRouting from 'leaflet-routing-machine';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddLoadComponent } from './add-load/add-load.component';
 import { LoadService } from '../../../core/services/load.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { ReviewService } from '../../../core/services/review.service';
+import { DriverService } from '../../../core/services/driver.service';
+import { CscService } from '../../../core/services/csc.service';
+import { environment } from '../../../../enviroments/environment';
 
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, RouterModule],
   templateUrl: './client-dashboard.component.html',
   styleUrls: ['./client-dashboard.component.css']
 })
 export class ClientDashboardComponent {
 
 
-  constructor(private modalService: NgbModal, private loadService: LoadService, private cd: ChangeDetectorRef, private router: Router) { }
+  constructor(private modalService: NgbModal, private loadService: LoadService, private cscService: CscService,private cd: ChangeDetectorRef, private router: Router, private authService: AuthService,private driverService: DriverService, private reviewService: ReviewService) { }
 
   userLoads: any[] = [];
+  recommendedDrivers: any[] = [];
+  imageBaseUrl = environment.apiUrl;
 
+   averageRating: number = 0;
+  totalReviews: number = 0;
+  
+  totalLoads: number = 0;
 
-  summary = {
-    total: 128,
-    active: 14,
-    completed: 102,
-    avgBid: '45.00 KM',
-    avgTime: '2h 30min',
-    rating: 4.9
-  };
-
-
-
-
-recommendedDrivers = [
-  {
-    name: 'Dostavljač A',
-    rating: 4.8,
-    image: 'user.png',
-    location: 'Sarajevo',
-    phone: '061/111-222'
-  },
-  {
-    name: 'Dostavljač B',
-    rating: 4.9,
-    image: 'user.png',
-    location: 'Tuzla',
-    phone: '062/333-444'
-  }
-];
 
 
   map!: L.Map;
 
   ngOnInit() {
-    this.initChart();
+  //  this.initChart();
     this.fetchUserLoads();
+    this.fetchUserRating();
+    this.fetchRecommendedDrivers();
   }
 
   fetchUserLoads() {
   this.loadService.getMyLoads().subscribe({
     next: (loads) => {
+      
+      this.totalLoads = loads.length;
        this.userLoads = loads.filter(l => l.status !== 'Dostavljen');
       
-    this.initMap();
+      setTimeout(() => {
+    this.initMap(); 
+  });
         this.cd.detectChanges();
     },
     error: (err) => {
       console.error('Greška pri preuzimanju podataka:', err);
     }
   });
+}
+
+fetchRecommendedDrivers() {
+  this.driverService.getRecommendedDrivers().subscribe({
+    next: (drivers) => {
+      this.recommendedDrivers = drivers;
+      console.log(drivers);
+      this.cd.detectChanges();
+    },
+    error: (err) => console.error('Greška pri preporuci dostavljača:', err)
+  });
+}
+
+getCountryName(code: string): string {
+  return this.cscService.getCountryNameByCode(code) ?? code;
+}
+
+getStateName(countryCode: string, stateCode: string): string {
+  return this.cscService.getStateNameByCode(countryCode, stateCode) ?? stateCode;
 }
 
 
@@ -147,6 +155,24 @@ private getColorForIndex(index: number): string {
   return colors[index % colors.length];
 }
 
+  fetchUserRating() {
+    const userId = this.getUser();
+    if (!userId) return;
+
+    this.reviewService.getUserRating(userId).subscribe({
+      next: (data) => {
+        this.averageRating = data.averageRating;
+        this.totalReviews = data.totalReviews;
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Greška pri preuzimanju ocjene:', err)
+    });
+  }
+
+  getUser(): string {
+    const user = this.authService.getCurrentUser();
+    return user?.id;
+  }
 
 
 
@@ -160,5 +186,9 @@ private getColorForIndex(index: number): string {
 
    viewLoadDetails(loadId: string) {
     this.router.navigate(['/load', loadId]);
+  }
+
+     viewUserDetails(loadId: string) {
+    this.router.navigate(['/user', loadId]);
   }
 }

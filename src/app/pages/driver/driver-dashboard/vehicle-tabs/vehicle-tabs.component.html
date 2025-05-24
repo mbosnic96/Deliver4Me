@@ -28,8 +28,12 @@
             </div>
             <span class="cargo-percentage">{{ vehicle.cargoPercentage || 0 }}%</span>
           </div>
-          <p>Model: {{ vehicle.vehicleType?.name + ' - ' + vehicle.vehicleType?.description || 'N/A' }}</p>
-          <p>Registracija: {{ vehicle.plateNumber || 'N/A' }}</p>
+          <div class="p-3">
+              <p>Model: {{ vehicle.vehicleType?.name + ' - ' + vehicle.vehicleType?.description || 'N/A' }}</p>
+              <p>Registracija: {{ vehicle.plateNumber || 'N/A' }}</p>
+              <p>Dimenzije: {{ vehicle.width + ' širina, ' + vehicle.height + ' visina, '+ vehicle.length + ' visina' || 'N/A' }}</p>
+          </div>
+        
         </div>
       </div>
     </div>

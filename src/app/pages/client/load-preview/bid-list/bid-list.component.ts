@@ -28,7 +28,6 @@ export class BidListComponent {
       this.bids = res;
       
     this.cd.detectChanges();
-      console.log('Bid ' + JSON.stringify(res));
 
     });
   }

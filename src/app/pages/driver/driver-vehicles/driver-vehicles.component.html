@@ -61,28 +61,28 @@
           </div>
         </div>
 
-        <!-- Metadata -->
         <div class="d-flex justify-content-between small border-top pt-3">
           <div>
-            <i class="fas fa-calendar-alt me-1"></i>
+            
+                <fa-icon [icon]="'calendar-alt'"></fa-icon>
             {{ vehicle.createdAt | date:'mediumDate' }}
           </div>
           <div class="badge bg-success bg-opacity-10 text-success">
-            <i class="fas fa-check-circle me-1"></i>Aktivno
+            
+                <fa-icon [icon]="'check-circle'"></fa-icon>Aktivno
           </div>
         </div>
       </div>
 
-      <!-- Card Footer with Actions -->
       <div class="card-footer bg-transparent border-0 pt-0 d-flex gap-2">
         <button class="btn btn-outline-primary btn-sm flex-fill d-flex align-items-center justify-content-center gap-2"
                 (click)="editVehicle(vehicle)">
-          <i class="fas fa-edit"></i>
+                <fa-icon [icon]="'edit'"></fa-icon>
           <span>Uredi</span>
         </button>
         <button class="btn btn-outline-danger btn-sm flex-fill d-flex align-items-center justify-content-center gap-2"
                 (click)="deleteVehicle(vehicle.id)">
-          <i class="fas fa-trash"></i>
+                <fa-icon [icon]="'trash'"></fa-icon>
           <span>Obriši</span>
         </button>
       </div>

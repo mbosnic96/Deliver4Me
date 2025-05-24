@@ -14,6 +14,7 @@ import * as L from 'leaflet';
 
 
 import Swal from 'sweetalert2';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-account-settings',
@@ -29,6 +30,7 @@ export class AccountSettingsComponent implements OnInit {
   private cscService = inject(CscService);
   private router = inject(Router);
   private modalService= inject(NgbModal);
+  private authService= inject(AuthService);
 
   countries: ICountry[] = [];
   states: IState[] = [];
@@ -60,9 +62,7 @@ private marker: L.Marker | null = null;
     this.countries = this.cscService.getAllCountries();
   }
 
-  ngAfterViewInit() {
-  setTimeout(() => this.initMap(), 0);
-}
+
 
 initMap(): void {
   let lat = this.profileForm.value.latitude;
@@ -81,7 +81,6 @@ initMap(): void {
     }
   }
 
-  // If still null, do not proceed
   if (!lat || !lng) {
     console.warn('No location data to initialize map.');
     return;
@@ -134,7 +133,7 @@ initMap(): void {
         }
         
         this.loading.set(false);
-              this.initMap();
+             setTimeout(() => this.initMap(), 0);
       },
       error: (err) => {
         console.error('Failed to load user data', err);
@@ -293,6 +292,9 @@ updatePositionOnly(): void {
   });
 }
 
+ getUserRole(): string {
+    return this.authService.getCurrentUser()?.role || 'User';
+  }
 
 
   

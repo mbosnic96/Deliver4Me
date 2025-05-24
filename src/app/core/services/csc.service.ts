@@ -37,5 +37,15 @@ getCityLatLng(cityName: string, countryCode: string): { lat: number, lng: number
   return null;
 }
 
+getCountryNameByCode(code: string): string | null {
+  const country = Country.getAllCountries().find(c => c.isoCode === code);
+  return country ? country.name : null;
+}
+getStateNameByCode(countryCode: string, stateCode: string): string | null {
+  const state = State.getStatesOfCountry(countryCode).find(s => s.isoCode === stateCode);
+  return state ? state.name : null;
+}
+
+
 
 }

@@ -1,4 +1,4 @@
-<div [class.collapsed]="collapsed" class="floating-sidebar shadow-lg content-bg"  [ngStyle]="{ top: navbarHeight }">
+<div [class.collapsed]="collapsed" class="floating-sidebar shadow-lg content-bg" [ngStyle]="{ top: navbarHeight }">
   <button class="toggle-btn" (click)="toggleSidebar()">
     <fa-icon [icon]="collapsed ? 'chevron-right' : 'chevron-left'"></fa-icon>
   </button>
@@ -20,58 +20,68 @@
       </a>
     </li>
 
-     <li *ngIf="role === 'driver'" class="nav-item">
+      <li *ngIf="role === 'admin'" class="nav-item">
+      <a routerLink="/admin" class="nav-link">
+        <fa-icon [icon]="'home'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Dashboard</span>
+      </a>
+    </li>
+
+    <li *ngIf="role === 'driver'" class="nav-item">
       <a routerLink="/driver/vehicles" class="nav-link">
         <fa-icon [icon]="'truck'" class="me-2"></fa-icon>
         <span *ngIf="!collapsed">Moja vozila</span>
       </a>
     </li>
 
-     <li *ngIf="role === 'driver'" class="nav-item">
-  <a routerLink="/driver/my-loads" class="nav-link">
-    <fa-icon [icon]="'truck-fast'" class="me-2"></fa-icon>
-    <span *ngIf="!collapsed">Moji tereti</span>
-  </a>
-</li>
+    <li *ngIf="role === 'driver'" class="nav-item">
+      <a routerLink="/driver/my-loads" class="nav-link">
+        <fa-icon [icon]="'truck-fast'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Moji tereti</span>
+      </a>
+    </li>
 
-    
-     <li *ngIf="role === 'driver'" class="nav-item">
+
+    <li *ngIf="role === 'driver'" class="nav-item">
       <a routerLink="/driver/account" class="nav-link">
         <fa-icon [icon]="'gear'" class="me-2"></fa-icon>
         <span *ngIf="!collapsed">Profil</span>
       </a>
     </li>
 
-    
- <li *ngIf="role === 'client'" class="nav-item">
-  <a routerLink="/client/my-loads" class="nav-link">
-    <fa-icon [icon]="'truck-fast'" class="me-2"></fa-icon>
-    <span *ngIf="!collapsed">Moji tereti</span>
-  </a>
-</li>
+
+    <li *ngIf="role === 'client'" class="nav-item">
+      <a routerLink="/client/my-loads" class="nav-link">
+        <fa-icon [icon]="'truck-fast'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Moji tereti</span>
+      </a>
+    </li>
 
 
 
 
     <li *ngIf="role === 'client'" class="nav-item">
-  <a routerLink="/client/account" class="nav-link">
-    <fa-icon [icon]="'user'" class="me-2"></fa-icon>
-    <span *ngIf="!collapsed">Profil</span>
-  </a>
-</li>
+      <a routerLink="/client/account" class="nav-link">
+        <fa-icon [icon]="'user'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Profil</span>
+      </a>
+    </li>
 
 
-    
+
     <!-- ADMIN -->
     <li *ngIf="role === 'admin'" class="nav-item">
       <a routerLink="/admin/users" class="nav-link">
-        
+
         <fa-icon [icon]="'user-cog'" class="me-2"></fa-icon>
         <span *ngIf="!collapsed">Korisnici</span>
       </a>
-      <a routerLink="/admin/orders" class="nav-link">
-        <fa-icon icon="clipboard-list"></fa-icon>
-        <span *ngIf="!collapsed">Narudžbe</span>
+    </li>
+
+    <li *ngIf="role === 'admin'" class="nav-item">
+      <a routerLink="/admin/account" class="nav-link">
+        <fa-icon [icon]="'gear'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Profil</span>
       </a>
     </li>
   </ul>

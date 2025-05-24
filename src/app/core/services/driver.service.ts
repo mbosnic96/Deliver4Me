@@ -42,4 +42,9 @@ markAsDelivered(loadId: string): Observable<any> {
   markAsCanceled(loadId: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/driver/loads/${loadId}/cancel`, {});
   }
+
+  getRecommendedDrivers(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/api/driver/recommended-drivers`);
+}
+
 }

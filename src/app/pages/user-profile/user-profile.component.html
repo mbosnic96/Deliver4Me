@@ -1,0 +1,164 @@
+<div *ngIf="user as u">
+<div class="container mt-4">
+  <div class="profile-section mb-4 p-4 border rounded-2 content-bg">
+    <h2>Profil korisnika</h2>
+
+    <div class="row d-flex align-items-center">
+      <div class="col-lg-4">
+        <div class="mb-4">
+          <div class="d-flex align-items-center flex-column">
+            <div class="profile-photo-container">
+              <img *ngIf="u.photoUrl; else noPhoto" 
+                   [src]="imageBaseUrl+user.photoUrl" 
+                   alt="Profile photo" 
+                   class="profile-photo">
+              <ng-template #noPhoto>
+                <div class="profile-photo-placeholder">
+                  <img src="/user.png" alt="User">
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="mb-3">
+          <label class="form-label">Ime i prezime</label>
+          <div class="fw-bold">{{ u.name }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Korisničko ime</label>
+          <div class="fw-bold">{{ u.userName }}</div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Država</label>
+            <div class="fw-bold">{{ getCountryName(user.country)  }}</div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Regija/Kanton</label>
+            <div class="fw-bold">{{  getStateName(user.country, user.state) }}</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Grad</label>
+            <div class="fw-bold">{{ u.city }}</div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Poštanski broj</label>
+            <div class="fw-bold">{{ u.postalCode }}</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Adresa</label>
+          <div class="fw-bold">{{ u.address }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Telefon</label>
+          <div class="fw-bold">{{ u.phone }}</div>
+          <a [href]="'tel:' + user.phone" class="btn btn-primary btn-sm mt-3">
+        <fa-icon [icon]="'phone'" class="me-1"></fa-icon> Kontaktiraj
+      </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="map-section p-4 border rounded-2 content-bg mb-4">
+    <h3>Tačna lokacija</h3>
+    <p>Prikazana je zadnja poznata lokacija korisnika.</p>
+    <div id="map" style="height: 300px;" class="rounded-2 border mb-3"></div>
+  </div>
+
+
+    <div class="row g-4 mb-4">
+  <div *ngFor="let vehicle of vehicles" class="col-12 col-md-6 col-xl-4">
+    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all content-bg">
+      <!-- Image Section with Badge -->
+      <div class="position-relative overflow-hidden" style="height: 220px;">
+        <div id="carousel-{{ vehicle.id }}" class="carousel slide h-100" data-bs-ride="carousel">
+          <div class="carousel-inner h-100">
+            <div *ngFor="let img of vehicle.images; let i = index" 
+                 class="carousel-item h-100" 
+                 [class.active]="i === 0">
+              <img [src]="imageBaseUrl + img.imageUrl" 
+     class="d-block w-100 h-100 object-fit-cover" 
+     alt="vehicle image {{ i + 1 }}">
+
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" 
+                  [attr.data-bs-target]="'#carousel-' + vehicle.id" 
+                  data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" 
+                  [attr.data-bs-target]="'#carousel-' + vehicle.id" 
+                  data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <div class="position-absolute top-0 end-0 bg-primary text-white px-3 py-1 rounded-bl">
+            {{ vehicle.vehicleType?.name }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body pb-2">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h3 class="h5 mb-0">{{ vehicle.model }}</h3>
+            <small>{{ vehicle.brand }}</small>
+          </div>
+          <span class="badge bg-primary-subtle text-primary fs-6">
+            {{ vehicle.volume }} m³
+          </span>
+        </div>
+
+      
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="small">Registracija</div>
+            <div class="fw-medium">{{ vehicle.plateNumber }}</div>
+          </div>
+          <div class="col-6">
+            <div class="small">Dimenzije</div>
+            <div class="fw-medium">{{ vehicle.width }}x{{ vehicle.length }}x{{ vehicle.height }}m</div>
+          </div>
+        </div>
+
+        
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="card text-white content-bg border shadow-sm rounded-3 h-100 mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <h6 class="text-light mb-1">Ocjena</h6>
+            <h4 class="fw-bold mb-0">{{ averageRating | number:'1.1-2' }}</h4>
+          </div>
+          <div class="rounded-circle p-2 star-rating">
+            <fa-icon [icon]="'star'" class="fs-4"></fa-icon>
+          </div>
+        </div>
+        <small class="text-light">{{ totalReviews }} recenzija</small>
+      </div>
+    </div>
+<app-review-list [userId]="u.id"></app-review-list>
+</div>
+</div>
+
