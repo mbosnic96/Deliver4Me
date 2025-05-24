@@ -21,9 +21,11 @@ export class AdminDashboardComponent {
         deliveredLoads: number = 0;
         sentLoads: number = 0;
         canceledLoads: number = 0;
+        userCount: number = 0;
 
         ngOnInit(){
           this.fetchLoads();
+          this.fetchUsers();
         }
 
   fetchLoads(): void {
@@ -33,6 +35,14 @@ export class AdminDashboardComponent {
       this.deliveredLoads = data.filter(data => data.status === 'Dostavljen').length;
       this.sentLoads = data.filter(data => data.status === 'Poslan').length;
       this.canceledLoads = data.filter(data => data.status === 'Otkazan').length;
+      this.cd.detectChanges();
+    });
+  }
+
+
+  fetchUsers(): void {
+    this.adminService.getAllLoads().subscribe(data => {
+      this.userCount = data.length;
       this.cd.detectChanges();
     });
   }

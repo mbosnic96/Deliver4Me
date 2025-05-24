@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { AccountSettingsComponent } from '../../components/account-settings/account-settings.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { UsersComponent } from './users/users.component';
 export const adminRoutes: Routes = [
   {
     path: '',
@@ -9,6 +10,7 @@ export const adminRoutes: Routes = [
     children: [
       { path: '', component: AdminDashboardComponent },
       { path: 'account', component: AccountSettingsComponent },
+      { path: 'users', component: UsersComponent },
     ]
   }
 ];
