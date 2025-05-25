@@ -207,7 +207,6 @@
 
 
   <div class="row g-4 p-3">
-  <!-- Klijent ocjenjuje vozača -->
   <div class="col-lg-12 content-bg rounded border p-3" *ngIf="getUserRole() === 'client' && getAcceptedBidDriverId() ">
      <p class="mt-2">
       Ocjenjujete vozača:
@@ -221,7 +220,7 @@
    
   </div>
 
-  <!-- Vozač ocjenjuje klijenta -->
+
   <div class="col-lg-12 content-bg rounded border p-3" *ngIf="getUserRole() === 'driver' && loadData.status === 'Dostavljen'">
     <p class="mt-2">
       Ocjenjujete klijenta:

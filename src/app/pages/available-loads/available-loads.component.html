@@ -32,7 +32,6 @@
       <input type="number" class="form-control" [(ngModel)]="filters.maxFixedPrice" />
     </div>
 
-    <!-- Pickup -->
     <div class="col-md-2">
       <label>Država utovara</label>
       <ng-select
@@ -70,7 +69,6 @@
       ></ng-select>
     </div>
 
-    <!-- Delivery -->
     <div class="col-md-2">
       <label>Država isporuke</label>
       <ng-select
@@ -108,7 +106,6 @@
       ></ng-select>
     </div>
 
-    <!-- Cargo Filters -->
     <div class="col-md-2">
       <label>Maks. težina (kg)</label>
       <input type="number" class="form-control" [(ngModel)]="filters.cargoWeight" />
@@ -148,7 +145,6 @@
       <input type="number" class="form-control" [(ngModel)]="filters.maxCargoHeight" />
     </div>
 
-    <!-- Buttons -->
     <div class="col-md-2 d-flex align-items-end">
       <button class="btn btn-primary w-100" (click)="applyFilters()">Primijeni filtere</button>
     </div>
@@ -163,7 +159,6 @@
   <div *ngFor="let load of DataArray" class="col-12 col-md-6 col-xl-4">
     <div class="card h-100 border-0 shadow-sm hover-shadow transition-all content-bg">
 
-      <!-- Image or Placeholder -->
       <div class="position-relative overflow-hidden" style="height: 220px;">
         <div id="carousel-{{ load.id }}" class="carousel slide h-100" data-bs-ride="carousel">
           <div class="carousel-inner h-100">
@@ -193,7 +188,6 @@
         </div>
       </div>
 
-      <!-- Card Body -->
       <div class="card-body pb-2">
         <div class="mb-2 text-center">
           <h6>{{load.title}}</h6>
@@ -209,7 +203,6 @@
           </p>
         </div>
 
-        <!-- Dimensions & Info -->
         <div class="row g-2 mb-3 small">
           <div class="col-6 text-center">
             <div class="text-center"> <fa-icon [icon]="'weight-hanging'" class="ms-2 me-2 text-primary"></fa-icon>Težina</div>
@@ -234,7 +227,6 @@
           </div>
         </div>
 
-        <!-- Dates -->
         <div class="border-top pt-3 small d-flex justify-content-between">
           <div>
              <fa-icon [icon]="'calendar-alt'" class="ms-2 me-2 text-primary"></fa-icon>
@@ -247,7 +239,6 @@
         </div>
       </div>
 
-      <!-- Footer: Preview only -->
       <div class="card-footer bg-transparent border-0 pt-0">
         <button
           class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"

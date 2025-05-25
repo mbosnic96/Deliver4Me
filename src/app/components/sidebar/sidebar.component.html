@@ -4,7 +4,7 @@
   </button>
 
   <ul class="nav flex-column mt-5 pt-5">
-    <!-- USER -->
+    
     <li *ngIf="role === 'client'" class="nav-item">
       <a routerLink="/client" class="nav-link">
         <fa-icon [icon]="'home'" class="me-2"></fa-icon>
@@ -12,7 +12,6 @@
       </a>
     </li>
 
-    <!-- DRIVER -->
     <li *ngIf="role === 'driver'" class="nav-item">
       <a routerLink="/driver" class="nav-link">
         <fa-icon [icon]="'home'" class="me-2"></fa-icon>
@@ -68,8 +67,6 @@
     </li>
 
 
-
-    <!-- ADMIN -->
 
      <li *ngIf="role === 'admin'" class="nav-item">
       <a routerLink="/admin/vehicle-types" class="nav-link">
