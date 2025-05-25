@@ -7,6 +7,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { NavbarHeightService } from '../../core/services/navbar-height.service';
 import { environment } from '../../../enviroments/environment';
 import { ReviewService } from '../../core/services/review.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 
 @Component({
@@ -23,17 +24,44 @@ import { ReviewService } from '../../core/services/review.service';
 export class NavbarComponent {
 
 
-  constructor(public authService: AuthService, private navbarHeightService: NavbarHeightService, private reviewService: ReviewService,  private cd: ChangeDetectorRef) {}
+  constructor(public authService: AuthService, private navbarHeightService: NavbarHeightService, private reviewService: ReviewService,  private cd: ChangeDetectorRef, private notificationService:NotificationService) {}
    @ViewChild('navbar', { static: false }) navbar!: ElementRef;
      imageBaseUrl = environment.apiUrl;
      
    averageRating: number = 0;
+   notifications: any[] = [];
+unreadCount = 0;
+showNotifications = false;
+
 
   ngAfterViewInit() {
     this.updateNavbarHeight();
     
         this.getRating();
+        this.notificationService.startConnection();
+        this.cd.detectChanges();
   }
+ngOnInit() {
+  this.notificationService.onNotificationReceived().subscribe(n => {
+    this.notifications.unshift(n);
+    this.unreadCount++;
+  });
+
+  this.fetchAndUpdateNotifications();
+
+  setInterval(() => {
+    this.fetchAndUpdateNotifications();
+  }, 5000);
+  this.cd.detectChanges();
+}
+
+fetchAndUpdateNotifications() {
+  this.notificationService.fetchNotifications().subscribe(data => {
+    this.notifications = data;
+    this.unreadCount = data.filter(n => !n.isRead).length;
+  });
+}
+
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
@@ -78,5 +106,17 @@ export class NavbarComponent {
       error: (err) => console.error('Greška pri preuzimanju ocjene:', err)
     });
   }
+
+  markAsRead(id: string) {
+  this.notificationService.markAsRead(id).subscribe(() => {
+    const notification = this.notifications.find(n => n.id === id);
+    if (notification) {
+      notification.isRead = true;
+      this.unreadCount = this.notifications.filter(n => !n.isRead).length;
+    }
+  });
+}
+
+
 }
 

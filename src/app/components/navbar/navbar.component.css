@@ -12,3 +12,17 @@
     color: #fff !important;
     font-weight: bold !important;
 }
+.notifikacije-dropdown {
+  width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 12px;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}

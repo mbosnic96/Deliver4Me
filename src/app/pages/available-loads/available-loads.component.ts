@@ -83,7 +83,6 @@ filters: any = {
 
 onPickupStateChange(): void {
   this.pickupCities = this.csc.getCitiesByCountry(this.filters.pickupCountry);
-  // optionally reset selected city
   this.filters.pickupCity = '';
 }
 
@@ -98,12 +97,10 @@ onPickupStateChange(): void {
   }
 onDeliveryStateChange(): void {
   this.deliveryCities = this.csc.getCitiesByCountry(this.filters.deliveryCountry);
-  // optionally reset selected city
   this.filters.deliveryCity = '';
 }
 private formatDate(date: string | null): string | null {
   if (!date) return null;
-  // Ensure the date is in DD-MM-YYYY format
   const [year, month, day] = date.split('-');
   return `${day}-${month}-${year}`;
 }
@@ -116,13 +113,11 @@ private getFormattedFilters() {
     preferredPickupDateTo: this.formatDate(f.preferredPickupDateTo),
     preferredDeliveryDate: this.formatDate(f.preferredDeliveryDate),
     preferredDeliveryDateTo: this.formatDate(f.preferredDeliveryDateTo),
-    // Convert numeric fields to numbers
   };
 }
 
 applyFilters(): void {
   const formattedFilter = this.getFormattedFilters();
-  console.log('Sending filters:', this.filters); // Check the console for this output
   this.loadService.filterLoads(this.getFormattedFilters()).subscribe(data => {
     this.DataArray = data;
     this.cd.detectChanges();

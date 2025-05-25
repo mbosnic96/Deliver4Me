@@ -57,7 +57,7 @@ export class MyLoadsComponent {
 
   modalRef.result.then((result) => {
     if (result === 'success') {
-      this.fetchUserLoads(); // Refresh list
+      this.fetchUserLoads(); 
     }
   });
 }
@@ -105,7 +105,6 @@ viewLoad(index: number) {
         .then(success => {
           if (!success) {
             console.error('Navigation failed');
-            // Optionally show error to user
           }
         })
         .catch(err => {

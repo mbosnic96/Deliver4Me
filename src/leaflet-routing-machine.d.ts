@@ -1,5 +1,3 @@
-// src/typings.d.ts
-
 import 'leaflet';
 import 'leaflet-routing-machine';
 

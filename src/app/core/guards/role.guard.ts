@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
-import { AuthService } from '../services/auth.service'; // adjust the path
+import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -20,7 +20,6 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
-    // Optional: redirect to fallback page if role mismatch
     return this.router.createUrlTree(['/']);
   }
 }

@@ -45,9 +45,6 @@ fetchVehicles(): void {
 }
 
 
-
-  
-// For adding new vehicle
 openAddModal() {
   const modalRef = this.modalService.open(DriverVehiclesModalComponent, {
     size: 'lg',
@@ -56,12 +53,11 @@ openAddModal() {
   
   modalRef.result.then((result) => {
     if (result === 'success') {
-      this.fetchVehicles(); // Refresh list
+      this.fetchVehicles(); 
     }
   });
 }
 
-// For editing existing vehicle
 editVehicle(vehicle: any) {
   const modalRef = this.modalService.open(DriverVehiclesModalComponent, {
     size: 'lg',
@@ -69,16 +65,15 @@ editVehicle(vehicle: any) {
   });
   
   modalRef.componentInstance.vehicleData = vehicle;
-  /*
+  
   modalRef.result.then((result) => {
     if (result === 'success') {
-      this.fetchVehicles(); // Refresh list
+      this.fetchVehicles(); 
     }
-  });*/
+  });
 }
 
 
-  // Placeholder for delete vehicle functionality
   deleteVehicle(vehicleId: string): void {
   Swal.fire({
     title: 'Are you sure?',
@@ -96,7 +91,7 @@ editVehicle(vehicle: any) {
             'The vehicle has been deleted.',
             'success'
           );
-          this.fetchVehicles(); // Refresh the list of vehicles
+          this.fetchVehicles();
         },
         error: (err) => {
           console.error('Error deleting vehicle', err);

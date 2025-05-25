@@ -20,7 +20,7 @@ export class VehicleMapComponent {
       })
     ],
     zoom: 13,
-    center: L.latLng(44.8164, 15.8704) // Default center
+    center: L.latLng(44.8164, 15.8704) 
   };
 
   get vehicleMarkers(): L.Marker[] {

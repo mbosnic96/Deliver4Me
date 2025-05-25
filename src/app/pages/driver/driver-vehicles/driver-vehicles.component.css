@@ -1,4 +1,3 @@
-/* Custom Bootstrap-based styles */
 .hover-shadow {
   transition: all 0.3s ease;
 }
@@ -30,7 +29,6 @@
   color: white !important;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .card {
     border-radius: 0.75rem !important;

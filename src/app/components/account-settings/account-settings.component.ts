@@ -166,7 +166,7 @@ onCitySelect(cityName: string) {
     this.map.setView([coords.lat, coords.lng], 12);
     this.marker.setLatLng([coords.lat, coords.lng]);
 
-    // Save to form
+    
     this.profileForm.patchValue({
       latitude: coords.lat,
       longitude: coords.lng
@@ -188,7 +188,7 @@ onCitySelect(cityName: string) {
   }
 
   removePhoto(): void {
-  this.profileForm.patchValue({ photoUrl: null }); // Use null instead of ''
+  this.profileForm.patchValue({ photoUrl: null });  
   this.profileForm.markAsDirty();
 }
 
@@ -201,12 +201,10 @@ onCitySelect(cityName: string) {
       next: () => {
         this.loading.set(false);
         this.profileForm.markAsPristine();
-        // Show success toast/notification
       },
       error: (err) => {
         console.error('Failed to update profile', err);
         this.loading.set(false);
-        // Show error toast/notification
       }
     });
   }
@@ -246,12 +244,11 @@ onCitySelect(cityName: string) {
     backdrop: 'static'
   });
   
-  // Pass current profile form value (full data) to modal
   modalRef.componentInstance.profileData = this.profileForm.value;
 
   modalRef.result.then((result) => {
     if (result === 'success') {
-      this.loadUserData(); // Refresh profile form after update
+      this.loadUserData(); 
     }
   });
 }
@@ -264,7 +261,7 @@ changePasswordModal() {
   
   modalRef.result.then((result) => {
     if (result === 'success') {
-      this.loadUserData(); // Refresh profile form after update
+      this.loadUserData(); 
     }
   });
 }

@@ -109,23 +109,17 @@ private patchFormValues(): void {
   }
 
   calculateVolume(): void {
-  // Get values and convert to numbers (handles string inputs from form)
   const width = Number(this.driverVehicleForm.get('width')?.value);
   const length = Number(this.driverVehicleForm.get('length')?.value);
   const height = Number(this.driverVehicleForm.get('height')?.value);
 
-  // Check if all dimensions are valid numbers greater than 0
   if (!isNaN(width) && !isNaN(length) && !isNaN(height) && 
       width > 0 && length > 0 && height > 0) {
-    
-    // Calculate with full precision, then round to 2 decimal places
     const preciseVolume = width * length * height;
-    const roundedVolume = Math.round(preciseVolume * 100) / 100; // More accurate than toFixed
+    const roundedVolume = Math.round(preciseVolume * 100) / 100; 
     
-    // Update form control
     this.driverVehicleForm.get('volume')?.setValue(roundedVolume, { emitEvent: false });
   } else {
-    // Reset volume if invalid dimensions
     this.driverVehicleForm.get('volume')?.setValue(0, { emitEvent: false });
   }
 }
@@ -137,7 +131,7 @@ onSubmit(): void {
   const formValues = this.driverVehicleForm.getRawValue();
   const formData = new FormData();
 
-  // Append text fields
+
   for (const key in formValues) {
     if (formValues.hasOwnProperty(key)) {
       formData.append(key, formValues[key]);
@@ -148,9 +142,9 @@ onSubmit(): void {
   formData.append('RemovedImageIds', id);
 });
 
-  // Ensure selected images are added to the form data
+
   this.selectedImages.forEach((file) => {
-    formData.append('Images', file); // Use `Images` to match backend field
+    formData.append('Images', file); 
   });
 
   const operation$ = this.isEditMode
@@ -181,7 +175,7 @@ onSubmit(): void {
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      this.imagePreviews.push(e.target.result); // base64 preview
+      this.imagePreviews.push(e.target.result); 
       this.cd.detectChanges(); 
     };
     reader.readAsDataURL(file);
@@ -191,13 +185,12 @@ onSubmit(): void {
 removeImage(index: number): void {
   const previewUrl = this.imagePreviews[index];
 
-  // Check if it's from existing images
+
   const existingImage = this.existingImages.find(img => img.url === previewUrl);
   if (existingImage) {
     this.removedImageIds.push(existingImage.id);
     this.existingImages = this.existingImages.filter(img => img.id !== existingImage.id);
   } else {
-    // If it's a new upload
     this.selectedImages.splice(index - this.existingImages.length, 1);
   }
 
@@ -209,7 +202,7 @@ removeImage(index: number): void {
 
   onCancel(): void {
     if (this.driverVehicleForm.dirty) {
-      if (confirm('Are you sure you want to discard changes?')) {
+      if (confirm('Jeste li sigurni da želite otkazati? Sve izmjene se gube!')) {
         this.activeModal.dismiss();
       }
     } else {

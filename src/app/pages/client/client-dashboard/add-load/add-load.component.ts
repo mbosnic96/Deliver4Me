@@ -320,7 +320,7 @@ private ngbDateToDateString(ngbDate: NgbDateStruct): string {
 
   onCancel(): void {
     if (this.addLoadForm.dirty) {
-      if (confirm('Are you sure you want to discard changes?')) {
+      if (confirm('Jeste li sigurni da želite otkazati? Sve izmjene se gube!')) {
         this.activeModal.dismiss();
       }
     } else {

@@ -35,7 +35,7 @@ export class AuthService {
     ).pipe(
       tap({
         next: (response) => {
-          this.setToken(response.token); // ✅ backend returns token as string
+          this.setToken(response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
         },
         error: (err) => {

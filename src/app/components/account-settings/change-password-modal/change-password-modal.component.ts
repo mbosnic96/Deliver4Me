@@ -22,7 +22,7 @@ export class ChangePasswordModalComponent {
     private userService: UserService
   ) {
     this.passwordForm = this.fb.group({
-      currentPassword: ['', Validators.required],  // optional if you want to verify
+      currentPassword: ['', Validators.required],
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
     }, { validators: this.passwordMatchValidator });

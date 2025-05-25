@@ -7,8 +7,6 @@ import Chart from 'chart.js/auto';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.js';
-// @ts-ignore
-import * as LRouting from 'leaflet-routing-machine';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddLoadComponent } from './add-load/add-load.component';
 import { LoadService } from '../../../core/services/load.service';

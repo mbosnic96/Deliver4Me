@@ -6,8 +6,6 @@ import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { provideToastr } from 'ngx-toastr';
 import { errorHandlerInterceptor } from './core/interceptors/error-handler.interceptor';
-
-// Font Awesome imports
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -17,10 +15,8 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // 🔥 Experimental Zoneless
     provideExperimentalZonelessChangeDetection(),
 
-    // 🚀 Router with modern features
     provideRouter(
       routes,
       withComponentInputBinding(),
@@ -29,7 +25,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
 
-    // 🌐 HTTP Client with interceptors
+
     provideHttpClient(
       withInterceptors([
         authInterceptor,
@@ -37,10 +33,10 @@ export const appConfig: ApplicationConfig = {
       ])
     ),
 
-    // 🎭 Async animations
+   
     provideAnimationsAsync(),
 
-    // ✨ Font Awesome configuration
+
     importProvidersFrom(FontAwesomeModule),
     {
       provide: FaIconLibrary,

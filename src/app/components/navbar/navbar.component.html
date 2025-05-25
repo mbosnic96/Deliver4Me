@@ -16,6 +16,40 @@
       </ul>
       
       <div class="d-flex align-items-center gap-2">
+
+        <div class="dropdown me-2">
+  <button class="btn btn-light position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <fa-icon [icon]="'bell'" class="text-dark"></fa-icon>
+    <span *ngIf="unreadCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {{ unreadCount }}
+    </span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end p-0 shadow-lg notifikacije-dropdown">
+    <li *ngIf="notifications.length === 0" class="p-3 text-muted text-center">Nema novih notifikacija</li>
+    <li *ngFor="let n of notifications" class="notification-item border-bottom">
+      <div class="d-flex flex-column p-3">
+        <div class="d-flex justify-content-between">
+          <strong>{{ n.title }}</strong>
+          <small class="text-muted">{{ n.createdAt | date:'short' }}</small>
+        </div>
+        <p class="mb-2 text-secondary small">{{ n.message }}</p>
+       <button *ngIf="!n.isRead" class="btn btn-sm btn-outline-primary w-100 mb-1" (click)="markAsRead(n.id)">
+  Označi kao pročitano
+</button>
+
+<a *ngIf="n.loadId" class="btn btn-sm btn-outline-secondary w-100" [routerLink]="['/load', n.loadId]">
+  Vidi teret
+</a>
+
+      </div>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
         <ng-container *ngIf="!(authService.authState$ | async); else loggedInTemplate">
           <a routerLink="/login" class="btn btn-primary" routerLinkActive="active">
             <fa-icon [icon]="'sign-in-alt'" class="me-2"></fa-icon>

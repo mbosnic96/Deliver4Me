@@ -3,7 +3,7 @@
     <div class="modal-header">
       <h5 class="modal-title fw-bold">
         <i class="fas fa-car me-2"></i>
-        {{ isEditMode ? 'Edit Vehicle' : 'Add New Vehicle' }}
+        {{ isEditMode ? 'Uredi vozilo' : 'Dodaj vozilo' }}
       </h5>
       <button type="button" class="btn-close" (click)="onCancel()" aria-label="Close"></button>
     </div>
@@ -83,12 +83,12 @@
 
     <div class="modal-footer border-top-0">
       <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">
-        <i class="fas fa-times me-1"></i> Cancel
+        <i class="fas fa-times me-1"></i> Otkaži
       </button>
       <button type="submit" class="btn btn-primary" [disabled]="driverVehicleForm.invalid || isLoading">
         <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
         <i *ngIf="!isLoading" class="fas fa-save me-1"></i>
-        {{ isEditMode ? 'Update' : 'Save' }}
+        {{ isEditMode ? 'Uredi' : 'Sačuvaj' }}
       </button>
     </div>
   </div>

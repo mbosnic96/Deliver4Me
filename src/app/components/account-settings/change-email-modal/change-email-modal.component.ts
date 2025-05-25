@@ -11,7 +11,7 @@ import { UserService } from '../../../core/services/user.service';
   styleUrls: ['./change-email-modal.component.css']
 })
 export class ChangeEmailModalComponent implements OnInit {
-  @Input() profileData: any;  // <-- receive full profile data
+  @Input() profileData: any;  
   emailForm: FormGroup;
   isLoading = false;
 
@@ -39,7 +39,7 @@ export class ChangeEmailModalComponent implements OnInit {
 
     const updatedEmail = this.emailForm.get('email')?.value;
 
-    // Clone profile data and update email
+  
     const updatedProfile = { ...this.profileData, email: updatedEmail };
 
     this.userService.updateProfile(updatedProfile).subscribe({
@@ -50,14 +50,13 @@ export class ChangeEmailModalComponent implements OnInit {
       error: (err) => {
         console.error('Failed to update email', err);
         this.isLoading = false;
-        // optionally display error to user
       }
     });
   }
 
   onCancel(): void {
     if (this.emailForm.dirty) {
-      if (confirm('Are you sure you want to discard changes?')) {
+      if (confirm('Jeste li sigurni da želite otkazati? Sve izmjene se gube!')) {
         this.activeModal.dismiss();
       }
     } else {
