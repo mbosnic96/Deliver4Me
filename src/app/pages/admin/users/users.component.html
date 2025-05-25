@@ -13,9 +13,12 @@
     { key: 'state', label: 'Regija/Kanton' },
     { key: 'city', label: 'Grad' },
     { key: 'address', label: 'Adresa' },
+    { key: 'isDeleted', label: 'Deaktiviran' },
+    { key: 'deletedAt', label: 'Datum deaktivacije' },
     { key: 'action', label: 'Opcije' },
   ]"
   [DataArray]="users"
+        (editRequest)=" editUser($event)"
      (viewRequest)="viewUser($event)"
     >
 </app-table>

@@ -18,5 +18,13 @@ private http = inject(HttpClient);
     getAllUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/api/admin/all-users`);
   }
+
+  deleteUser(userId: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/api/users/admin/${userId}/delete-user`, {});
+  }
+
+  restoreUser(userId: string): Observable<{ message: string }> {
+  return this.http.post<{ message: string }>(`${this.apiUrl}/api/users/admin/${userId}/restore-user`, {});
+}
   
 }

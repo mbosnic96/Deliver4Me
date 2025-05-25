@@ -1,0 +1,28 @@
+<div class="modal-content content-bg">
+  <div class="modal-header">
+    <h5 class="modal-title fw-bold">
+      <i class="fas fa-user me-2"></i>
+      {{ isDeleteMode ? 'Deaktiviraj korisnika' : 'Aktiviraj korisnika' }}
+    </h5>
+    <button type="button" class="btn-close" (click)="onCancel()" aria-label="Close"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container-fluid">
+      <p>
+        {{ isDeleteMode 
+            ? 'Jeste li sigurni da želite deaktivirati ovog korisnika? On više neće imati pristup aplikaciji.'
+            : 'Želite li ponovo omogućiti pristup ovom korisniku?' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="modal-footer border-top-0">
+    <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">
+      <i class="fas fa-times me-1"></i> Otkaži
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onConfirm()">
+      {{ isDeleteMode ? 'Deaktiviraj' : 'Aktiviraj' }}
+    </button>
+  </div>
+</div>

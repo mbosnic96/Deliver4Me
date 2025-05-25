@@ -41,7 +41,7 @@ export class AdminDashboardComponent {
 
 
   fetchUsers(): void {
-    this.adminService.getAllLoads().subscribe(data => {
+    this.adminService.getAllUsers().subscribe(data => {
       this.userCount = data.length;
       this.cd.detectChanges();
     });

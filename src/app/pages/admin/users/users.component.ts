@@ -2,6 +2,9 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { AdminService } from '../../../core/services/admin.service';
 import { TableComponent } from '../../../components/table/table.component';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeactivateUserModalComponent } from './deactivate-user-modal/deactivate-user-modal.component';
+import { CscService } from '../../../core/services/csc.service';
 
 @Component({
   selector: 'app-users',
@@ -15,6 +18,9 @@ export class UsersComponent {
   private router = inject(Router);
   
   private cd = inject(ChangeDetectorRef);
+  
+    private modalService = inject(NgbModal);
+    private cscService = inject(CscService);
 
   ngOnInit(){
     this.fetchUsers()
@@ -22,11 +28,41 @@ export class UsersComponent {
 
   
   fetchUsers(): void {
-    this.adminService.getAllUsers().subscribe(data => {
-      this.users = data;
-      this.cd.detectChanges();
-    });
-  }
+  this.adminService.getAllUsers().subscribe(data => {
+    this.users = data.map(user => ({
+      ...user,
+      isDeleted: user.isDeleted ? 'Da' : 'Ne',
+      country : this.getCountryName(user.country),
+      state: this. getStateName(user.country, user.state),
+    }));
+    this.cd.detectChanges();
+  });
+}
+
+  getCountryName(code: string): string {
+  return this.cscService.getCountryNameByCode(code) ?? code;
+}
+
+getStateName(countryCode: string, stateCode: string): string {
+  return this.cscService.getStateNameByCode(countryCode, stateCode) ?? stateCode;
+}
+
+  editUser(index: number) {
+  const user = this.users[index];
+  const modalRef = this.modalService.open(DeactivateUserModalComponent, {
+    size: 'xl',
+    backdrop: 'static'
+  });
+
+  modalRef.componentInstance.userId = user.id;
+  modalRef.componentInstance.isDeleteMode = !user.isDeleted; 
+  modalRef.result.then((result) => {
+    if (result === 'deleted' || result === 'restored') {
+      this.fetchUsers();
+    }
+  });
+}
+
 
   viewUser(index: number) {
   const user = this.users[index];
@@ -48,4 +84,6 @@ export class UsersComponent {
     console.error('loš ID');
   }
 }
+
+
 }
