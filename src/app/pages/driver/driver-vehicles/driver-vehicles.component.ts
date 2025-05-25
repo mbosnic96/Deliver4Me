@@ -76,19 +76,19 @@ editVehicle(vehicle: any) {
 
   deleteVehicle(vehicleId: string): void {
   Swal.fire({
-    title: 'Are you sure?',
-    text: 'You won\'t be able to revert this!',
+    title: 'Jeste li sigurni?',
+    text: 'Radnja se ne može poništiti!',
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'No, keep it'
+    confirmButtonText: 'Da!',
+    cancelButtonText: 'Ne'
   }).then((result) => {
     if (result.isConfirmed) {
       this.driverService.deleteVehicle(vehicleId).subscribe({
         next: (response) => {
           Swal.fire(
-            'Deleted!',
-            'The vehicle has been deleted.',
+            'Obrisano!',
+            'Vozilo je obrisano.',
             'success'
           );
           this.fetchVehicles();
@@ -97,7 +97,7 @@ editVehicle(vehicle: any) {
           console.error('Error deleting vehicle', err);
           Swal.fire(
             'Error!',
-            'There was an error deleting the vehicle.',
+            'Greška pri brisanju vozila.',
             'error'
           );
         }

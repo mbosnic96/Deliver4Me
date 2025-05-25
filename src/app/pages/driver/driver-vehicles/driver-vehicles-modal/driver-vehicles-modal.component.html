@@ -13,7 +13,7 @@
         <div class="row g-3 mb-4">
           <div class="col-md-6" *ngFor="let field of ['brand', 'model', 'plateNumber']">
             <label [for]="field" class="form-label small fw-bold">
-              {{ field | titlecase }}
+                {{ field === 'brand' ? 'Marka' : field === 'model' ? 'Model' : 'Registracija' }}
               <span *ngIf="driverVehicleForm.get(field)?.hasError('required')" class="text-danger">*</span>
             </label>
             <input [id]="field" type="text" class="form-control" 
@@ -21,29 +21,30 @@
                    [class.is-invalid]="driverVehicleForm.get(field)?.invalid && driverVehicleForm.get(field)?.touched">
             <div *ngIf="driverVehicleForm.get(field)?.invalid && driverVehicleForm.get(field)?.touched" 
                  class="invalid-feedback">
-              <span *ngIf="driverVehicleForm.get(field)?.hasError('required')">This field is required</span>
-              <span *ngIf="driverVehicleForm.get(field)?.hasError('maxlength')">Maximum length exceeded</span>
+              <span *ngIf="driverVehicleForm.get(field)?.hasError('required')">Obavezno polje!</span>
+              <span *ngIf="driverVehicleForm.get(field)?.hasError('maxlength')">Unos sadrži previše znakova.</span>
               <span *ngIf="driverVehicleForm.get(field)?.hasError('pattern')">Invalid format</span>
             </div>
           </div>
         </div>
 
         <div class="row g-3 mb-4">
+          <small>Unesite dimenzije tovarnog prostora.</small>
           <div class="col-md-4" *ngFor="let dim of ['width', 'length', 'height']">
             <label [for]="dim" class="form-label small fw-bold">
-              {{ dim | titlecase }} (m)
+               {{ dim === 'width' ? 'Širina' : dim === 'length' ? 'Dužina' : 'Visina' }} (m)
               <span class="text-danger">*</span>
             </label>
             <input [id]="dim" type="number" step="0.01" class="form-control"
                    [formControlName]="dim"
                    [class.is-invalid]="driverVehicleForm.get(dim)?.invalid && driverVehicleForm.get(dim)?.touched">
             <div class="invalid-feedback">
-              Valid {{ dim }} between 0.1 and {{ dim === 'height' ? 5 : dim === 'width' ? 10 : 20 }}m required
+              Unos {{ dim }} između 0.1 i {{ dim === 'height' ? 5 : dim === 'width' ? 10 : 20 }}m dozvoljen
             </div>
           </div>
           
           <div class="col-md-4">
-            <label class="form-label small fw-bold">Volume (m³)</label>
+            <label class="form-label small fw-bold">Volumen (m³)</label>
             <input type="text" class="form-control bg-light" formControlName="volume" readonly>
           </div>
         </div>
@@ -51,19 +52,19 @@
        
         <div class="mb-4">
           <label for="vehicleTypeId" class="form-label small fw-bold">
-            Vehicle Type <span class="text-danger">*</span>
+            Tip vozila <span class="text-danger">*</span>
           </label>
           <select id="vehicleTypeId" class="form-select"
                   formControlName="vehicleTypeId"
                   [class.is-invalid]="driverVehicleForm.get('vehicleTypeId')?.invalid && driverVehicleForm.get('vehicleTypeId')?.touched">
-            <option value="" disabled selected>Select vehicle type</option>
+            <option value="" disabled selected>Odaberite tip vozila</option>
             <option *ngFor="let vt of vehicleTypes" [value]="vt.id">{{ vt.name }}</option>
           </select>
-          <div class="invalid-feedback">Please select a vehicle type</div>
+          <div class="invalid-feedback">Odaberite tip vozila</div>
         </div>
 
 <div class="mb-4">
-  <label for="imageUpload" class="form-label small fw-bold">Upload Vehicle Images</label>
+  <label for="imageUpload" class="form-label small fw-bold">Uploadujte slike vozila</label>
   <input id="imageUpload" type="file" class="form-control" multiple 
          (change)="onImageSelected($event)" accept="image/*">
 
