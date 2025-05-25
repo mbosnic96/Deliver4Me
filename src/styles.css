@@ -1,4 +1,5 @@
 @import "@ng-select/ng-select/themes/default.theme.css";
+@import 'ngx-toastr/toastr';
 
 .dark-bg, body {
   background-color: #080c1c !important;

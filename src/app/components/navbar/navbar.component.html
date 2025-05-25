@@ -17,7 +17,7 @@
       
       <div class="d-flex align-items-center gap-2">
 
-        <div class="dropdown me-2">
+        <div class="dropdown me-2" *ngIf="(authService.authState$ | async)">
   <button class="btn btn-light position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
     <fa-icon [icon]="'bell'" class="text-dark"></fa-icon>
     <span *ngIf="unreadCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

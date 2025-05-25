@@ -70,6 +70,16 @@
 
 
     <!-- ADMIN -->
+
+     <li *ngIf="role === 'admin'" class="nav-item">
+      <a routerLink="/admin/vehicle-types" class="nav-link">
+
+        <fa-icon [icon]="'user-cog'" class="me-2"></fa-icon>
+        <span *ngIf="!collapsed">Tipovi vozila</span>
+      </a>
+    </li>
+
+
     <li *ngIf="role === 'admin'" class="nav-item">
       <a routerLink="/admin/users" class="nav-link">
 

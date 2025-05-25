@@ -1,31 +1,46 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../enviroments/environment';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly apiUrl = environment.apiUrl;
   private authToken: string | null = localStorage.getItem('auth_token');
-  private authSubject = new BehaviorSubject<boolean>(false);
-  authState$ = this.authSubject.asObservable();
+  private currentUserSubject = new BehaviorSubject<any>(this.getUserFromStorage());
 
-  constructor(private router: Router, private http: HttpClient) {
-    const token = localStorage.getItem('auth_token');
-    this.authToken = token;
-    this.authSubject.next(!!token);
+  authState$ = this.currentUserSubject.asObservable();
+
+  constructor(private router: Router, private http: HttpClient) {}
+
+  private getUserFromStorage(): any {
+    const raw = localStorage.getItem('user');
+    try {
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
   }
 
   setToken(token: string): void {
     this.authToken = token;
     localStorage.setItem('auth_token', token);
-    this.authSubject.next(true);
   }
 
-  getToken(): string | null {
-    return this.authToken;
+getToken(): string | null {
+  return localStorage.getItem('auth_token');
+}
+
+
+  setCurrentUser(user: any): void {
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUserSubject.next(user);
+  }
+
+  getCurrentUser(): any {
+    return this.currentUserSubject.value;
   }
 
   login(email: string, password: string) {
@@ -36,11 +51,11 @@ export class AuthService {
       tap({
         next: (response) => {
           this.setToken(response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
+          this.setCurrentUser(response.user);
         },
         error: (err) => {
           console.error('Login failed:', err);
-          this.authSubject.next(false);
+          this.logout();
         }
       })
     );
@@ -58,26 +73,24 @@ export class AuthService {
     );
   }
 
-  getCurrentUser(): any {
-    const raw = localStorage.getItem('user');
-    if (!raw || raw === 'undefined') return null;
-    try {
-      return JSON.parse(raw);
-    } catch (e) {
-      console.error('Failed to parse user from localStorage:', raw);
-      return null;
-    }
-  }
-
   logout(): void {
     this.authToken = null;
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    this.authSubject.next(false);
+    this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
-  isAuthenticated(): boolean {
-    return !!this.authToken && !!localStorage.getItem('auth_token');
-  }
+isAuthenticated(): boolean {
+  const token = localStorage.getItem('auth_token');
+  const user = this.getUserFromStorage();
+  return !!token && !!user;
+}
+
+
+  updateCurrentUser(updatedUser: any): void {
+  localStorage.setItem('user', JSON.stringify(updatedUser));
+  this.currentUserSubject.next(updatedUser);
+}
+
 }

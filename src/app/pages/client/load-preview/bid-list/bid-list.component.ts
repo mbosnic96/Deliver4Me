@@ -35,12 +35,12 @@ export class BidListComponent {
   accept(bidId: string) {
     this.bidService.acceptBid(this.loadId, bidId).subscribe({
       next: () => {
-        this.toastr.success('Bid accepted');
+        this.toastr.success('Ponuda prihvaćena');
         this.fetchBids();
         
     this.cd.detectChanges();
       },
-      error: err => this.toastr.error(err.error || 'Error accepting bid')
+      error: err => this.toastr.error(err.error || 'Greška s dohvananjem podataka.')
     });
   }
 

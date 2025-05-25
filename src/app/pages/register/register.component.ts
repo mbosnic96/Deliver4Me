@@ -7,6 +7,7 @@ import { CscService } from '../../core/services/csc.service';
 import { ICountry, IState, ICity } from 'country-state-city';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,7 @@ export class RegisterComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private cscService = inject(CscService);
+  private toastr = inject(ToastrService);
 
   countries: ICountry[] = [];
   states: IState[] = [];
@@ -87,11 +89,14 @@ export class RegisterComponent implements OnInit {
     ).subscribe({
       next: () => {
         this.form.reset();
+        
+        this.toastr.success('Uspješna registracija. Molimo da se prijavite');
         this.router.navigate(['/login']);
       },
       error: (err) => {
         const msg = err?.message || 'Please try again later.';
-        this.error.set(msg);
+        
+        this.toastr.error(msg);
       }
     });
   }

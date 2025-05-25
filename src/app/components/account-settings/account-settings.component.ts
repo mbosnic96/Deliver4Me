@@ -15,6 +15,7 @@ import * as L from 'leaflet';
 
 import Swal from 'sweetalert2';
 import { AuthService } from '../../core/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-account-settings',
@@ -31,6 +32,7 @@ export class AccountSettingsComponent implements OnInit {
   private router = inject(Router);
   private modalService= inject(NgbModal);
   private authService= inject(AuthService);
+  private toastr= inject(ToastrService);
 
   countries: ICountry[] = [];
   states: IState[] = [];
@@ -134,6 +136,7 @@ initMap(): void {
         
         this.loading.set(false);
              setTimeout(() => this.initMap(), 0);
+             
       },
       error: (err) => {
         console.error('Failed to load user data', err);
@@ -200,7 +203,9 @@ onCitySelect(cityName: string) {
     this.userService.updateProfile(this.profileForm.value).subscribe({
       next: () => {
         this.loading.set(false);
+        this.toastr.success('Uspješno ažurirano');
         this.profileForm.markAsPristine();
+        
       },
       error: (err) => {
         console.error('Failed to update profile', err);
@@ -248,6 +253,8 @@ onCitySelect(cityName: string) {
 
   modalRef.result.then((result) => {
     if (result === 'success') {
+      
+        this.toastr.success('Uspješno ažurirano');
       this.loadUserData(); 
     }
   });
@@ -261,6 +268,8 @@ changePasswordModal() {
   
   modalRef.result.then((result) => {
     if (result === 'success') {
+      
+        this.toastr.success('Uspješno ažurirano');
       this.loadUserData(); 
     }
   });

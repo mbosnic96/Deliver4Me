@@ -49,16 +49,16 @@ export class ReviewFormComponent {
     comment: this.form.value.comment
   };
 
-  console.log('Submitting review:', payload); 
+
 
   this.reviewService.submitReview(payload).subscribe({
     next: () => {
-      this.toastr.success('Review submitted');
+      this.toastr.success('Recenzija poslana!');
       this.reviewSubmitted.emit();
       this.form.reset();
       this.selectedRating = 0;
     },
-    error: err => this.toastr.error(err?.error?.message || 'Error submitting review')
+    error: err => this.toastr.error(err?.error?.message || 'Greška')
   });
 }
 

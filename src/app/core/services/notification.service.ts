@@ -1,20 +1,26 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../enviroments/environment';
 import { Observable, Subject } from 'rxjs';
 import * as signalR from '@microsoft/signalr';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
+
+  
+  private http = inject(HttpClient);
+  private authService = inject(AuthService);
  private hubConnection!: signalR.HubConnection;
   private notificationSubject = new Subject<any>();
+   private apiUrl = environment.apiUrl;
 
   startConnection() {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(environment.apiUrl + '/notificationHub', {
+      .withUrl(this.apiUrl + '/notificationHub', {
         accessTokenFactory: () => localStorage.getItem('token') || ''
       })
       .withAutomaticReconnect()
@@ -25,6 +31,7 @@ export class NotificationService {
     this.hubConnection.on('ReceiveNotification', (notification) => {
       this.notificationSubject.next(notification);
     });
+  
   }
 
   onNotificationReceived(): Observable<any> {
@@ -32,12 +39,12 @@ export class NotificationService {
   }
 
   fetchNotifications(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/notification`);
+    return this.http.get<any[]>(`${this.apiUrl}/api/notification`);
   }
 
   markAsRead(id: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/api/notification/${id}/read`, {});
+    return this.http.post<void>(`${this.apiUrl}/api/notification/${id}/read`, {});
   }
 
-  constructor(private http: HttpClient) {}
+
 }

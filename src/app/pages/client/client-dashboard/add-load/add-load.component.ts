@@ -11,6 +11,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { environment } from '../../../../../enviroments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-load',
@@ -51,6 +52,7 @@ removedImageIds: string[] = [];
     private loadService: LoadService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
+    private toastr: ToastrService,
   ) {}
 
 ngOnInit(): void {
@@ -302,10 +304,11 @@ onSubmit(): void {
   operation$.subscribe({
     next: () => {
       this.activeModal.close('success');
+      this.toastr.success('Teret uspješno dodan');
       this.isLoading = false;
     },
     error: (err) => {
-      console.error('Error saving load', err);
+      this.toastr.error('Greška', err);
       this.isLoading = false;
     }
   });

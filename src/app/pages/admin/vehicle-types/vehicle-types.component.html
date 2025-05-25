@@ -1,0 +1,26 @@
+<div class="row g-4">
+
+    <div class="col-lg-12">
+       <div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-primary shadow-sm" (click)="openAddModal()">
+    <fa-icon [icon]="'box'" class="me-2"></fa-icon> Dodaj tip vozila
+  </button>
+</div>
+
+    <div class="col-lg-12">
+      
+
+        <app-table
+  [HeadersArray]="[
+    { key: 'name', label: 'Naziv' },
+    { key: 'description', label: 'Opis' },
+    { key: 'action', label: 'Opcije' },
+  ]"
+  [DataArray]="vehicleTypes"
+        (editRequest)=" editVehicleType($event)"
+        (deleteRequest)="deleteVehicleType($event)"
+    >
+</app-table>
+
+    </div>
+</div>

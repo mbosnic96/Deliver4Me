@@ -5,6 +5,7 @@ import { DriverService } from '../../../../core/services/driver.service';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../../enviroments/environment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-driver-vehicles-modal',
@@ -31,7 +32,8 @@ existingImages: { id: string; url: string }[] = [];
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
     private driverService: DriverService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private toastr: ToastrService,
   ) {
     this.driverVehicleForm = this.fb.group({
       brand: ['', [Validators.required, Validators.maxLength(50)]],
@@ -86,7 +88,6 @@ private patchFormValues(): void {
   }));
 
   this.imagePreviews = [...this.existingImages.map(img => img.url)];
-  console.log('Loaded image previews:', this.imagePreviews);
 }
 
 }
@@ -154,10 +155,12 @@ onSubmit(): void {
   operation$.subscribe({
     next: () => {
       this.activeModal.close('success');
+      
+      this.toastr.success('Vozilo uspješno dodano');
       this.isLoading = false;
     },
     error: (err) => {
-      console.error('Error saving vehicle', err);
+      this.toastr.error('Greška pri dodavanju vozila.', err);
       this.isLoading = false;
     }
   });
@@ -195,7 +198,6 @@ removeImage(index: number): void {
   }
 
   this.imagePreviews.splice(index, 1);
-  console.log('Removed image IDs:', this.removedImageIds);
 }
 
 

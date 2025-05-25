@@ -26,5 +26,18 @@ private http = inject(HttpClient);
   restoreUser(userId: string): Observable<{ message: string }> {
   return this.http.post<{ message: string }>(`${this.apiUrl}/api/users/admin/${userId}/restore-user`, {});
 }
+
+addVehicleType(data: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}/api/vehicles/types`, data);
+}
+
+updateVehicleType(id: string, data: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/api/vehicles/types/${id}`, data);
+}
+
+deleteVehicleType(id: string): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/api/vehicles/types/${id}`);
+}
+
   
 }

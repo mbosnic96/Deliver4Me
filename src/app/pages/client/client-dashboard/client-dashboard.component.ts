@@ -71,7 +71,6 @@ fetchRecommendedDrivers() {
   this.driverService.getRecommendedDrivers().subscribe({
     next: (drivers) => {
       this.recommendedDrivers = drivers;
-      console.log(drivers);
       this.cd.detectChanges();
     },
     error: (err) => console.error('Greška pri preporuci dostavljača:', err)

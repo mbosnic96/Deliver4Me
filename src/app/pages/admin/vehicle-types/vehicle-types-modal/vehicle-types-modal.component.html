@@ -1,0 +1,25 @@
+<form [formGroup]="addVehicleTypeForm" (ngSubmit)="onSubmit()">
+  <div class="modal-header content-bg">
+    <h5 class="modal-title">{{ isEditMode ? 'Uredi tip vozila' : 'Dodaj novi tip vozila' }}</h5>
+    <button type="button" class="btn-close" (click)="onCancel()"></button>
+  </div>
+
+  <div class="modal-body content-bg">
+    <div class="mb-3">
+      <label class="form-label">Naziv</label>
+      <input formControlName="name" class="form-control" />
+    </div>
+    <div class="mb-4">
+      <label class="form-label">Opis</label>
+      <textarea formControlName="description" class="form-control" rows="3"></textarea>
+    </div>
+
+  </div>
+
+  <div class="modal-footer content-bg">
+    <button type="submit" class="btn btn-success" [disabled]="addVehicleTypeForm.invalid || isLoading">
+      {{ isEditMode ? 'Ažuriraj tip vozila' : 'Kreiraj tip vozila' }}
+    </button>
+    <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">Otkaži</button>
+  </div>
+</form>

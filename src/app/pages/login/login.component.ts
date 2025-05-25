@@ -4,6 +4,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService, 
-    private router: Router 
+    private router: Router ,
+    private toastr: ToastrService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -45,6 +47,8 @@ onSubmit(): void {
       const user = this.authService.getCurrentUser();
 
       if (!user || !user.role) {
+        
+        this.toastr.error('Greška prilikom logina');
         this.error = 'Login uspješan, nepotpuni podaci.';
         return;
       }
@@ -66,7 +70,8 @@ onSubmit(): void {
       const msg = err?.status === 401
         ? 'Pogrešan email ili password'
         : err?.message || 'Please check your connection and try again.';
-      this.error = msg;
+      
+        this.toastr.error(msg);
     }
   });
 }
