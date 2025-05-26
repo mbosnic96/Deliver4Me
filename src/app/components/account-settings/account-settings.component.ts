@@ -47,7 +47,7 @@ private marker: L.Marker | null = null;
     name: ['', Validators.required],
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+    phone: ['', [Validators.required]],
     address: ['', Validators.required],
     country: ['', Validators.required],
     state: ['', Validators.required],

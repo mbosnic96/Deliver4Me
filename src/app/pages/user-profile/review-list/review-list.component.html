@@ -2,12 +2,13 @@
     <div *ngIf="reviews.length === 0">Korisnik nema ocjena.</div>
 
     <div class="row">
-        <div *ngFor="let review of reviews" class="col-md-3 dark-bg p-4 rounded-2">
+        <div *ngFor="let review of reviews" class="col-md-3">
+            <div class="dark-bg p-4 rounded-2 h-100">
             <p><strong>Ocjena:</strong> {{ review.rating }} <span><fa-icon [icon]="'star'" class="star-rating"></fa-icon> </span></p>
             <p><strong>Komentar:</strong> {{ review.comment || 'No comment' }}</p>
             <p><small>{{ review.createdAt | date:'short' }}</small></p>
             <hr />
-
+</div>
 
         </div>
     </div>

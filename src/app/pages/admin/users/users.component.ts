@@ -31,7 +31,6 @@ export class UsersComponent {
   this.adminService.getAllUsers().subscribe(data => {
     this.users = data.map(user => ({
       ...user,
-      isDeleted: user.isDeleted ? 'Da' : 'Ne',
       country : this.getCountryName(user.country),
       state: this. getStateName(user.country, user.state),
     }));
