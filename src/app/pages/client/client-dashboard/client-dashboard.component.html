@@ -57,7 +57,7 @@
 
 
 <div class="row g-4">
-  <div class="col-lg-6 mb-3">
+  <div class="col-lg-6 mb-3" *ngIf="userLoads.length > 0">
     <div class="shadow-lg border-0 rounded-3 content-bg border">
       <h5 class="mb-3 mt-4 ps-3 pt-4"> <fa-icon [icon]="'truck-fast'"></fa-icon> Moje dostave</h5>
       <div id="senderCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -124,7 +124,7 @@
   </div>
 
 
-  <div class="col-lg-6 mb-3">
+  <div class="col-lg-6 mb-3" *ngIf="recommendedDrivers.length > 0">
     <div class="shadow-lg border-0 rounded-3 content-bg border">
       <h5 class="mb-3 mt-4 ps-3 pt-4"> <fa-icon [icon]="'truck'"></fa-icon> Preporučeni dostavljači</h5>
       <div id="recommendedCarousel" class="carousel slide" data-bs-ride="carousel">

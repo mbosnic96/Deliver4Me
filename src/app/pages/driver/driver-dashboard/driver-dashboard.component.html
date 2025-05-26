@@ -70,7 +70,7 @@
   </div>
 
   <div class="row g-4 mt-2">
-    <div class="col-lg-6">
+    <div class="col-lg-6" *ngIf="userLoads && userLoads.length > 0">
     <div class="shadow-lg border-0 rounded-3 content-bg border">
     <h5 class="mb-3 ps-3 pt-4"> <fa-icon [icon]="'truck-fast'"></fa-icon>  Aktivne dostave</h5>
     <div id="senderCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -130,7 +130,7 @@
 
     
 
-    <div class="col-lg-6">
+    <div class="col-lg-6" *ngIf="totalVehicles> 0">
       <div class="content-bg border rounded-3">
         <app-vehicle-tabs></app-vehicle-tabs>
       </div>
